@@ -1,0 +1,793 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f2f7f5;
+  --surface: rgba(255, 255, 255, 0.94);
+  --surface-muted: #f5f9f7;
+  --text: #15221c;
+  --muted: #586b61;
+  --line: #d7e4de;
+  --brand: #1db96a;
+  --on-brand: #042715;
+  --danger: #b93040;
+  --glow: rgba(29, 185, 106, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #0d1512;
+    --surface: rgba(21, 31, 27, 0.96);
+    --surface-muted: #1a2822;
+    --text: #f2f8f5;
+    --muted: #a9b7af;
+    --line: #2b3a32;
+    --brand: #42db86;
+    --on-brand: #052615;
+    --danger: #ff7d86;
+    --glow: rgba(66, 219, 134, 0.16);
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0d1512;
+  --surface: rgba(21, 31, 27, 0.96);
+  --surface-muted: #1a2822;
+  --text: #f2f8f5;
+  --muted: #a9b7af;
+  --line: #2b3a32;
+  --brand: #42db86;
+  --on-brand: #052615;
+  --danger: #ff7d86;
+  --glow: rgba(66, 219, 134, 0.16);
+}
+
+:root[data-theme="midnight"] {
+  color-scheme: dark;
+  --bg: #08121f;
+  --surface: rgba(16, 29, 45, 0.96);
+  --surface-muted: #15253a;
+  --text: #f2f7ff;
+  --muted: #aebdd1;
+  --line: #293b54;
+  --brand: #48d7ad;
+  --on-brand: #041e1a;
+  --danger: #ff8594;
+  --glow: rgba(72, 215, 173, 0.18);
+}
+
+:root[data-theme="forest"] {
+  color-scheme: dark;
+  --bg: #071a13;
+  --surface: rgba(14, 39, 28, 0.96);
+  --surface-muted: #143222;
+  --text: #effaf4;
+  --muted: #abc0b4;
+  --line: #29503a;
+  --brand: #55dd83;
+  --on-brand: #052512;
+  --danger: #ff8b8f;
+  --glow: rgba(85, 221, 131, 0.18);
+}
+
+:root[data-theme="graphite"] {
+  color-scheme: dark;
+  --bg: #101317;
+  --surface: rgba(25, 30, 35, 0.96);
+  --surface-muted: #222a31;
+  --text: #f3f5f6;
+  --muted: #b2bbc2;
+  --line: #354049;
+  --brand: #65d2b2;
+  --on-brand: #08251e;
+  --danger: #ff8a9d;
+  --glow: rgba(101, 210, 178, 0.17);
+}
+
+:root[data-theme="ocean"] {
+  color-scheme: dark;
+  --bg: #071a21;
+  --surface: rgba(10, 35, 44, 0.96);
+  --surface-muted: #10313c;
+  --text: #f0fbfd;
+  --muted: #accbd2;
+  --line: #29515e;
+  --brand: #50d9e4;
+  --on-brand: #06262b;
+  --danger: #ff8d9c;
+  --glow: rgba(80, 217, 228, 0.18);
+}
+
+:root[data-theme="blush"] {
+  color-scheme: light;
+  --bg: #fff2f4;
+  --surface: rgba(255, 250, 251, 0.96);
+  --surface-muted: #fcecef;
+  --text: #342229;
+  --muted: #755f67;
+  --line: #efd3da;
+  --brand: #b24767;
+  --on-brand: #fff8fa;
+  --danger: #a92740;
+  --glow: rgba(178, 71, 103, 0.16);
+}
+
+:root[data-theme="lavender"] {
+  color-scheme: light;
+  --bg: #f5f1fc;
+  --surface: rgba(252, 250, 255, 0.96);
+  --surface-muted: #eee8f8;
+  --text: #30273d;
+  --muted: #70647e;
+  --line: #ddd2ed;
+  --brand: #7553a3;
+  --on-brand: #fbf8ff;
+  --danger: #ae2e4a;
+  --glow: rgba(117, 83, 163, 0.16);
+}
+
+:root[data-theme="candy"] {
+  color-scheme: light;
+  --bg: #fff3f9;
+  --surface: rgba(255, 250, 253, 0.96);
+  --surface-muted: #f9e8f2;
+  --text: #342730;
+  --muted: #755f6c;
+  --line: #eed1e1;
+  --brand: #a64478;
+  --on-brand: #fff8fc;
+  --danger: #a82843;
+  --glow: rgba(166, 68, 120, 0.16);
+}
+
+:root[data-theme="aurora"] {
+  color-scheme: light;
+  --bg: #f7f3fb;
+  --surface: rgba(255, 253, 255, 0.96);
+  --surface-muted: #efe8f7;
+  --text: #2f2740;
+  --muted: #6f6580;
+  --line: #ddd2ec;
+  --brand: #6b5bb8;
+  --on-brand: #fbf9ff;
+  --danger: #ae2e4a;
+  --glow: rgba(107, 91, 184, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.login-shell {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: stretch;
+  padding: 0;
+  background: transparent;
+}
+
+.login-quit {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.login-quit:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  color: var(--text);
+}
+
+.login-card {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px 24px 20px;
+  border: none;
+  border-radius: 0;
+  background: var(--surface);
+  box-shadow: none;
+  overflow: auto;
+  -webkit-app-region: drag;
+}
+
+/* Keep controls clickable; blank card areas stay draggable. */
+.login-card .auth-tabs,
+.login-card .auth-panel,
+.login-card .login-field,
+.login-card .login-primary,
+.login-card .login-error,
+.login-card .login-hint,
+.login-card .eye-btn,
+.login-card .login-quit {
+  -webkit-app-region: no-drag;
+}
+
+.login-brand {
+  width: 48px;
+  height: 48px;
+  align-self: center;
+  border-radius: 14px;
+  box-shadow: 0 10px 22px var(--glow);
+}
+
+h1 {
+  margin: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.login-copy {
+  margin: -2px 0 2px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+}
+
+.auth-tab {
+  min-height: 36px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.auth-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.auth-panel[hidden] {
+  display: none !important;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.login-field > span:first-child {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.login-field > input,
+.password-wrap > input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.login-field > input.input-invalid,
+.password-wrap > input.input-invalid {
+  border-color: var(--danger);
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap > input {
+  padding-right: 42px;
+}
+
+.eye-btn {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+}
+
+.eye-btn:hover {
+  color: var(--text);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+/* Only one glyph at a time (WebView2 ignores bare [hidden] on nested SVG). */
+.eye-btn .eye-open {
+  display: block;
+}
+.eye-btn .eye-closed {
+  display: none;
+}
+.eye-btn[aria-pressed="true"] .eye-open {
+  display: none;
+}
+.eye-btn[aria-pressed="true"] .eye-closed {
+  display: block;
+}
+
+.login-field input:focus-visible,
+.password-wrap input:focus-visible,
+.login-primary:focus-visible,
+.eye-btn:focus-visible,
+.auth-tab:focus-visible,
+.secondary:focus-visible,
+.login-quit:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--brand) 36%, transparent);
+  outline-offset: 2px;
+}
+
+.login-hint {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.field-error {
+  color: var(--danger);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.field-error[hidden] {
+  display: none !important;
+}
+
+.login-primary {
+  min-height: 42px;
+  margin-top: 2px;
+  padding: 8px 14px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: var(--brand);
+  color: var(--on-brand);
+  font-size: 14px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.login-primary:hover {
+  filter: brightness(1.04);
+}
+
+.login-primary:disabled,
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.login-error {
+  min-height: 1.2em;
+  margin: 0;
+  text-align: center;
+  color: var(--danger);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.login-error.is-info {
+  color: var(--muted);
+}
+
+.login-error.is-success {
+  color: var(--brand);
+}
+
+.device-limit-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: stretch;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.45);
+  -webkit-app-region: no-drag;
+}
+
+.device-limit-modal[hidden] {
+  display: none !important;
+}
+
+.device-limit-dialog {
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  height: 100%;
+  overflow: auto;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+  box-sizing: border-box;
+}
+
+.device-limit-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.device-limit-dialog h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.device-limit-close-btn {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.device-limit-desc {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.device-limit-list-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.device-limit-list-head strong {
+  font-size: 14px;
+}
+
+.device-limit-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.field-note {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.45;
+}
+
+.device-limit-status {
+  margin-top: 10px;
+}
+
+.devices-list {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  max-height: min(420px, calc(100vh - 220px));
+  overflow-y: auto;
+}
+
+.device-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.device-item:last-child {
+  border-bottom: none;
+}
+
+.device-status-current {
+  background: #e7f5ff;
+  color: #1864ab;
+}
+
+.device-item-current {
+  background: rgba(231, 245, 255, 0.45);
+}
+
+.device-item-current .device-name {
+  color: #1864ab;
+}
+
+.device-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.device-name {
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+.device-status-tag {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.device-status-active {
+  background: #d3f9d8;
+  color: #2b8a3e;
+}
+
+.device-status-offline {
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.device-select-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--line, #e9ecef);
+}
+
+.device-select-toolbar .secondary,
+.device-select-toolbar .device-remove-btn {
+  padding: 6px 11px;
+  font-size: 11px;
+}
+
+.device-select-all-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted, #495057);
+  cursor: pointer;
+  user-select: none;
+}
+
+.device-select-cb {
+  width: 16px;
+  height: 16px;
+  margin: 3px 10px 0 0;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.link-btn {
+  border: none;
+  background: transparent;
+  color: #1864ab;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.device-meta {
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.device-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.device-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid #ffc9c9;
+  background: #fff;
+  color: #c92a2a;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.device-remove-btn:hover:not(:disabled) {
+  background: #fff5f5;
+  border-color: #ffa8a8;
+}
+
+.device-remove-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.secondary {
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface-muted);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* In-app confirm — must sit above device-limit-modal; native confirm is broken on macOS WKWebView. */
+.app-confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-app-region: no-drag;
+}
+
+.app-confirm-modal[hidden] {
+  display: none !important;
+}
+
+.app-confirm-dialog {
+  width: min(360px, 100%);
+  padding: 18px 16px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
+}
+
+.app-confirm-msg {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.app-confirm-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: -6px 0 14px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+}
+
+.app-confirm-input[hidden] {
+  display: none !important;
+}
+
+.app-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.app-confirm-btn {
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+.app-confirm-cancel {
+  border: 1px solid var(--line);
+  background: var(--surface-muted);
+  color: var(--text);
+}
+
+.app-confirm-ok {
+  border: 1px solid #c92a2a;
+  background: #c92a2a;
+  color: #fff;
+}

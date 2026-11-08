@@ -1,0 +1,278 @@
+[
+  {
+    "path": "/content-translate-visible.js",
+    "file": "content-translate-visible.js",
+    "bytes": 861,
+    "offset": "0x6ca4c4"
+  },
+  {
+    "path": "/content-translate-engines.js",
+    "file": "content-translate-engines.js",
+    "bytes": 7927,
+    "offset": "0x6ca83e"
+  },
+  {
+    "path": "/styles.css",
+    "file": "styles.css",
+    "bytes": 72341,
+    "offset": "0x6cc752"
+  },
+  {
+    "path": "/watrans-ui.js",
+    "file": "watrans-ui.js",
+    "bytes": 8781,
+    "offset": "0x6de1f2"
+  },
+  {
+    "path": "/resources/watrans-send-hook.js",
+    "file": "resources/watrans-send-hook.js",
+    "bytes": 117,
+    "offset": "0x6e044d"
+  },
+  {
+    "path": "/resources/watrans-ui.js",
+    "file": "resources/watrans-ui.js",
+    "bytes": 231,
+    "offset": "0x6e04e1"
+  },
+  {
+    "path": "/watrans-country-fx.js",
+    "file": "watrans-country-fx.js",
+    "bytes": 2282,
+    "offset": "0x6e05e0"
+  },
+  {
+    "path": "/watrans-voice-stt.js",
+    "file": "watrans-voice-stt.js",
+    "bytes": 2363,
+    "offset": "0x6e0ef6"
+  },
+  {
+    "path": "/i18n-data.js",
+    "file": "i18n-data.js",
+    "bytes": 10443,
+    "offset": "0x6e7cf1"
+  },
+  {
+    "path": "/i18n-runtime.js",
+    "file": "i18n-runtime.js",
+    "bytes": 3558,
+    "offset": "0x6ea5c9"
+  },
+  {
+    "path": "/style.css",
+    "file": "style.css",
+    "bytes": 1510,
+    "offset": "0x6eb3bf"
+  },
+  {
+    "path": "/options.js",
+    "file": "options.js",
+    "bytes": 7582,
+    "offset": "0x6eb9af"
+  },
+  {
+    "path": "/content-customer-lang.js",
+    "file": "content-customer-lang.js",
+    "bytes": 10508,
+    "offset": "0x6ed7b2"
+  },
+  {
+    "path": "/content-inline-translate.js",
+    "file": "content-inline-translate.js",
+    "bytes": 14871,
+    "offset": "0x6f67ab"
+  },
+  {
+    "path": "/content-quick-remark.js",
+    "file": "content-quick-remark.js",
+    "bytes": 91720,
+    "offset": "0x6fa1dd"
+  },
+  {
+    "path": "/content.js",
+    "file": "content.js",
+    "bytes": 87929,
+    "offset": "0x7108cc"
+  },
+  {
+    "path": "/content-fx.js",
+    "file": "content-fx.js",
+    "bytes": 73654,
+    "offset": "0x72608c"
+  },
+  {
+    "path": "/watrans-fx.js",
+    "file": "watrans-fx.js",
+    "bytes": 28585,
+    "offset": "0x7469fb"
+  },
+  {
+    "path": "/content-msg-device.js",
+    "file": "content-msg-device.js",
+    "bytes": 18249,
+    "offset": "0x74d9fc"
+  },
+  {
+    "path": "/content-send-hook.js",
+    "file": "content-send-hook.js",
+    "bytes": 93618,
+    "offset": "0x7521a3"
+  },
+  {
+    "path": "/page.js",
+    "file": "page.js",
+    "bytes": 39834,
+    "offset": "0x770cab"
+  },
+  {
+    "path": "/content-ai-suggest.js",
+    "file": "content-ai-suggest.js",
+    "bytes": 55039,
+    "offset": "0x77e26a"
+  },
+  {
+    "path": "/content-ai-explain.js",
+    "file": "content-ai-explain.js",
+    "bytes": 32427,
+    "offset": "0x78b9c4"
+  },
+  {
+    "path": "/update-dialog.js",
+    "file": "update-dialog.js",
+    "bytes": 78,
+    "offset": "0x7c4340"
+  },
+  {
+    "path": "/Tq/contacts-backup.js",
+    "file": "Tq/contacts-backup.js",
+    "bytes": 72,
+    "offset": "0x7c4f69"
+  },
+  {
+    "path": "/watrans-engine-list.js",
+    "file": "watrans-engine-list.js",
+    "bytes": 75,
+    "offset": "0x7c629e"
+  },
+  {
+    "path": "/watrans-lang-list.js",
+    "file": "watrans-lang-list.js",
+    "bytes": 68,
+    "offset": "0x7c6ce8"
+  },
+  {
+    "path": "/theme.js",
+    "file": "theme.js",
+    "bytes": 81,
+    "offset": "0x816582"
+  },
+  {
+    "path": "/d/lock.html",
+    "file": "d/lock.html",
+    "bytes": 74,
+    "offset": "0x81679c"
+  },
+  {
+    "path": "/country-dial-codes.json",
+    "file": "country-dial-codes.json",
+    "bytes": 70,
+    "offset": "0x81739f"
+  },
+  {
+    "path": "/login.html",
+    "file": "login.html",
+    "bytes": 66,
+    "offset": "0x818746"
+  },
+  {
+    "path": "/vendor/xlsx.full.min.js",
+    "file": "vendor/xlsx.full.min.js",
+    "bytes": 67,
+    "offset": "0x819137"
+  },
+  {
+    "path": "/settings-backup.js",
+    "file": "settings-backup.js",
+    "bytes": 70,
+    "offset": "0x8522f8"
+  },
+  {
+    "path": "/lock.css",
+    "file": "lock.css",
+    "bytes": 71,
+    "offset": "0x853178"
+  },
+  {
+    "path": "/confirm.js",
+    "file": "confirm.js",
+    "bytes": 85,
+    "offset": "0x853897"
+  },
+  {
+    "path": "/update-dialog.html",
+    "file": "update-dialog.html",
+    "bytes": 70,
+    "offset": "0x856396"
+  },
+  {
+    "path": "/login.js",
+    "file": "login.js",
+    "bytes": 86,
+    "offset": "0x8565a2"
+  },
+  {
+    "path": "/lock.js",
+    "file": "lock.js",
+    "bytes": 69,
+    "offset": "0x858273"
+  },
+  {
+    "path": "/hotkey.js",
+    "file": "hotkey.js",
+    "bytes": 68,
+    "offset": "0x8589ee"
+  },
+  {
+    "path": "/tabs.html",
+    "file": "tabs.html",
+    "bytes": 69,
+    "offset": "0x858cca"
+  },
+  {
+    "path": "/login.css",
+    "file": "login.css",
+    "bytes": 76,
+    "offset": "0x859b0c"
+  },
+  {
+    "path": "/tabs.js",
+    "file": "tabs.js",
+    "bytes": 70,
+    "offset": "0x85a74c"
+  },
+  {
+    "path": "/main.js",
+    "file": "main.js",
+    "bytes": 68,
+    "offset": "0x85b887"
+  },
+  {
+    "path": "/app-icon.svg",
+    "file": "app-icon.svg",
+    "bytes": 70,
+    "offset": "0x861ff4"
+  },
+  {
+    "path": "/update-dialog.css",
+    "file": "update-dialog.css",
+    "bytes": 71,
+    "offset": "0x8afd23"
+  },
+  {
+    "path": "/i18n.js",
+    "file": "i18n.js",
+    "bytes": 78,
+    "offset": "0x8b00ba"
+  }
+]

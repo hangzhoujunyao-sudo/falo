@@ -1,0 +1,45 @@
+{
+  "dlog": [
+    "modules\\02_styles.css",
+    "modules\\03_watrans-ui.js",
+    "modules\\08_watrans-voice-stt.js",
+    "modules\\15_content-quick-remark.js",
+    "modules\\18_watrans-fx.js",
+    "modules\\20_content-send-hook.js",
+    "watrans-content-bundle.js"
+  ],
+  "set_unread_count": [
+    "watrans-content-bundle.js"
+  ],
+  "cycle_account_tab": [
+    "modules\\08_watrans-voice-stt.js",
+    "watrans-content-bundle.js"
+  ],
+  "fetch_inline_button_config": [
+    "modules\\14_content-inline-translate.js",
+    "watrans-content-bundle.js"
+  ],
+  "fetch_fx_rates": [
+    "modules\\17_content-fx.js",
+    "watrans-content-bundle.js"
+  ],
+  "translate_text": [
+    "modules\\20_content-send-hook.js",
+    "watrans-content-bundle.js"
+  ],
+  "open_settings": [
+    "watrans-content-bundle.js"
+  ],
+  "membership_renew": [
+    "watrans-content-bundle.js"
+  ],
+  "followup_todos_pull": [
+    "watrans-content-bundle.js"
+  ],
+  "followup_todos_push": [
+    "watrans-content-bundle.js"
+  ],
+  "notify": [
+    "watrans-content-bundle.js"
+  ]
+}

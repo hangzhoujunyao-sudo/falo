@@ -1,0 +1,110 @@
+[
+  {
+    "file": "README.md",
+    "bytes": 889
+  },
+  {
+    "file": "Tq_contacts-backup.js",
+    "bytes": 20352
+  },
+  {
+    "file": "_m.py",
+    "bytes": 288
+  },
+  {
+    "file": "app-icon.png",
+    "bytes": 317436
+  },
+  {
+    "file": "app-icon.svg",
+    "bytes": 847999
+  },
+  {
+    "file": "confirm.js",
+    "bytes": 4693
+  },
+  {
+    "file": "content.js",
+    "bytes": 284668
+  },
+  {
+    "file": "country-dial-codes.json",
+    "bytes": 14120
+  },
+  {
+    "file": "hotkey.js",
+    "bytes": 1718
+  },
+  {
+    "file": "i18n.js",
+    "bytes": 65305
+  },
+  {
+    "file": "index.html",
+    "bytes": 68117
+  },
+  {
+    "file": "lock.css",
+    "bytes": 6800
+  },
+  {
+    "file": "lock.js",
+    "bytes": 5895
+  },
+  {
+    "file": "login.css",
+    "bytes": 14428
+  },
+  {
+    "file": "login.html",
+    "bytes": 3403
+  },
+  {
+    "file": "login.js",
+    "bytes": 31745
+  },
+  {
+    "file": "main.js",
+    "bytes": 131220
+  },
+  {
+    "file": "settings-backup.js",
+    "bytes": 14565
+  },
+  {
+    "file": "style.css",
+    "bytes": 52897
+  },
+  {
+    "file": "tabs.html",
+    "bytes": 17276
+  },
+  {
+    "file": "tabs.js",
+    "bytes": 16686
+  },
+  {
+    "file": "titlebar-icon.png",
+    "bytes": 2045
+  },
+  {
+    "file": "update-dialog.html",
+    "bytes": 1733
+  },
+  {
+    "file": "update-dialog.js",
+    "bytes": 10960
+  },
+  {
+    "file": "vendor_xlsx.full.min.js",
+    "bytes": 881727
+  },
+  {
+    "file": "watrans-engine-list.js",
+    "bytes": 10606
+  },
+  {
+    "file": "watrans-lang-list.js",
+    "bytes": 23207
+  }
+]

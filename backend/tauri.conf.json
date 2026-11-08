@@ -1,0 +1,33 @@
+{
+  "productName": "WATransChat-OSS",
+  "version": "2.6.5",
+  "identifier": "app.whatsnow.desktop",
+  "build": {
+    "frontendDist": "../frontend"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "WATransChat",
+        "width": 1100,
+        "height": 720,
+        "resizable": true,
+        "transparent": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.ico"
+    ]
+  }
+}

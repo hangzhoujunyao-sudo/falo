@@ -1,0 +1,110 @@
+[
+  {
+    "offset": "0x6c0000",
+    "dir": "content-scripts",
+    "file": "style_00.css",
+    "bytes": 150552
+  },
+  {
+    "offset": "0x6e4c20",
+    "dir": "frontend",
+    "file": "style_01.css",
+    "bytes": 6088
+  },
+  {
+    "offset": "0x6e6400",
+    "dir": "frontend",
+    "file": "style_02.css",
+    "bytes": 6312
+  },
+  {
+    "offset": "0x6e7cb0",
+    "dir": "content-scripts",
+    "file": "style_03.css",
+    "bytes": 166808
+  },
+  {
+    "offset": "0x710850",
+    "dir": "frontend",
+    "file": "style_04.css",
+    "bytes": 161800
+  },
+  {
+    "offset": "0x738060",
+    "dir": "frontend",
+    "file": "style_05.css",
+    "bytes": 88400
+  },
+  {
+    "offset": "0x74d9b8",
+    "dir": "content-scripts",
+    "file": "style_06.css",
+    "bytes": 112048
+  },
+  {
+    "offset": "0x768f70",
+    "dir": "frontend",
+    "file": "style_07.css",
+    "bytes": 364209
+  },
+  {
+    "offset": "0x7c2d08",
+    "dir": "frontend",
+    "file": "style_08.css",
+    "bytes": 1283
+  },
+  {
+    "offset": "0x7c4340",
+    "dir": "frontend",
+    "file": "style_09.css",
+    "bytes": 18556
+  },
+  {
+    "offset": "0x7c8bca",
+    "dir": "frontend",
+    "file": "style_10.css",
+    "bytes": 388541
+  },
+  {
+    "offset": "0x827990",
+    "dir": "frontend",
+    "file": "style_11.css",
+    "bytes": 11258
+  },
+  {
+    "offset": "0x82a593",
+    "dir": "frontend",
+    "file": "style_12.css",
+    "bytes": 256707
+  },
+  {
+    "offset": "0x86905e",
+    "dir": "frontend",
+    "file": "style_13.css",
+    "bytes": 321450
+  },
+  {
+    "offset": "0x8b7bd0",
+    "dir": "frontend",
+    "file": "blob_14.txt",
+    "bytes": 900
+  },
+  {
+    "offset": "0x8b9c68",
+    "dir": "frontend",
+    "file": "blob_15.txt",
+    "bytes": 1040
+  },
+  {
+    "offset": "0x8ba080",
+    "dir": "frontend",
+    "file": "blob_16.txt",
+    "bytes": 1496
+  },
+  {
+    "offset": "0x8bab30",
+    "dir": "frontend",
+    "file": "blob_17.txt",
+    "bytes": 5328
+  }
+]

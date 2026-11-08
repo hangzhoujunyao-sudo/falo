@@ -1,0 +1,170 @@
+{
+  "dlog": [
+    "03_watrans-ui.js",
+    "08_watrans-voice-stt.js",
+    "15_content-quick-remark.js",
+    "18_watrans-fx.js",
+    "20_content-send-hook.js",
+    "content.js",
+    "watrans-content-bundle.js"
+  ],
+  "unlock_password": [
+    "lock.js"
+  ],
+  "unlock_biometric": [
+    "lock.js"
+  ],
+  "get_theme": [
+    "lock.js",
+    "login.js",
+    "tabs.js"
+  ],
+  "reset_app_lock": [
+    "lock.js"
+  ],
+  "get_lock_status": [
+    "lock.js",
+    "main.js",
+    "tabs.js"
+  ],
+  "membership_logout_device_by_challenge": [
+    "login.js",
+    "main.js"
+  ],
+  "membership_devices_by_challenge": [
+    "login.js",
+    "main.js"
+  ],
+  "membership_login": [
+    "login.js",
+    "main.js"
+  ],
+  "get_settings": [
+    "login.js",
+    "main.js",
+    "settings-backup.js",
+    "tabs.js"
+  ],
+  "membership_status": [
+    "main.js"
+  ],
+  "set_settings": [
+    "main.js",
+    "settings-backup.js"
+  ],
+  "check_proxy": [
+    "main.js"
+  ],
+  "set_account_proxy": [
+    "main.js"
+  ],
+  "membership_open_pay": [
+    "main.js"
+  ],
+  "membership_logout": [
+    "main.js"
+  ],
+  "membership_logout_device": [
+    "main.js"
+  ],
+  "check_for_update": [
+    "main.js"
+  ],
+  "get_productivity_status": [
+    "main.js"
+  ],
+  "set_focus_mode": [
+    "main.js"
+  ],
+  "test_notification": [
+    "main.js"
+  ],
+  "close_account": [
+    "main.js"
+  ],
+  "open_account": [
+    "Tq_contacts-backup.js",
+    "main.js"
+  ],
+  "set_account_notifications": [
+    "main.js"
+  ],
+  "rename_account": [
+    "main.js"
+  ],
+  "remove_account": [
+    "main.js"
+  ],
+  "get_account_fingerprint": [
+    "main.js"
+  ],
+  "list_accounts": [
+    "main.js"
+  ],
+  "add_account": [
+    "main.js",
+    "tabs.js"
+  ],
+  "set_app_lock_options": [
+    "main.js"
+  ],
+  "set_app_lock_password": [
+    "main.js"
+  ],
+  "lock_app": [
+    "main.js"
+  ],
+  "change_app_lock_password": [
+    "main.js"
+  ],
+  "disable_app_lock": [
+    "main.js"
+  ],
+  "set_biometric_enabled": [
+    "main.js"
+  ],
+  "quality_translate_test": [
+    "main.js"
+  ],
+  "list_open_account_tabs": [
+    "Tq_contacts-backup.js",
+    "settings-backup.js"
+  ],
+  "contacts_backup_call": [
+    "Tq_contacts-backup.js",
+    "settings-backup.js"
+  ],
+  "get_always_on_top": [
+    "tabs.js"
+  ],
+  "toggle_always_on_top": [
+    "tabs.js"
+  ],
+  "switch_account": [
+    "tabs.js"
+  ],
+  "list_account_tabs": [
+    "tabs.js"
+  ],
+  "seat_pick_status": [
+    "tabs.js"
+  ],
+  "membership_apply_seat_pick": [
+    "tabs.js"
+  ],
+  "open_accounts_settings": [
+    "tabs.js"
+  ],
+  "update_resize": [
+    "update-dialog.js"
+  ],
+  "update_close": [
+    "update-dialog.js"
+  ],
+  "update_snooze": [
+    "update-dialog.js"
+  ],
+  "update_download_and_install": [
+    "update-dialog.js"
+  ]
+}

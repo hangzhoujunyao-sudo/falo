@@ -1,0 +1,1907 @@
+ .wa-retranslate-btn */
+          ".wa-retranslate-btn{color:#555;border:none;border-radius:4px;cursor:pointer;opacity:0.8;" +
+          "align-items:center;justify-content:center;background:transparent;padding:6px 8px;" +
+          "min-width:28px;min-height:24px;box-sizing:border-box;line-height:0;display:inline-flex;" +
+          "flex-shrink:0;vertical-align:middle;align-self:center}" +
+          ".wa-retranslate-btn:hover{opacity:1}" +
+          ".wa-retranslate-btn:disabled{cursor:default;opacity:0.6}" +
+          "body.dark .wa-retranslate-btn,.dark .wa-retranslate-btn{color:#8696a0}" +
+          "body.dark .wa-retranslate-btn:hover,.dark .wa-retranslate-btn:hover{color:#e9edef;opacity:1}" +
+          /* Fail placeholder: WA secondary gray + teal CTA (not loud red) */
+          ".translated-text > .selectable-text.wa-chat-translate-fail{color:#667781!important}" +
+          "body.dark .translated-text > .selectable-text.wa-chat-translate-fail," +
+          ".dark .translated-text > .selectable-text.wa-chat-translate-fail{color:#8696a0!important}" +
+          ".wa-chat-switch-engine-btn{appearance:none;border:1px solid rgba(18,140,126,0.35);" +
+          "background:rgba(37,211,102,0.1);color:#128c7e;font:inherit;font-size:12px;line-height:1.2;" +
+          "padding:2px 8px;border-radius:12px;cursor:pointer;flex:0 0 auto}" +
+          ".wa-chat-switch-engine-btn:hover{background:rgba(37,211,102,0.18);border-color:rgba(18,140,126,0.5)}" +
+          ".wa-chat-switch-engine-btn:disabled{opacity:0.55;cursor:default}" +
+          "body.dark .wa-chat-switch-engine-btn,.dark .wa-chat-switch-engine-btn{" +
+          "color:#00a884;border-color:rgba(0,168,132,0.4);background:rgba(0,168,132,0.12)}" +
+          "body.dark .wa-chat-switch-engine-btn:hover,.dark .wa-chat-switch-engine-btn:hover{" +
+          "background:rgba(0,168,132,0.2);border-color:rgba(0,168,132,0.55)}";
+        parent.appendChild(s);
+        refreshTranslatedAppearance();
+        return true;
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function canTranslate() {
+      // WATransChat parity: require core_translate (isValid + cap). Logout clears
+      // caps → false. Never allow "offline demo" after sign-out.
+      try {
+        return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+      } catch (_) {}
+      return false;
+    }
+
+    function applyConfig(c) {
+      if (!c || typeof c !== "object") return;
+      cfg.enabled = !!c.enabled;
+      cfg.incoming = c.incoming !== false;
+      if (typeof c.compose === "boolean") cfg.compose = c.compose;
+      if (typeof c.targetLang === "string" && c.targetLang.trim()) {
+        cfg.targetLang = c.targetLang.trim();
+      }
+      if (typeof c.engine === "string" && c.engine.trim()) cfg.engine = c.engine.trim();
+      if (typeof c.historyEngine === "string" && c.historyEngine.trim()) {
+        cfg.historyEngine = c.historyEngine.trim();
+      }
+      if (typeof c.sourceLang === "string") cfg.sourceLang = c.sourceLang.trim() || "auto";
+      if (typeof c.defaultCustomerLang === "string") {
+        cfg.defaultCustomerLang = c.defaultCustomerLang.trim() || "auto";
+      }
+      if (typeof c.autoSend === "boolean") cfg.autoSend = c.autoSend;
+      if (typeof c.inlineBtn === "boolean") cfg.inlineBtn = c.inlineBtn;
+      if (typeof c.textColor === "string" && c.textColor.trim()) {
+        cfg.textColor = normalizeTextColor(c.textColor);
+      }
+      if (typeof c.fontSize === "number" && c.fontSize > 0) {
+        cfg.fontSize = normalizeFontSize(c.fontSize);
+      }
+      if (typeof c.deeplApiKey === "string") cfg.deeplApiKey = c.deeplApiKey;
+      if (typeof c.chatgptApiKey === "string") cfg.chatgptApiKey = c.chatgptApiKey;
+      if (typeof c.openaiCustomApiKey === "string") cfg.openaiCustomApiKey = c.openaiCustomApiKey;
+      if (typeof c.openaiCustomApiUrl === "string") cfg.openaiCustomApiUrl = c.openaiCustomApiUrl;
+      if (typeof c.openaiCustomModel === "string") cfg.openaiCustomModel = c.openaiCustomModel;
+      if (typeof c.deepseekCustomApiKey === "string") cfg.deepseekCustomApiKey = c.deepseekCustomApiKey;
+      if (typeof c.quickPhrasesJson === "string") cfg.quickPhrasesJson = c.quickPhrasesJson;
+      if (typeof c.quickPhrasesSyncMetaJson === "string") {
+        cfg.quickPhrasesSyncMetaJson = c.quickPhrasesSyncMetaJson;
+      }
+      if (typeof c.uiLang === "string" && c.uiLang.trim()) {
+        var ul = String(c.uiLang).trim().toLowerCase();
+        cfg.uiLang = ul === "en" || ul.indexOf("en-") === 0 || ul.indexOf("en_") === 0 ? "en" : "zh";
+      }
+      ["showPhrases", "showRemark", "showDevice", "showBadge", "showCountry", "showFx", "showFollowup"].forEach(
+        function (k) {
+          if (typeof c[k] === "boolean") cfg[k] = c[k];
+        }
+      );
+      // Extension: no separate「译文语言」— incoming target = 你的语言 (sourceLang),
+      // or zh-CN when sourceLang is auto.
+      cfg.targetLang =
+        cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : "zh-CN";
+      // WATransChat userSourceLang — destination / "my language" for same-lang skip.
+      try {
+        window.userSourceLang =
+          cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : cfg.targetLang || "zh-CN";
+        window.userSourceLangSetting = cfg.sourceLang || "auto";
+        window.defaultTargetLang = cfg.defaultCustomerLang || "auto";
+        window.__whatsnowTranslateCfg = cfg;
+      } catch (_) {}
+      invoke("dlog", {
+        msg:
+          "translate cfg on=" +
+          cfg.enabled +
+          " in=" +
+          cfg.incoming +
+          " lang=" +
+          cfg.targetLang +
+          " composeEng=" +
+          (cfg.engine || "google_web") +
+          " historyEng=" +
+          (cfg.historyEngine || "google_web") +
+          " color=" +
+          (cfg.textColor || "") +
+          " size=" +
+          (cfg.fontSize || ""),
+      });
+      ensureStyle();
+      refreshTranslatedAppearance();
+      updateComposeButton();
+      scheduleScan(80);
+      try {
+        window.dispatchEvent(new CustomEvent("whatsnow-translate-config", { detail: cfg }));
+      } catch (_) {}
+    }
+
+    window.__whatsnowApplyTranslateConfig = function (c) {
+      pendingCfg = c || pendingCfg;
+      if (!started) return;
+      applyConfig(c);
+    };
+
+    // WATransChat roots from `$()` / `c()` / `X()` — pick the one that actually
+    // holds message text. A near-empty scrolltrace node must not beat panel-body.
+    function waIoPanelRoot() {
+      var candidates = [
+        document.querySelector('div[data-scrolltracepolicy="wa.web.conversation.messages"]'),
+        document.querySelector('[data-testid="conversation-panel-body"]'),
+        document.querySelector('[data-testid="conversation-panel-messages"]'),
+      ];
+      var best = null;
+      var bestN = -1;
+      for (var i = 0; i < candidates.length; i++) {
+        var el = candidates[i];
+        if (!el) continue;
+        var n = 0;
+        try {
+          n = el.querySelectorAll('span[data-testid~="selectable-text"]').length;
+        } catch (_) {
+          n = 0;
+        }
+        if (n > bestN) {
+          bestN = n;
+          best = el;
+        } else if (!best) {
+          best = el;
+        }
+      }
+      return best;
+    }
+
+    // WATransChat H() — segment container
+    /**
+     * 从气泡 DOM 还原真实换行（比 innerText 更准）。
+     * WA 每行是 display:block 的 span，段内已有 \\n；innerText 又在块边界再插 \\n → 空行翻倍。
+     */
+    function extractInlineBubbleText(el) {
+      var s = "";
+      function walk(n) {
+        if (!n) return;
+        if (n.nodeType === 3) {
+          s += n.nodeValue || "";
+          return;
+        }
+        if (n.nodeType !== 1) return;
+        var tag = n.tagName;
+        if (tag === "BR") {
+          s += "\n";
+          return;
+        }
+        if (tag === "IMG") {
+          s += n.getAttribute("data-plain-text") || n.getAttribute("alt") || "";
+          return;
+        }
+        var kids = n.childNodes || [];
+        for (var i = 0; i < kids.length; i++) walk(kids[i]);
+      }
+      var kids = el && el.childNodes ? el.childNodes : [];
+      for (var j = 0; j < kids.length; j++) walk(kids[j]);
+      return s;
+    }
+
+    function extractWaBubblePlainText(root) {
+      if (!root) return "";
+      try {
+        // WA 每行通常是直接子 span；最后一行常为 display:inline，不能按 block 过滤否则会丢末行
+        var kids = Array.prototype.slice.call(root.children || []).filter(function (el) {
+          try {
+            return el && el.nodeType === 1 && el.tagName !== "BR";
+          } catch (_) {
+            return !!el;
+          }
+        });
+        if (kids.length > 1) {
+          return kids
+            .map(function (b) {
+              return extractInlineBubbleText(b).replace(/^\n+/, "").replace(/\n+$/, "");
+            })
+            .join("\n")
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n");
+        }
+        if (kids.length === 1) {
+          return extractInlineBubbleText(kids[0])
+            .replace(/\r\n/g, "\n")
+            .replace(/\r/g, "\n")
+            .replace(/^\n+/, "")
+            .replace(/\n+$/, "");
+        }
+      } catch (_) {}
+      try {
+        return extractInlineBubbleText(root)
+          .replace(/\r\n/g, "\n")
+          .replace(/\r/g, "\n")
+          .replace(/\n+$/, "");
+      } catch (_) {
+        return String((root && (root.innerText || root.textContent)) || "")
+          .replace(/\r\n/g, "\n")
+          .replace(/\r/g, "\n");
+      }
+    }
+
+    /** 译文显示兜底：仅收敛极端空行（≥3），保留正常换行与一个空行 */
+    function softenBubbleTranslationNewlines(text) {
+      return String(text == null ? "" : text)
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .replace(/\n{3,}/g, "\n\n");
+    }
+
+    // WATransChat content-translate-visible.js — IndexedDB + sync memory cache.
+    // Chrome rarely remounts the chat DOM on minimize; WebView2 often does.
+    // Memory hits must re-attach .translated-text in the same turn as the
+    // MutationObserver callback so restore does not look like a slow reload.
+    var TRANS_DB_NAME = "wa_translate_db";
+    var TRANS_DB_STORE = "msg_cache";
+    var TRANS_DB_VERSION = 2;
+    var CACHE_TTL_MS = 90 * 24 * 60 * 60 * 1000;
+    var CACHE_MAX_ENTRIES = 2000;
+    var CACHE_PRUNE_TO = 1600;
+    var transDbInstance = null;
+    var transMemCache = typeof Map !== "undefined" ? new Map() : null;
+    var cacheWriteCount = 0;
+
+    function openTransDb() {
+      return new Promise(function (resolve, reject) {
+        if (transDbInstance) return resolve(transDbInstance);
+        if (!window.indexedDB) return reject(new Error("indexedDB unavailable"));
+        var request = window.indexedDB.open(TRANS_DB_NAME, TRANS_DB_VERSION);
+        request.onerror = function (e) {
+          reject(e);
+        };
+        request.onsuccess = function (e) {
+          transDbInstance = e.target.result;
+          resolve(transDbInstance);
+        };
+        request.onupgradeneeded = function (e) {
+          var db = e.target.result;
+          if (!db.objectStoreNames.contains(TRANS_DB_STORE)) {
+            db.createObjectStore(TRANS_DB_STORE);
+          }
+        };
+      });
+    }
+
+    function unwrapCacheValue(raw) {
+      if (raw == null || raw === "") return undefined;
+      if (typeof raw === "string") return raw;
+      if (raw && typeof raw === "object" && raw.v != null) {
+        var ts = Number(raw.ts) || 0;
+        if (ts && Date.now() - ts > CACHE_TTL_MS) return null;
+        return raw.v;
+      }
+      return undefined;
+    }
+
+    function pruneTranslateCache(db) {
+      return new Promise(function (resolve) {
+        try {
+          var tx = db.transaction([TRANS_DB_STORE], "readwrite");
+          var store = tx.objectStore(TRANS_DB_STORE);
+          var countReq = store.count();
+          countReq.onerror = function () {
+            resolve();
+          };
+          countReq.onsuccess = function () {
+            var count = countReq.result || 0;
+            if (count <= CACHE_MAX_ENTRIES) {
+              resolve();
+              return;
+            }
+            var entries = [];
+            var cursorReq = store.openCursor();
+            cursorReq.onerror = function () {
+              resolve();
+            };
+            cursorReq.onsuccess = function (ev) {
+              var cursor = ev.target.result;
+              if (cursor) {
+                var val = cursor.value;
+                var ts = typeof val === "string" ? 0 : Number(val && val.ts) || 0;
+                entries.push({ key: cursor.key, ts: ts });
+                cursor.continue();
+                return;
+              }
+              entries.sort(function (a, b) {
+                return a.ts - b.ts;
+              });
+              var toDelete = Math.max(0, count - CACHE_PRUNE_TO);
+              for (var i = 0; i < toDelete && i < entries.length; i++) {
+                try {
+                  store.delete(entries[i].key);
+                } catch (_) {}
+              }
+              resolve();
+            };
+          };
+        } catch (_) {
+          resolve();
+        }
+      });
+    }
+
+    function isCtxEngine(engine) {
+      return engine === "chatgpt" || engine === "openai_custom" || engine === "deepseek_custom";
+    }
+
+    function appendEngineKeySuffix(base, engine) {
+      if (isCtxEngine(engine)) return base + "__" + engine + "__ctx";
+      return base;
+    }
+
+    function getMsgCacheKey(text, engine) {
+      var raw = String(text == null ? "" : text);
+      var base;
+      try {
+        base = "wa_translate_cache_" + btoa(unescape(encodeURIComponent(raw)));
+      } catch (_) {
+        var h = 0;
+        for (var i = 0; i < raw.length; i++) {
+          h = ((h << 5) - h + raw.charCodeAt(i)) | 0;
+        }
+        base = "wa_translate_cache_fb_" + raw.length + "_" + (h >>> 0).toString(36);
+      }
+      return appendEngineKeySuffix(base, engine);
+    }
+
+    function rowMsgId(row) {
+      try {
+        if (!row) return "";
+        if (row.getAttribute) {
+          var id = row.getAttribute("data-id") || row.getAttribute("data-message-id") || "";
+          if (id) return String(id);
+        }
+        var host =
+          (row.closest &&
+            (row.closest("[data-id]") || row.closest("[data-message-id]"))) ||
+          null;
+        if (host && host.getAttribute) {
+          return String(host.getAttribute("data-id") || host.getAttribute("data-message-id") || "");
+        }
+      } catch (_) {}
+      return "";
+    }
+
+    function getIdCacheKey(msgId, engine) {
+      if (!msgId) return "";
+      var base =
+        "wa_translate_id_" +
+        String(msgId) +
+        "__" +
+        String(cfg.targetLang || "zh-CN");
+      return appendEngineKeySuffix(base, engine);
+    }
+
+    function peekMemCache(text, engine, row) {
+      if (!transMemCache) return undefined;
+      try {
+        var idKey = getIdCacheKey(rowMsgId(row), engine);
+        if (idKey && transMemCache.has(idKey)) return transMemCache.get(idKey);
+        var textKey = getMsgCacheKey(text, engine);
+        if (transMemCache.has(textKey)) return transMemCache.get(textKey);
+      } catch (_) {}
+      return undefined;
+    }
+
+    function getTransCache(key) {
+      if (!key) return Promise.resolve(undefined);
+      if (transMemCache && transMemCache.has(key)) {
+        return Promise.resolve(transMemCache.get(key));
+      }
+      return openTransDb()
+        .then(function (db) {
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction([TRANS_DB_STORE], "readonly");
+              var store = tx.objectStore(TRANS_DB_STORE);
+              var req = store.get(key);
+              req.onsuccess = function () {
+                var raw = req.result;
+                var val = unwrapCacheValue(raw);
+                if (val === null) {
+                  try {
+                    var delTx = db.transaction([TRANS_DB_STORE], "readwrite");
+                    delTx.objectStore(TRANS_DB_STORE).delete(key);
+                  } catch (_) {}
+                  resolve(undefined);
+                  return;
+                }
+                if (val != null && val !== "" && transMemCache) {
+                  try {
+                    transMemCache.set(key, val);
+                  } catch (_) {}
+                }
+                resolve(val);
+              };
+              req.onerror = function () {
+                resolve(undefined);
+              };
+            } catch (_) {
+              resolve(undefined);
+            }
+          });
+        })
+        .catch(function () {
+          return undefined;
+        });
+    }
+
+    function lookupTransCache(text, engine, row) {
+      var mem = peekMemCache(text, engine, row);
+      if (mem) return Promise.resolve(mem);
+      var idKey = getIdCacheKey(rowMsgId(row), engine);
+      var textKey = getMsgCacheKey(text, engine);
+      return getTransCache(idKey).then(function (byId) {
+        if (byId) return byId;
+        return getTransCache(textKey);
+      });
+    }
+
+    function setTransCache(key, value) {
+      var cleaned = softenBubbleTranslationNewlines(value);
+      if (!key || !cleaned) return Promise.resolve();
+      if (transMemCache) {
+        try {
+          transMemCache.set(key, cleaned);
+        } catch (_) {}
+      }
+      return openTransDb()
+        .then(function (db) {
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction([TRANS_DB_STORE], "readwrite");
+              var store = tx.objectStore(TRANS_DB_STORE);
+              var req = store.put({ v: cleaned, ts: Date.now() }, key);
+              req.onsuccess = function () {
+                resolve();
+              };
+              req.onerror = function () {
+                resolve();
+              };
+            } catch (_) {
+              resolve();
+            }
+          }).then(function () {
+            cacheWriteCount += 1;
+            if (cacheWriteCount % 20 === 0) {
+              try {
+                pruneTranslateCache(db);
+              } catch (_) {}
+            }
+          });
+        })
+        .catch(function () {});
+    }
+
+    function rememberTranslation(text, engine, row, value) {
+      var cleaned = softenBubbleTranslationNewlines(value);
+      if (!cleaned) return;
+      try {
+        setTransCache(getMsgCacheKey(text, engine), cleaned);
+      } catch (_) {}
+      try {
+        var idKey = getIdCacheKey(rowMsgId(row), engine);
+        if (idKey) setTransCache(idKey, cleaned);
+      } catch (_) {}
+    }
+
+    /** Chat-history only — never falls back to compose `cfg.engine` (WATransChat). */
+    function historyCacheEngine() {
+      var eng =
+        typeof cfg.historyEngine === "string" && cfg.historyEngine.trim()
+          ? cfg.historyEngine.trim()
+          : "google_web";
+      if (CHAT_HISTORY_TRANSLATION_ENGINES.indexOf(eng) < 0) eng = "google_web";
+      return eng;
+    }
+
+    /** Sync: re-attach cached translations immediately (no debounce / no API). */
+    function restoreCachedTranslationsSync() {
+      if (!cfg.enabled || !cfg.incoming || !canTranslate()) return 0;
+      if (!transMemCache || !transMemCache.size) return 0;
+      if (!ensureStyle()) return 0;
+      var eng = historyCacheEngine();
+      var engIdx = TRANSLATION_ENGINES.indexOf(eng);
+      if (engIdx < 0) engIdx = 0;
+      var panel = waIoPanelRoot();
+      var spans = collectTextElementsForVisibleScan(panel || document);
+      var seen = typeof Set !== "undefined" ? new Set() : null;
+      var restored = 0;
+      for (var idx = 0; idx < spans.length; idx++) {
+        try {
+          var o = spans[idx];
+          if (panel && !panel.contains(o)) continue;
+          if (o.closest(".translated-text")) continue;
+          var row = findBubbleFromSpan(o);
+          if (!row) continue;
+          var nested = row.querySelectorAll('span[data-testid~="selectable-text"]');
+          var nestedChild = false;
+          for (var k = 0; k < nested.length; k++) {
+            if (nested[k] !== o && nested[k].contains(o)) {
+              nestedChild = true;
+              break;
+            }
+          }
+          if (nestedChild) continue;
+          var host = getSegmentContainer(o, row);
+          if (seen) {
+            if (seen.has(host)) continue;
+            seen.add(host);
+          }
+          if (host.querySelector && host.querySelector(".translated-text")) continue;
+          var text = extractWaBubblePlainText(o);
+          if (!text) continue;
+          var cached = peekMemCache(text, eng, row);
+          if (!cached) continue;
+          renderTranslation(row, o, cached, text, engIdx);
+          restored++;
+        } catch (_) {}
+      }
+      return restored;
+    }
+
+    /** Prefill memory Map from IndexedDB so remount restore stays synchronous. */
+    function warmMemCacheFromDb() {
+      return openTransDb()
+        .then(function (db) {
+          return new Promise(function (resolve) {
+            try {
+              var tx = db.transaction([TRANS_DB_STORE], "readonly");
+              var store = tx.objectStore(TRANS_DB_STORE);
+              if (typeof store.openCursor !== "function") {
+                resolve(0);
+                return;
+              }
+              var n = 0;
+              var req = store.openCursor();
+              req.onsuccess = function (ev) {
+                var cursor = ev && ev.target ? ev.target.result : null;
+                if (!cursor) {
+                  resolve(n);
+                  return;
+                }
+                try {
+                  if (transMemCache && cursor.key != null) {
+                    var unwrapped = unwrapCacheValue(cursor.value);
+                    if (unwrapped === null) {
+                      try {
+                        cursor.delete();
+                      } catch (_) {}
+                    } else if (unwrapped != null && unwrapped !== "") {
+                      transMemCache.set(cursor.key, unwrapped);
+                      n++;
+                    }
+                  }
+                } catch (_) {}
+                cursor.continue();
+              };
+              req.onerror = function () {
+                resolve(n);
+              };
+            } catch (_) {
+              resolve(0);
+            }
+          });
+        })
+        .then(function (n) {
+          try {
+            restoreCachedTranslationsSync();
+          } catch (_) {}
+          return n;
+        })
+        .catch(function () {
+          return 0;
+        });
+    }
+
+    function getSegmentContainer(span, row) {
+      return span && span.parentNode && span.parentNode.nodeType === 1 ? span.parentNode : row;
+    }
+
+    // WATransChat At() — in viewport
+    function isInViewport(el) {
+      try {
+        var e = el.getBoundingClientRect();
+        var n = window.innerHeight || document.documentElement.clientHeight;
+        var r = window.innerWidth || document.documentElement.clientWidth;
+        return e.bottom > 0 && e.top < n && e.right > 0 && e.left < r;
+      } catch (_) {
+        return true;
+      }
+    }
+
+    // WATransChat R() — language family
+    function normalizeLangFamily(t) {
+      var e = String(t || "")
+        .trim()
+        .toLowerCase();
+      if (!e || e === "auto" || e === "unknown") return "";
+      if (e === "zh" || e.indexOf("zh-") === 0 || e === "zh_cn" || e === "zh_tw" || e === "zh_hk") {
+        return "zh";
+      }
+      if (e.indexOf("en") === 0) return "en";
+      if (e.indexOf("pt") === 0) return "pt";
+      if (e.indexOf("es") === 0) return "es";
+      if (e.indexOf("fr") === 0) return "fr";
+      if (e.indexOf("de") === 0) return "de";
+      if (e.indexOf("ja") === 0) return "ja";
+      if (e.indexOf("ko") === 0) return "ko";
+      if (e.indexOf("ar") === 0) return "ar";
+      if (e.indexOf("ru") === 0) return "ru";
+      if (e.indexOf("th") === 0) return "th";
+      if (e.indexOf("vi") === 0) return "vi";
+      if (e.indexOf("id") === 0 || e === "ms") return e.slice(0, 2);
+      return e.split(/[-_]/)[0] || "";
+    }
+
+    // WATransChat Ct() — rough detect
+    function detectLang(t) {
+      var e = String(t == null ? "" : t).trim();
+      if (!e) return "auto";
+      var n = e
+        .replace(/https?:\/\/\S+/gi, " ")
+        .replace(/\b[\w.+-]+@[\w.-]+\.\w+\b/gi, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (!n) return "auto";
+      var r = (n.match(/[\u4e00-\u9fff]/g) || []).length;
+      var u = (n.match(/[\u3040-\u30ff]/g) || []).length;
+      var o = (n.match(/[\uac00-\ud7af]/g) || []).length;
+      var i = (n.match(/[A-Za-z\u00C0-\u024F]/g) || []).length;
+      var a = (n.match(/[\u0400-\u04FF]/g) || []).length;
+      var c = (n.match(/[\u0600-\u06FF]/g) || []).length;
+      var d = (n.match(/[\u0E00-\u0E7F]/g) || []).length;
+      var s = r + u + o + i + a + c + d;
+      if (s < 2) return "auto";
+      if (u / s > 0.08) return "ja";
+      if (o / s > 0.08) return "ko";
+      if (c / s > 0.3) return "ar";
+      if (d / s > 0.3) return "th";
+      if (a / s > 0.3) return "ru";
+      var f = Math.max(n.replace(/\s/g, "").length, 1);
+      if (r / s > 0.35 || (r * 2.5) / f > 0.45) return "zh-CN";
+      if (i / s > 0.5) return "en";
+      return "auto";
+    }
+
+    // WATransChat Tt() — skip when already in user language
+    function isSameAsUserLang(text, userLang) {
+      var n = normalizeLangFamily(userLang || cfg.targetLang || "zh-CN");
+      if (!n) return false;
+      var r = detectLang(text);
+      if (!r || r === "auto") return false;
+      var u = normalizeLangFamily(r);
+      return !!(u && u === n);
+    }
+
+    // WATransChat t() — bubble from selectable-text span
+    function findBubbleFromSpan(o) {
+      if (!o) return null;
+      // Voice STT transcriptions sit inside conv-msg / msg-container rows.
+      var i =
+        o.closest('[data-testid^="conv-msg-"]') ||
+        o.closest('[data-testid="msg-container"]') ||
+        o.closest('[data-id][role="row"]') ||
+        o.closest('[role="row"]');
+      if (!i) {
+        try {
+          var ct = o.closest(".copyable-text");
+          if (ct && ct.parentElement && ct.parentElement.parentElement) {
+            i = ct.parentElement.parentElement;
+          }
+        } catch (_) {}
+      }
+      if (!i) {
+        var a = o.parentElement;
+        var c = 0;
+        var d = 8;
+        while (a && a !== document.body && c < d) {
+          if (a.tagName === "DIV") {
+            var s = a.getBoundingClientRect();
+            if (
+              s.height > 0 &&
+              s.height < 800 &&
+              s.width > 50 &&
+              s.width < 1000 &&
+              (a.querySelector('[data-testid~="selectable-text"]') ||
+                a.getAttribute("data-id") ||
+                a.querySelector('[role="row"]'))
+            ) {
+              i = a;
+              break;
+            }
+          }
+          a = a.parentElement;
+          c++;
+        }
+      }
+      if (!i) {
+        i =
+          o.closest("div.message-in") ||
+          o.closest("div._amk6._amlo") ||
+          o.closest('div[class*="message-in"]');
+      }
+      if (!i) {
+        var a2 = o.parentElement;
+        while (a2 && a2 !== document.body) {
+          if (a2.tagName === "DIV" && a2.classList && a2.classList.length > 0) {
+            var c2 = a2.getBoundingClientRect();
+            if (
+              c2.height > 20 &&
+              c2.height < 500 &&
+              c2.width > 100 &&
+              (a2.querySelector('[class*="time"], [class*="Time"]') ||
+                (a2.textContent && a2.textContent.match(/\d{1,2}:\d{2}/)) ||
+                a2.querySelector('[data-testid~="selectable-text"]'))
+            ) {
+              i = a2;
+              break;
+            }
+          }
+          a2 = a2.parentElement;
+        }
+      }
+      return i;
+    }
+
+    function pageUiLang() {
+      try {
+        var i18n = window.__whatsnowPageI18n;
+        if (i18n && i18n.getUiLang) return i18n.getUiLang();
+      } catch (_) {}
+      try {
+        return cfg.uiLang === "en" ? "en" : "zh";
+      } catch (_) {}
+      return "zh";
+    }
+    function tPage(key, fbZh) {
+      try {
+        var i18n = window.__whatsnowPageI18n;
+        if (i18n && i18n.t) return i18n.t(pageUiLang(), key, fbZh);
+      } catch (_) {}
+      return fbZh;
+    }
+    function tPageFill(key, fbZh, vars) {
+      try {
+        var i18n = window.__whatsnowPageI18n;
+        if (i18n && i18n.fill) return i18n.fill(pageUiLang(), key, fbZh, vars);
+      } catch (_) {}
+      var s = String(fbZh || "");
+      if (vars && typeof vars === "object") {
+        Object.keys(vars).forEach(function (k) {
+          s = s.split("{" + k + "}").join(String(vars[k]));
+        });
+      }
+      return s;
+    }
+
+    function getEngineDisplayName(engineId, ui) {
+      var id = String(engineId || "google_web");
+      try {
+        var api = window.__whatsnowEngineList;
+        if (api) {
+          var map = api.nameMap ? api.nameMap(ui || "zh") : null;
+          if (map && map[id]) return map[id];
+          if ((!ui || String(ui).indexOf("zh") === 0) && api.NAME_ZH && api.NAME_ZH[id]) {
+            return api.NAME_ZH[id];
+          }
+          if (api.NAME_EN && api.NAME_EN[id]) return api.NAME_EN[id];
+        }
+      } catch (_) {}
+      return id;
+    }
+
+    function defaultHistoryEngineIndex() {
+      var saved =
+        typeof cfg.historyEngine === "string" && cfg.historyEngine.trim()
+          ? cfg.historyEngine.trim()
+          : "google_web";
+      var eng = CHAT_HISTORY_TRANSLATION_ENGINES.indexOf(saved) >= 0 ? saved : "google_web";
+      var idx = TRANSLATION_ENGINES.indexOf(eng);
+      return idx >= 0 ? idx : 0;
+    }
+
+    function isProOnlyTranslationEngine(engine) {
+      return (
+        engine === "deepl" ||
+        engine === "deepseek" ||
+        engine === "volc_deepseek" ||
+        engine === "qwen" ||
+        engine === "hunyuan" ||
+        engine === "glm" ||
+        engine === "chatgpt" ||
+        engine === "openai_custom" ||
+        engine === "deepseek_custom"
+      );
+    }
+
+    function canUseProRetranslateEngines() {
+      try {
+        if (window.__whatsnowCan) {
+          if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+        }
+        var c = window.__whatsnowCaps;
+        if (c && (c.isPro || c.isPremium)) return true;
+      } catch (_) {}
+      return false;
+    }
+
+    function findNextRetranslateEngineIndex(
+      currentIndex,
+      hasDeepLKey,
+      canUseProOnlyEngines,
+      alreadyRetranslated,
+      hasChatgptKey,
+      hasOpenaiCustomKey,
+      hasDeepseekCustomKey
+    ) {
+      var safeIndex = Number.isFinite(currentIndex) ? currentIndex : 0;
+      if (safeIndex < 0 || safeIndex >= TRANSLATION_ENGINES.length) safeIndex = 0;
+
+      if (canUseProOnlyEngines) {
+        var order = PRO_RETRANSLATE_ENGINE_ORDER;
+        var currentEngine = TRANSLATION_ENGINES[safeIndex];
+        var posInOrder = order.indexOf(currentEngine);
+        if (!alreadyRetranslated || posInOrder < 0) posInOrder = -1;
+        for (var i = 0; i < order.length; i += 1) {
+          var candidateEngine = order[(posInOrder + 1 + i) % order.length];
+          if (candidateEngine === "deepl" && !hasDeepLKey) continue;
+          if (candidateEngine === "chatgpt" && !hasChatgptKey) continue;
+          if (candidateEngine === "openai_custom" && !hasOpenaiCustomKey) continue;
+          if (candidateEngine === "deepseek_custom" && !hasDeepseekCustomKey) continue;
+          var candidateIndex = TRANSLATION_ENGINES.indexOf(candidateEngine);
+          if (candidateIndex >= 0) return candidateIndex;
+        }
+        return safeIndex;
+      }
+
+      for (var j = 0; j < TRANSLATION_ENGINES.length; j += 1) {
+        var candidateIndex2 = (safeIndex + 1 + j) % TRANSLATION_ENGINES.length;
+        var candidateEngine2 = TRANSLATION_ENGINES[candidateIndex2];
+        if (candidateEngine2 === "deepl" && !hasDeepLKey) continue;
+        if (candidateEngine2 === "chatgpt" && !hasChatgptKey) continue;
+        if (candidateEngine2 === "openai_custom" && !hasOpenaiCustomKey) continue;
+        if (candidateEngine2 === "deepseek_custom" && !hasDeepseekCustomKey) continue;
+        if (isProOnlyTranslationEngine(candidateEngine2)) continue;
+        return candidateIndex2;
+      }
+      return safeIndex;
+    }
+
+    // WATransChat mountRetranslateButton — before msg-meta time; AI buttons on the left
+    function mountRetranslateButton(msg, retranslateBtn, fallbackParent) {
+      if (!retranslateBtn) return;
+      try {
+        var msgMeta =
+          msg && msg.querySelector
+            ? msg.querySelector('[data-testid="msg-meta"]') ||
+              (msg.closest && msg.closest('[data-testid="msg-container"]')
+                ? msg.closest('[data-testid="msg-container"]').querySelector('[data-testid="msg-meta"]')
+                : null)
+            : null;
+        if (msgMeta) {
+          var suggestBtn = msgMeta.querySelector(".wa-ai-suggest-reply-btn");
+          var explainBtn = msgMeta.querySelector(".wa-ai-explain-btn");
+          var anchor = suggestBtn || explainBtn;
+          if (anchor) {
+            if (anchor.nextSibling) {
+              msgMeta.insertBefore(retranslateBtn, anchor.nextSibling);
+            } else {
+              msgMeta.appendChild(retranslateBtn);
+            }
+          } else {
+            var firstChild = msgMeta.firstChild;
+            if (firstChild) {
+              msgMeta.insertBefore(retranslateBtn, firstChild);
+            } else {
+              msgMeta.appendChild(retranslateBtn);
+            }
+          }
+          return;
+        }
+      } catch (_) {}
+      if (fallbackParent && fallbackParent.appendChild) {
+        fallbackParent.appendChild(retranslateBtn);
+      }
+    }
+
+    // WATransChat createTranslationWrapper — translation + retranslate icon button
+    function renderTranslation(row, span, translated, original, engineIndex) {
+      if (!row || !translated) return;
+      try {
+        ensureStyle();
+        var host = getSegmentContainer(span, row);
+        var existing = host.querySelector ? host.querySelector(".translated-text") : null;
+        if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+
+        var idx =
+          typeof engineIndex === "number" && engineIndex >= 0
+            ? engineIndex
+            : defaultHistoryEngineIndex();
+        try {
+          row.setAttribute("data-engine-index", String(idx));
+        } catch (_) {}
+
+        var wrap = document.createElement("div");
+        wrap.className = "translated-text";
+        if (original != null && original !== "") {
+          wrap.setAttribute("data-original-text", original);
+        }
+        var body = document.createElement("div");
+        body.className = "selectable-text copyable-text _aupe";
+        var trColor = normalizeTextColor(cfg.textColor);
+        var trSize = normalizeFontSize(cfg.fontSize);
+        // Voice STT transcription (AudioToTextTranscription-*) — same padding as WATransChat.
+        var isAudioTx =
+          span &&
+          span.id &&
+          (span.id === "AudioToTextTranscription" ||
+            String(span.id).indexOf("AudioToTextTranscription-") === 0);
+        var pad = isAudioTx ? "4px 6px 0" : "4px 0 0 0";
+        body.style.cssText =
+          "user-select:text;border-top:1px dashed #bbb;margin:4px 0 0 0;padding:" +
+          pad +
+          ";" +
+          "white-space:pre-wrap;color:" +
+          trColor +
+          ";font-size:" +
+          trSize +
+          "px;line-height:1.5;min-width:100px;box-sizing:border-box;";
+        wrap.style.fontSize = trSize + "px";
+        wrap.style.lineHeight = "1.5";
+        body.textContent = softenBubbleTranslationNewlines(translated);
+        wrap.appendChild(body);
+        if (isAudioTx) {
+          try {
+            var voiceUi = span.closest && span.closest(".wa-audio-to-text-ui");
+            if (voiceUi) voiceUi.classList.add("wa-audio-to-text-ui--has-text");
+          } catch (_) {}
+        }
+
+        var retranslateBtn = document.createElement("button");
+        retranslateBtn.className = "wa-retranslate-btn";
+        retranslateBtn.type = "button";
+        retranslateBtn.title = tPage("retranslate", "重新翻译");
+        retranslateBtn.setAttribute("aria-label", tPage("retranslate", "重新翻译"));
+        retranslateBtn.innerHTML = RETRANSLATE_SVG;
+        retranslateBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          handleRetranslate(row, span, undefined, original);
+        });
+
+        if (span && span.parentNode) {
+          span.insertAdjacentElement("afterend", wrap);
+        } else if (host && host.appendChild) {
+          host.appendChild(wrap);
+        }
+
+        try {
+          row.querySelectorAll(".wa-retranslate-btn").forEach(function (btn) {
+            try {
+              btn.remove();
+            } catch (_) {}
+          });
+        } catch (_) {}
+        mountRetranslateButton(row, retranslateBtn, body);
+      } catch (_) {}
+    }
+
+    function isTranslateAuthError(err) {
+      var d = String(err && err.message ? err.message : err || "").trim();
+      if (!d) return false;
+      var dl = d.toLowerCase();
+      if (dl.indexOf("未登录") >= 0 || dl.indexOf("订阅已过期") >= 0) return true;
+      if (dl.indexOf("auth_invalid") >= 0 || dl.indexOf("login") >= 0 || dl.indexOf("expired") >= 0) {
+        return true;
+      }
+      try {
+        if (!canTranslate()) return true;
+      } catch (_) {}
+      return false;
+    }
+
+    function saveChatHistoryEngineSelection(engineId) {
+      var next = String(engineId || "").trim() || "google_web";
+      if (CHAT_HISTORY_TRANSLATION_ENGINES.indexOf(next) < 0) next = "google_web";
+      cfg.historyEngine = next;
+      try {
+        if (window.__whatsnowTranslateCfg) window.__whatsnowTranslateCfg.historyEngine = next;
+        if (window.__whatsnowTranslateBoot) window.__whatsnowTranslateBoot.historyEngine = next;
+      } catch (_) {}
+      try {
+        invokeChecked("set_chat_history_engine", { engine: next }).catch(function (err) {
+          invoke("dlog", {
+            msg: ("set_chat_history_engine fail: " + (err && err.message ? err.message : err)).slice(
+              0,
+              280
+            ),
+          });
+        });
+      } catch (_) {}
+      return true;
+    }
+
+    /** Cycle global chat-history engine (persists via set_chat_history_engine). */
+    function switchToNextChatHistoryEngine(done) {
+      var finish = function (result) {
+        try {
+          if (typeof done === "function") done(result);
+        } catch (_) {}
+      };
+      var all = CHAT_HISTORY_TRANSLATION_ENGINES.slice();
+      var current = historyCacheEngine();
+      var idx = Math.max(0, all.indexOf(current));
+      var isPro = canUseProRetranslateEngines();
+      var hasDeepLKey = !!(cfg.deeplApiKey && String(cfg.deeplApiKey).trim());
+      var hasChatgptKey = !!(cfg.chatgptApiKey && String(cfg.chatgptApiKey).trim());
+      var hasOpenaiCustomKey = !!(
+        cfg.openaiCustomApiKey &&
+        String(cfg.openaiCustomApiKey).trim() &&
+        cfg.openaiCustomApiUrl &&
+        String(cfg.openaiCustomApiUrl).trim() &&
+        cfg.openaiCustomModel &&
+        String(cfg.openaiCustomModel).trim()
+      );
+      var hasDeepseekCustomKey = !!(
+        cfg.deepseekCustomApiKey && String(cfg.deepseekCustomApiKey).trim()
+      );
+      var candidates = [];
+      for (var step = 1; step <= all.length; step++) {
+        var eng = all[(idx + step) % all.length];
+        if (!eng || eng === current) continue;
+        if (!isPro && CHAT_HISTORY_PRO_ENGINES.indexOf(eng) >= 0) continue;
+        if (eng === "deepl" && !hasDeepLKey) continue;
+        if (eng === "chatgpt" && !hasChatgptKey) continue;
+        if (eng === "openai_custom" && !hasOpenaiCustomKey) continue;
+        if (eng === "deepseek_custom" && !hasDeepseekCustomKey) continue;
+        candidates.push(eng);
+      }
+      if (!candidates.length) {
+        for (var i = 0; i < all.length; i++) {
+          var fe = all[i];
+          if (!fe || fe === current) continue;
+          if (CHAT_HISTORY_PRO_ENGINES.indexOf(fe) >= 0) continue;
+          candidates.push(fe);
+        }
+      }
+      var next = candidates[0] || null;
+      if (!next) {
+        finish({
+          ok: false,
+          engine: current,
+          name: getEngineDisplayName(current, pageUiLang()),
+        });
+        return;
+      }
+      var saved = saveChatHistoryEngineSelection(next);
+      finish({
+        ok: !!saved,
+        engine: next,
+        name: getEngineDisplayName(next, pageUiLang()),
+      });
+    }
+
+    function resolveFailPlaceholderTarget(wrap) {
+      if (!wrap || !wrap.isConnected) return null;
+      var msg =
+        findBubbleFromSpan(wrap) ||
+        (wrap.closest &&
+          (wrap.closest("[data-id][role=\"row\"]") ||
+            wrap.closest("[role=\"row\"]") ||
+            wrap.closest("[data-testid=\"msg-container\"]")));
+      if (!msg) return null;
+      var originalText =
+        wrap.getAttribute("data-original-text") || msg.getAttribute("data-original-text") || "";
+      if (!originalText) return null;
+      var isSelectable = function (el) {
+        try {
+          return !!(
+            el &&
+            el.getAttribute &&
+            String(el.getAttribute("data-testid") || "").indexOf("selectable-text") >= 0
+          );
+        } catch (_) {
+          return false;
+        }
+      };
+      var textElement = wrap.previousElementSibling;
+      if (!isSelectable(textElement)) {
+        var parent = wrap.parentElement;
+        if (parent && parent.children) {
+          var kids = Array.prototype.slice.call(parent.children);
+          var widx = kids.indexOf(wrap);
+          for (var i = widx - 1; i >= 0; i--) {
+            if (isSelectable(kids[i])) {
+              textElement = kids[i];
+              break;
+            }
+          }
+        }
+      }
+      if (!isSelectable(textElement)) {
+        textElement = msg.querySelector('span[data-testid~="selectable-text"]');
+      }
+      if (!textElement) return null;
+      return { msg: msg, textElement: textElement, originalText: originalText };
+    }
+
+    function collectChatHistoryFailRetryTargets() {
+      var root =
+        document.querySelector('div[data-scrolltracepolicy="wa.web.conversation.messages"]') ||
+        document.querySelector('[data-testid="conversation-panel-body"]');
+      if (!root) return [];
+      var fails = root.querySelectorAll(".translated-text.wa-chat-translate-fail-wrap");
+      var out = [];
+      var seen = typeof Set !== "undefined" ? new Set() : null;
+      for (var i = 0; i < fails.length; i++) {
+        try {
+          var target = resolveFailPlaceholderTarget(fails[i]);
+          if (!target) continue;
+          if (seen) {
+            if (seen.has(target.textElement)) continue;
+            seen.add(target.textElement);
+          }
+          out.push(target);
+        } catch (_) {}
+      }
+      return out;
+    }
+
+    function createTranslationFailPlaceholder(msg, textElement, engineIndex, originalText) {
+      if (!msg || !textElement) return;
+      try {
+        ensureStyle();
+        var segmentContainer = getSegmentContainer(textElement, msg);
+        var existing = segmentContainer.querySelector
+          ? segmentContainer.querySelector(".translated-text")
+          : null;
+        if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+
+        var failText = tPage("chatHistoryEngineAbnormal", "聊天记录翻译接口异常");
+        var switchLabel = tPage("composerSwitchEngine", "切换翻译接口");
+        var wrap = document.createElement("div");
+        wrap.className = "translated-text wa-chat-translate-fail-wrap";
+        if (originalText != null && originalText !== "") {
+          wrap.setAttribute("data-original-text", originalText);
+        }
+        try {
+          wrap.setAttribute(
+            "data-engine-index",
+            String(engineIndex == null ? defaultHistoryEngineIndex() : engineIndex)
+          );
+        } catch (_) {}
+
+        var trSize = normalizeFontSize(cfg.fontSize);
+        wrap.style.fontSize = trSize + "px";
+        wrap.style.lineHeight = "1.5";
+        var isAudioTx =
+          textElement &&
+          textElement.id &&
+          (textElement.id === "AudioToTextTranscription" ||
+            String(textElement.id).indexOf("AudioToTextTranscription-") === 0);
+        var pad = isAudioTx ? "4px 6px 0" : "4px 0 0 0";
+        var textDiv = document.createElement("div");
+        textDiv.className = "selectable-text copyable-text _aupe wa-chat-translate-fail";
+        textDiv.style.cssText =
+          "user-select:text;border-top:1px dashed #bbb;margin:4px 0 0 0;padding:" +
+          pad +
+          ";white-space:pre-wrap;font-size:" +
+          trSize +
+          "px;line-height:1.5;min-width:100px;box-sizing:border-box;" +
+          "display:flex;align-items:center;flex-wrap:wrap;gap:8px;";
+
+        var label = document.createElement("span");
+        label.className = "wa-chat-translate-fail-label";
+        label.textContent = failText;
+        var switchBtn = document.createElement("button");
+        switchBtn.type = "button";
+        switchBtn.className = "wa-chat-switch-engine-btn";
+        switchBtn.textContent = switchLabel;
+        switchBtn.title = switchLabel;
+        switchBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (switchBtn.disabled) return;
+          switchGlobalChatHistoryEngineAndRetry(msg, textElement, originalText, switchBtn);
+        });
+        textDiv.appendChild(label);
+        textDiv.appendChild(switchBtn);
+        wrap.appendChild(textDiv);
+
+        if (isAudioTx) {
+          try {
+            var voiceUi = textElement.closest && textElement.closest(".wa-audio-to-text-ui");
+            if (voiceUi) voiceUi.classList.add("wa-audio-to-text-ui--has-text");
+          } catch (_) {}
+        }
+
+        var retranslateBtn = document.createElement("button");
+        retranslateBtn.className = "wa-retranslate-btn";
+        retranslateBtn.type = "button";
+        retranslateBtn.title = tPage("retranslate", "重新翻译");
+        retranslateBtn.setAttribute("aria-label", tPage("retranslate", "重新翻译"));
+        retranslateBtn.innerHTML = RETRANSLATE_SVG;
+        retranslateBtn.addEventListener("click", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          handleRetranslate(msg, textElement, undefined, originalText);
+        });
+
+        if (textElement && textElement.parentNode) {
+          textElement.insertAdjacentElement("afterend", wrap);
+        } else if (segmentContainer && segmentContainer.appendChild) {
+          segmentContainer.appendChild(wrap);
+        }
+
+        try {
+          msg.querySelectorAll(".wa-retranslate-btn").forEach(function (btn) {
+            try {
+              btn.remove();
+            } catch (_) {}
+          });
+        } catch (_) {}
+        mountRetranslateButton(msg, retranslateBtn, textDiv);
+      } catch (_) {}
+    }
+
+    function retryChatMessageWithGlobalEngine(msg, textElement, originalText) {
+      if (!msg || !textElement || !originalText) return;
+      var segmentContainer = getSegmentContainer(textElement, msg);
+      if (busyHosts && busyHosts.has(segmentContainer)) return;
+      if (busyHosts) busyHosts.add(segmentContainer);
+
+      var wrapper = segmentContainer.querySelector
+        ? segmentContainer.querySelector(".translated-text")
+        : null;
+      var textDiv = wrapper ? wrapper.querySelector(".selectable-text.copyable-text") : null;
+      var eng = historyCacheEngine();
+      var engIdx = TRANSLATION_ENGINES.indexOf(eng);
+      if (engIdx < 0) engIdx = 0;
+      try {
+        msg.setAttribute("data-engine-index", String(engIdx));
+      } catch (_) {}
+
+      if (textDiv) {
+        textDiv.classList.remove("wa-chat-translate-fail");
+        textDiv.classList.add("wa-translating-status");
+        var engineName = getEngineDisplayName(eng, pageUiLang());
+        textDiv.textContent = tPageFill("translatingWithEngine", engineName + "翻译中.........", {
+          engine: engineName,
+        });
+      }
+
+      var retranslateBtn =
+        (msg && msg.querySelector && msg.querySelector(".wa-retranslate-btn")) ||
+        (wrapper ? wrapper.querySelector(".wa-retranslate-btn") : null);
+      if (retranslateBtn) {
+        retranslateBtn.disabled = true;
+        try {
+          retranslateBtn.style.opacity = "0.6";
+        } catch (_) {}
+      }
+
+      var ctx = null;
+      if (eng === "chatgpt" || eng === "openai_custom" || eng === "deepseek_custom") {
+        ctx = collectHistoryTranslateContext(msg || textElement, originalText);
+      }
+      translateHistoryWithChain(originalText, eng, cfg.targetLang || "zh-CN", ctx)
+        .then(function (out) {
+          var translatedText = typeof out === "string" ? out.trim() : "";
+          if (translatedText) {
+            var cleaned = softenBubbleTranslationNewlines(translatedText);
+            try {
+              rememberTranslation(originalText, eng, msg, cleaned);
+            } catch (_) {}
+            renderTranslation(msg, textElement, cleaned, originalText, engIdx);
+          } else {
+            createTranslationFailPlaceholder(msg, textElement, engIdx, originalText);
+          }
+        })
+        .catch(function (err) {
+          if (isTranslateAuthError(err)) {
+            if (wrapper) {
+              try {
+                wrapper.remove();
+              } catch (_) {}
+            }
+            return;
+          }
+          createTranslationFailPlaceholder(msg, textElement, engIdx, originalText);
+        })
+        .then(function () {
+          try {
+            if (busyHosts && segmentContainer) busyHosts.delete(segmentContainer);
+          } catch (_) {}
+          if (retranslateBtn) {
+            try {
+              retranslateBtn.disabled = false;
+              retranslateBtn.style.opacity = "0.8";
+            } catch (_) {}
+          }
+        });
+    }
+
+    function switchGlobalChatHistoryEngineAndRetry(msg, textElement, originalText, triggerBtn) {
+      if (triggerBtn) {
+        try {
+          triggerBtn.disabled = true;
+        } catch (_) {}
+      }
+      var targets = collectChatHistoryFailRetryTargets();
+      if (!targets.length && msg && textElement && originalText) {
+        targets.push({ msg: msg, textElement: textElement, originalText: originalText });
+      }
+      switchToNextChatHistoryEngine(function (result) {
+        if (triggerBtn) {
+          try {
+            triggerBtn.disabled = false;
+          } catch (_) {}
+        }
+        if (!result || !result.ok) return;
+        var name = result.name || getEngineDisplayName(result.engine, pageUiLang());
+        var switchedHint = tPageFill(
+          "chatHistoryEngineSwitched",
+          "已切换到 " + name + "，正在重新翻译…",
+          { engine: name }
+        );
+        for (var i = 0; i < targets.length; i++) {
+          try {
+            var t = targets[i];
+            var sc = getSegmentContainer(t.textElement, t.msg);
+            var w = sc.querySelector
+              ? sc.querySelector(".translated-text.wa-chat-translate-fail-wrap")
+              : null;
+            var td = w ? w.querySelector(".selectable-text.copyable-text") : null;
+            if (td) {
+              td.classList.remove("wa-chat-translate-fail");
+              td.classList.add("wa-translating-status");
+              td.textContent = switchedHint;
+            }
+          } catch (_) {}
+        }
+        for (var j = 0; j < targets.length; j++) {
+          try {
+            var tj = targets[j];
+            retryChatMessageWithGlobalEngine(tj.msg, tj.textElement, tj.originalText);
+          } catch (_) {}
+        }
+      });
+    }
+
+    function handleRetranslate(msg, textElement, currentEngineIndex, originalTextFromSegment) {
+      var segmentContainer = getSegmentContainer(textElement, msg);
+      var wrapper = segmentContainer.querySelector
+        ? segmentContainer.querySelector(".translated-text")
+        : msg.querySelector(".translated-text");
+      var originalText =
+        typeof originalTextFromSegment === "string" && originalTextFromSegment
+          ? originalTextFromSegment
+          : (wrapper && wrapper.getAttribute("data-original-text")) ||
+            msg.getAttribute("data-original-text") ||
+            extractWaBubblePlainText(textElement) ||
+            "";
+      if (!originalText) return;
+
+      var engineIndex = currentEngineIndex;
+      if (engineIndex === undefined || engineIndex === null) {
+        var storedIndex = msg.getAttribute("data-engine-index");
+        engineIndex = storedIndex ? parseInt(storedIndex, 10) : defaultHistoryEngineIndex();
+        if (isNaN(engineIndex)) engineIndex = 0;
+      }
+
+      var textDiv = wrapper ? wrapper.querySelector(".selectable-text.copyable-text") : null;
+      var retranslateBtn =
+        (msg && msg.querySelector && msg.querySelector(".wa-retranslate-btn")) ||
+        (wrapper ? wrapper.querySelector(".wa-retranslate-btn") : null);
+      if (textDiv) {
+        textDiv.classList.add("wa-translating-status");
+        textDiv.textContent = tPage("retranslating", "重新翻译中...");
+      }
+      if (retranslateBtn) {
+        retranslateBtn.disabled = true;
+        try {
+          retranslateBtn.style.opacity = "0.6";
+        } catch (_) {}
+      }
+
+      var hasDeepLKey = !!(cfg.deeplApiKey && String(cfg.deeplApiKey).trim());
+      var hasChatgptKey = !!(cfg.chatgptApiKey && String(cfg.chatgptApiKey).trim());
+      var hasOpenaiCustomKey = !!(
+        cfg.openaiCustomApiKey &&
+        String(cfg.openaiCustomApiKey).trim() &&
+        cfg.openaiCustomApiUrl &&
+        String(cfg.openaiCustomApiUrl).trim() &&
+        cfg.openaiCustomModel &&
+        String(cfg.openaiCustomModel).trim()
+      );
+      var hasDeepseekCustomKey = !!(
+        cfg.deepseekCustomApiKey && String(cfg.deepseekCustomApiKey).trim()
+      );
+      var canUseProOnlyEngines = canUseProRetranslateEngines();
+      var alreadyRetranslated = msg.getAttribute("data-retranslated") === "1";
+      var nextEngineIndex = findNextRetranslateEngineIndex(
+        engineIndex,
+        hasDeepLKey,
+        canUseProOnlyEngines,
+        alreadyRetranslated,
+        hasChatgptKey,
+        hasOpenaiCustomKey,
+        hasDeepseekCustomKey
+      );
+      var nextEngine = TRANSLATION_ENGINES[nextEngineIndex] || "google_web";
+      var engineName = getEngineDisplayName(nextEngine, pageUiLang());
+      if (textDiv) {
+        textDiv.classList.add("wa-translating-status");
+        textDiv.textContent = tPageFill(
+          "translatingWithEngine",
+          engineName + "翻译中.........",
+          { engine: engineName }
+        );
+      }
+      try {
+        msg.setAttribute("data-engine-index", String(nextEngineIndex));
+        msg.setAttribute("data-retranslated", "1");
+      } catch (_) {}
+
+      invokeChecked("translate_text", {
+        text: originalText,
+        targetLang: cfg.targetLang || "zh-CN",
+        engine: nextEngine,
+        sourceLang: "auto",
+      })
+        .then(function (out) {
+          var translatedText = typeof out === "string" ? out.trim() : "";
+          if (translatedText) {
+            var cleaned = softenBubbleTranslationNewlines(translatedText);
+            try {
+              rememberTranslation(originalText, nextEngine, msg, cleaned);
+            } catch (_) {}
+            renderTranslation(msg, textElement, cleaned, originalText, nextEngineIndex);
+          } else {
+            if (retranslateBtn) {
+              retranslateBtn.disabled = false;
+              try {
+                retranslateBtn.style.opacity = "0.8";
+              } catch (_) {}
+              retranslateBtn.innerHTML = RETRANSLATE_SVG;
+            }
+            if (textDiv) {
+              textDiv.classList.remove("wa-translating-status");
+              textDiv.textContent = tPage("translateFailRetry", "翻译失败，请重试");
+              if (retranslateBtn) mountRetranslateButton(msg, retranslateBtn, textDiv);
+            }
+          }
+        })
+        .catch(function (err) {
+          var detail = String(err && err.message ? err.message : err || "").trim();
+          if (retranslateBtn) {
+            retranslateBtn.disabled = false;
+            try {
+              retranslateBtn.style.opacity = "0.8";
+            } catch (_) {}
+            retranslateBtn.innerHTML = RETRANSLATE_SVG;
+          }
+          if (textDiv) {
+            textDiv.classList.remove("wa-translating-status");
+            textDiv.textContent = detail
+              ? tPageFill(
+                  "translateFailEngineDetail",
+                  engineName + "翻译失败: " + detail,
+                  { engine: engineName, detail: detail }
+                )
+              : tPage("translateFailRetry", "翻译失败，请重试");
+            if (retranslateBtn) mountRetranslateButton(msg, retranslateBtn, textDiv);
+          }
+        });
+    }
+
+    /** WATransChat performChatMessageTranslation fallback chains for Google/Bing. */
+    function historyFallbackEngines(preferred) {
+      if (preferred === "bing") return ["google_web", "google", "google_chrome"];
+      if (preferred === "google_web") return ["google", "google_chrome"];
+      if (preferred === "google") return ["google_web", "google_chrome"];
+      if (preferred === "google_chrome") return ["google_web", "google"];
+      return [];
+    }
+
+    function isGoogleOrBingHistoryEngine(eng) {
+      return (
+        eng === "google_web" ||
+        eng === "google" ||
+        eng === "google_chrome" ||
+        eng === "bing"
+      );
+    }
+
+    function collectHistoryTranslateContext(anchorEl, sourceText) {
+      try {
+        var helpers = window.__whatsnowAiHelpers || {};
+        if (typeof helpers.collectChatHistoryTranslateContext === "function") {
+          return helpers.collectChatHistoryTranslateContext(anchorEl, sourceText) || [];
+        }
+        if (typeof helpers.collectWaAiExplainContext === "function") {
+          return (helpers.collectWaAiExplainContext(anchorEl, sourceText) || [])
+            .map(function (m) {
+              return {
+                role: m && m.role === "me" ? "me" : "them",
+                text: m && m.text != null ? String(m.text).trim() : "",
+              };
+            })
+            .filter(function (m) {
+              return !!m.text;
+            });
+        }
+      } catch (_) {}
+      return [];
+    }
+
+    function translateHistoryWithChain(text, preferred, targetLang, contextMessages) {
+      var chain = [preferred].concat(historyFallbackEngines(preferred));
+      var i = 0;
+      function attempt() {
+        if (i >= chain.length) {
+          return Promise.reject(new Error("all_engines_failed"));
+        }
+        var eng = chain[i++];
+        var payload = {
+          text: text,
+          targetLang: targetLang,
+          engine: eng,
+          sourceLang: "auto",
+        };
+        if (
+          contextMessages &&
+          contextMessages.length &&
+          (eng === "chatgpt" || eng === "openai_custom" || eng === "deepseek_custom")
+        ) {
+          payload.contextMessages = contextMessages;
+        }
+        return invokeChecked("translate_text", payload).catch(function (err) {
+          if (!isGoogleOrBingHistoryEngine(preferred) || i >= chain.length) {
+            return Promise.reject(err);
+          }
+          invoke("dlog", {
+            msg: ("translate chain fail eng=" + eng + ": " + (err && err.message ? err.message : err)).slice(
+              0,
+              280
+            ),
+          });
+          return attempt();
+        });
+      }
+      return attempt();
+    }
+
+    function pumpQueue() {
+      while (active < MAX_ACTIVE && queue.length) {
+        var job = queue.shift();
+        active++;
+        (function (j) {
+          var eng = historyCacheEngine();
+          var engIdx = TRANSLATION_ENGINES.indexOf(eng);
+          if (engIdx < 0) engIdx = 0;
+          try {
+            if (j.row) j.row.setAttribute("data-engine-index", String(engIdx));
+          } catch (_) {}
+          var memHit = peekMemCache(j.text, eng, j.row);
+          if (memHit && j.row && j.row.isConnected) {
+            renderTranslation(j.row, j.span, memHit, j.text, engIdx);
+            try {
+              if (busyHosts && j.host) busyHosts.delete(j.host);
+            } catch (_) {}
+            active--;
+            pumpQueue();
+            return;
+          }
+          lookupTransCache(j.text, eng, j.row)
+            .then(function (cached) {
+              if (cached && j.row && j.row.isConnected) {
+                renderTranslation(j.row, j.span, cached, j.text, engIdx);
+                return;
+              }
+              var ctx = null;
+              if (
+                eng === "chatgpt" ||
+                eng === "openai_custom" ||
+                eng === "deepseek_custom"
+              ) {
+                ctx = collectHistoryTranslateContext(j.row || j.span, j.text);
+              }
+              return translateHistoryWithChain(j.text, eng, cfg.targetLang, ctx).then(function (out) {
+                var result = typeof out === "string" ? out.trim() : "";
+                if (result && j.row && j.row.isConnected) {
+                  var cleaned = softenBubbleTranslationNewlines(result);
+                  rememberTranslation(j.text, eng, j.row, cleaned);
+                  renderTranslation(j.row, j.span, cleaned, j.text, engIdx);
+                } else if (j.row && j.row.isConnected && j.span) {
+                  // Empty result → visible fail placeholder (guide switch engine)
+                  createTranslationFailPlaceholder(j.row, j.span, engIdx, j.text);
+                }
+              });
+            })
+            .catch(function (err) {
+              invoke("dlog", {
+                msg: ("translate fail: " + (err && err.message ? err.message : err)).slice(0, 280),
+              });
+              if (isTranslateAuthError(err)) return;
+              if (j.row && j.row.isConnected && j.span) {
+                createTranslationFailPlaceholder(j.row, j.span, engIdx, j.text);
+              }
+            })
+            .then(function () {
+              try {
+                if (busyHosts && j.host) busyHosts.delete(j.host);
+              } catch (_) {}
+              active--;
+              pumpQueue();
+            });
+        })(job);
+      }
+    }
+
+    // WATransChat `$()` — translate visible selectable-text spans
+    function translateVisibleMessages() {
+      if (!cfg.enabled || !cfg.incoming || !canTranslate()) return;
+      if (!ensureStyle()) return;
+
+      var e = waIoPanelRoot();
+      var r = collectTextElementsForVisibleScan(e || document);
+      var u = typeof Set !== "undefined" ? new Set() : null;
+      var userLang = cfg.targetLang || window.userSourceLang || "zh-CN";
+      var added = 0;
+
+      for (var idx = 0; idx < r.length; idx++) {
+        (function (o) {
+          try {
+            if (e && !e.contains(o)) return;
+            if (o.closest(".translated-text")) return;
+            var i = findBubbleFromSpan(o);
+            if (!i) return;
+            var a = i.querySelectorAll('span[data-testid~="selectable-text"]');
+            for (var k = 0; k < a.length; k++) {
+              if (a[k] !== o && a[k].contains(o)) return;
+            }
+            var c = getSegmentContainer(o, i);
+            if (u) {
+              if (u.has(c)) return;
+            }
+            if (c.querySelector && c.querySelector(".translated-text")) return;
+            try {
+              var skip = c.getAttribute && c.getAttribute("data-wa-same-lang-skip");
+              if (skip) {
+                if (normalizeLangFamily(skip) === normalizeLangFamily(userLang)) return;
+                c.removeAttribute("data-wa-same-lang-skip");
+              }
+            } catch (_) {}
+            if (e && !e.contains(i)) return;
+            if (u) u.add(c);
+            var s = extractWaBubblePlainText(o);
+            if (!s) return;
+            try {
+              i.setAttribute("data-original-text", s);
+            } catch (_) {}
+            // Remounted bubbles (everything except the sticky last row) lose
+            // .translated-text; restore from memory immediately, even off-viewport.
+            var eng = historyCacheEngine();
+            var engIdx = TRANSLATION_ENGINES.indexOf(eng);
+            if (engIdx < 0) engIdx = 0;
+            var memHit = peekMemCache(s, eng, i);
+            if (memHit) {
+              renderTranslation(i, o, memHit, s, engIdx);
+              return;
+            }
+            if (!isInViewport(i)) return;
+            if (isSameAsUserLang(s, userLang)) {
+              try {
+                c.setAttribute("data-wa-same-lang-skip", userLang);
+              } catch (_) {}
+              return;
+            }
+            if (busyHosts && busyHosts.has(c)) return;
+            if (busyHosts) busyHosts.add(c);
+            added++;
+            queue.push({ row: i, span: o, host: c, text: s });
+          } catch (_) {}
+        })(r[idx]);
+      }
+      pumpQueue();
+      var now = Date.now();
+      if (added > 0 || now - lastScanLogAt > 5000) {
+        lastScanLogAt = now;
+        invoke("dlog", {
+          msg: "translate scan spans=" + r.length + " add=" + added + " q=" + queue.length + " act=" + active,
+        });
+      }
+    }
+
+    function scheduleScan(ms) {
+      if (scanTimer) clearTimeout(scanTimer);
+      scanTimer = setTimeout(function () {
+        scanTimer = null;
+        try {
+          translateVisibleMessages();
+        } catch (_) {}
+      }, typeof ms === "number" ? ms : 200);
+    }
+
+    // WATransChat observer: IntersectionObserver on rows + MutationObserver on panel
+    function ensureIntersectionObserver() {
+      if (rowIo || typeof IntersectionObserver !== "function") return rowIo;
+      try {
+        rowIo = new IntersectionObserver(
+          function (entries) {
+            var needScan = false;
+            for (var g = 0; g < entries.length; g++) {
+              var entry = entries[g];
+              if (!entry || !entry.target) continue;
+              if (entry.isIntersecting) {
+                if (waIntersectingMessageRows) waIntersectingMessageRows.add(entry.target);
+                needScan = true;
+              } else if (waIntersectingMessageRows) {
+                waIntersectingMessageRows.delete(entry.target);
+              }
+            }
+            if (needScan) {
+              try {
+                restoreCachedTranslationsSync();
+              } catch (_) {}
+              scheduleScan(80);
+            }
+          },
+          { root: null, rootMargin: "120px 0px", threshold: 0 }
+        );
+      } catch (_) {
+        rowIo = null;
+      }
+      return rowIo;
+    }
+
+    function observeMessageRows(panel) {
+      var root = panel || waIoPanelRoot() || document;
+      var observer = ensureIntersectionObserver();
+      if (!observer) return;
+      var rows;
+      try {
+        rows = root.querySelectorAll('[data-id][role="row"], [role="row"]');
+      } catch (_) {
+        return;
+      }
+      for (var w = 0; w < rows.length; w++) {
+        var row = rows[w];
+        if (!row) continue;
+        if (observedRows && observedRows.has(row)) continue;
+        if (observedRows) observedRows.add(row);
+        try {
+          observer.observe(row);
+        } catch (_) {}
+      }
+    }
+
+    function ensurePanelObservers() {
+      var panel = waIoPanelRoot();
+      if (!panel) {
+        scheduleScan(400);
+        return;
+      }
+      if (panel !== observedPanel) {
+        observedPanel = panel;
+        // 换会话：重建 IO，清空相交集合，避免旧会话行占用扫描与内存
+        resetIntersectionObserver();
+        try {
+          if (panelMo) panelMo.disconnect();
+        } catch (_) {}
+        try {
+          panelMo = new MutationObserver(function (mutations) {
+            if (mutationsAreOnlyPluginUi(mutations)) return;
+            // Virtual-list remounts drop .translated-text on every row except the
+            // sticky last message; sync memory restore must run in this callback.
+            try {
+              restoreCachedTranslationsSync();
+            } catch (_) {}
+            try {
+              observeMessageRows(panel);
+            } catch (_) {}
+            scheduleScan(50);
+          });
+          panelMo.observe(panel, { childList: true, subtree: true });
+        } catch (_) {}
+        try {
+          restoreCachedTranslationsSync();
+        } catch (_) {}
+        scheduleScan(100);
+      }
+      observeMessageRows(panel);
+    }
+
+    function findComposeRoot() {
+      return (
+        document.querySelector("[data-testid='conversation-compose-box-container']") ||
+        document.querySelector("[data-testid='compose-box']") ||
+        document.querySelector("#main footer") ||
+        null
+      );
+    }
+
+    function isAllowedChatComposerEl(el) {
+      if (!el || !el.getAttribute) return false;
+      try {
+        var testid = el.getAttribute("data-testid") || "";
+        // 联系人信息「备注」等非消息框：绝不能当成会话输入框
+        if (
+          testid === "note-input-field" ||
+          testid === "text-input" ||
+          testid === "contact-first-name-input" ||
+          testid === "contact-last-name-input" ||
+          (el.closest &&
+            (el.closest('[data-testid="notes-section"]') ||
+              el.closest('[data-testid="chat-info-drawer"]') ||
+              el.closest('[data-testid="contact-info-drawer"]') ||
+              el.closest('[data-testid="save-contact-drawer"]') ||
+              el.closest('[data-testid="contact-info-header"]')))
+        ) {
+          return false;
+        }
+        if (
+          testid === "conversation-compose-box-input" ||
+          testid === "media-caption-input-container" ||
+          testid === "edit-message-composer"
+        ) {
+          return true;
+        }
+        if (el.closest && el.closest('[data-testid="media-caption-input-container"]')) {
+          return el.getAttribute("contenteditable") === "true";
+        }
+        if (el.closest("footer") && el.getAttribute("contenteditable") === "true") return true;
+        if (
+          el.getAttribute("contenteditable") === "true" &&
+          (el.getAttribute("data-lexical-editor") === "true" || el.getAttribute("role") === "textbox") &&
+          el.closest &&
+          (el.closest('[data-testid="media-editor"]') || el.closest('[data-testid="draw-overlay"]'))
+        ) {
+          return true;
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    function findComposeInput(root) {
+      // 优先走 send-hook 同源选框（已排除备注框、配文优先）
+      try {
+        var h = window.__whatsnowTranslateHelpers || {};
+        if (typeof h.getNativeComposerElement === "function") {
+          var fromHook = h.getNativeComposerElement();
+          if (fromHook) return fromHook;
+        }
+      } catch (_) {}
+      // 配文面板打开时优先配文框，避免译文写到背后会话框
+      try {
+        var capRoot = document.querySelector('[data-testid="media-caption-input-container"]');
+        if (capRoot) {
+          var capEd =
+            (capRoot.getAttribute("contenteditable") === "true" ? capRoot : null) ||
+            capRoot.querySelector('[contenteditable="true"][data-lexical-editor="true"]') ||
+            capRoot.querySelector('[contenteditable="true"][role="textbox"]') ||
+            capRoot.querySelector('[contenteditable="true"]');
+          if (capEd && isAllowedChatComposerEl(capEd)) return capEd;
+        }
+      } catch (_) {}
+      var scope = root || document;
+      var candidates = [
+        scope.querySelector("[data-testid='conversation-compose-box-input'][contenteditable='true']"),
+        scope.querySelector(".lexical-rich-text-input [contenteditable='true']"),
+        scope.querySelector("footer [contenteditable='true'][data-lexical-editor='true']"),
+        scope.querySelector("footer [contenteditable='true'][role='textbox']"),
+      ];
+      for (var i = 0; i < candidates.length; i++) {
+        if (candidates[i] && isAllowedChatComposerEl(candidates[i])) return candidates[i];
+      }
+      return null;
+    }
+
+    // Compose toggle lives in
