@@ -1,0 +1,1338 @@
+[
+  [
+    "Afghanistan (阿富汗)",
+    "af",
+    "93"
+  ],
+  [
+    "Albania (阿尔巴尼亚)",
+    "al",
+    "355"
+  ],
+  [
+    "Algeria (阿尔及利亚)",
+    "dz",
+    "213"
+  ],
+  [
+    "American Samoa (美属萨摩亚)",
+    "as",
+    "1684"
+  ],
+  [
+    "Andorra (安道尔)",
+    "ad",
+    "376"
+  ],
+  [
+    "Angola (安哥拉)",
+    "ao",
+    "244"
+  ],
+  [
+    "Anguilla (安圭拉)",
+    "ai",
+    "1264"
+  ],
+  [
+    "Antigua and Barbuda (安提瓜)",
+    "ag",
+    "1268"
+  ],
+  [
+    "Argentina (阿根廷)",
+    "ar",
+    "54"
+  ],
+  [
+    "Armenia (亚美尼亚)",
+    "am",
+    "374"
+  ],
+  [
+    "Aruba (阿鲁巴)",
+    "aw",
+    "297"
+  ],
+  [
+    "Australia (澳洲)",
+    "au",
+    "61",
+    0
+  ],
+  [
+    "Austria (奥地利)",
+    "at",
+    "43"
+  ],
+  [
+    "Azerbaijan (阿塞拜疆)",
+    "az",
+    "994"
+  ],
+  [
+    "Bahamas (巴哈马)",
+    "bs",
+    "1242"
+  ],
+  [
+    "Bahrain (巴林)",
+    "bh",
+    "973"
+  ],
+  [
+    "Bangladesh (孟加拉)",
+    "bd",
+    "880"
+  ],
+  [
+    "Barbados (巴巴多斯)",
+    "bb",
+    "1246"
+  ],
+  [
+    "Belarus (白俄)",
+    "by",
+    "375"
+  ],
+  [
+    "Belgium (比利时)",
+    "be",
+    "32"
+  ],
+  [
+    "Belize (伯利兹)",
+    "bz",
+    "501"
+  ],
+  [
+    "Benin (贝宁)",
+    "bj",
+    "229"
+  ],
+  [
+    "Bermuda (百慕大)",
+    "bm",
+    "1441"
+  ],
+  [
+    "Bhutan (不丹)",
+    "bt",
+    "975"
+  ],
+  [
+    "Bolivia (玻利维亚)",
+    "bo",
+    "591"
+  ],
+  [
+    "Bosnia and Herzegovina (波黑)",
+    "ba",
+    "387"
+  ],
+  [
+    "Botswana (博茨瓦纳)",
+    "bw",
+    "267"
+  ],
+  [
+    "Brazil (巴西)",
+    "br",
+    "55"
+  ],
+  [
+    "British Indian Ocean Territory (英属印度洋领地)",
+    "io",
+    "246"
+  ],
+  [
+    "British Virgin Islands (英属维尔京群岛)",
+    "vg",
+    "1284"
+  ],
+  [
+    "Brunei (文莱)",
+    "bn",
+    "673"
+  ],
+  [
+    "Bulgaria (保加利亚)",
+    "bg",
+    "359"
+  ],
+  [
+    "Burkina Faso (布基纳法索)",
+    "bf",
+    "226"
+  ],
+  [
+    "Burundi (布隆迪)",
+    "bi",
+    "257"
+  ],
+  [
+    "Cambodia (柬埔寨)",
+    "kh",
+    "855"
+  ],
+  [
+    "Cameroon (喀麦隆)",
+    "cm",
+    "237"
+  ],
+  [
+    "Canada (加拿大)",
+    "ca",
+    "1",
+    1,
+    [
+      "204",
+      "226",
+      "236",
+      "249",
+      "250",
+      "289",
+      "306",
+      "343",
+      "365",
+      "387",
+      "403",
+      "416",
+      "418",
+      "431",
+      "437",
+      "438",
+      "450",
+      "506",
+      "514",
+      "519",
+      "548",
+      "579",
+      "581",
+      "587",
+      "604",
+      "613",
+      "639",
+      "647",
+      "672",
+      "705",
+      "709",
+      "742",
+      "778",
+      "780",
+      "782",
+      "807",
+      "819",
+      "825",
+      "867",
+      "873",
+      "902",
+      "905"
+    ]
+  ],
+  [
+    "Cape Verde (佛得角)",
+    "cv",
+    "238"
+  ],
+  [
+    "Caribbean Netherlands (荷属加勒比)",
+    "bq",
+    "599",
+    1
+  ],
+  [
+    "Cayman Islands (开曼群岛)",
+    "ky",
+    "1345"
+  ],
+  [
+    "Central African Republic (中非)",
+    "cf",
+    "236"
+  ],
+  [
+    "Chad (乍得)",
+    "td",
+    "235"
+  ],
+  [
+    "Chile (智利)",
+    "cl",
+    "56"
+  ],
+  [
+    "China (中国)",
+    "cn",
+    "86"
+  ],
+  [
+    "Christmas Island (圣诞岛)",
+    "cx",
+    "61",
+    2
+  ],
+  [
+    "Cocos (Keeling) Islands (科科斯（基林）群岛)",
+    "cc",
+    "61",
+    1
+  ],
+  [
+    "Colombia (哥伦比亚)",
+    "co",
+    "57"
+  ],
+  [
+    "Comoros (科摩罗)",
+    "km",
+    "269"
+  ],
+  [
+    "Congo (DRC) (Jamhuri ya Kidemokrasia ya Kongo) (刚果（金）)",
+    "cd",
+    "243"
+  ],
+  [
+    "Congo (Republic) (Congo-Brazzaville) (刚果（布）)",
+    "cg",
+    "242"
+  ],
+  [
+    "Cook Islands (库克群岛)",
+    "ck",
+    "682"
+  ],
+  [
+    "Costa Rica (哥斯达黎加)",
+    "cr",
+    "506"
+  ],
+  [
+    "Côte d’Ivoire (科特迪瓦)",
+    "ci",
+    "225"
+  ],
+  [
+    "Croatia (克罗地亚)",
+    "hr",
+    "385"
+  ],
+  [
+    "Cuba (古巴)",
+    "cu",
+    "53"
+  ],
+  [
+    "Curaçao (库拉索)",
+    "cw",
+    "599",
+    0
+  ],
+  [
+    "Cyprus (塞浦路斯)",
+    "cy",
+    "357"
+  ],
+  [
+    "Czech Republic (捷克)",
+    "cz",
+    "420"
+  ],
+  [
+    "Denmark (丹麦)",
+    "dk",
+    "45"
+  ],
+  [
+    "Djibouti (吉布提)",
+    "dj",
+    "253"
+  ],
+  [
+    "Dominica (多米尼克)",
+    "dm",
+    "1767"
+  ],
+  [
+    "Dominican Republic (多米尼加)",
+    "do",
+    "1",
+    2,
+    [
+      "809",
+      "829",
+      "849"
+    ]
+  ],
+  [
+    "Ecuador (厄瓜多尔)",
+    "ec",
+    "593"
+  ],
+  [
+    "Egypt (埃及)",
+    "eg",
+    "20"
+  ],
+  [
+    "El Salvador (萨尔瓦多)",
+    "sv",
+    "503"
+  ],
+  [
+    "Equatorial Guinea (赤道几内亚)",
+    "gq",
+    "240"
+  ],
+  [
+    "Eritrea (厄立特里亚)",
+    "er",
+    "291"
+  ],
+  [
+    "Estonia (爱沙尼亚)",
+    "ee",
+    "372"
+  ],
+  [
+    "Ethiopia (埃塞)",
+    "et",
+    "251"
+  ],
+  [
+    "Falkland Islands (Islas Malvinas) (福克兰群岛)",
+    "fk",
+    "500"
+  ],
+  [
+    "Faroe Islands (法罗群岛)",
+    "fo",
+    "298"
+  ],
+  [
+    "Fiji (斐济)",
+    "fj",
+    "679"
+  ],
+  [
+    "Finland (芬兰)",
+    "fi",
+    "358",
+    0
+  ],
+  [
+    "France (法国)",
+    "fr",
+    "33"
+  ],
+  [
+    "French Guiana (法属圭亚那)",
+    "gf",
+    "594"
+  ],
+  [
+    "French Polynesia (法属波利尼西亚)",
+    "pf",
+    "689"
+  ],
+  [
+    "Gabon (加蓬)",
+    "ga",
+    "241"
+  ],
+  [
+    "Gambia (冈比亚)",
+    "gm",
+    "220"
+  ],
+  [
+    "Georgia (格鲁吉亚)",
+    "ge",
+    "995"
+  ],
+  [
+    "Germany (德国)",
+    "de",
+    "49"
+  ],
+  [
+    "Ghana (加纳)",
+    "gh",
+    "233"
+  ],
+  [
+    "Gibraltar (直布罗陀)",
+    "gi",
+    "350"
+  ],
+  [
+    "Greece (希腊)",
+    "gr",
+    "30"
+  ],
+  [
+    "Greenland (格陵兰)",
+    "gl",
+    "299"
+  ],
+  [
+    "Grenada (格林纳达)",
+    "gd",
+    "1473"
+  ],
+  [
+    "Guadeloupe (瓜德罗普)",
+    "gp",
+    "590",
+    0
+  ],
+  [
+    "Guam (关岛)",
+    "gu",
+    "1671"
+  ],
+  [
+    "Guatemala (危地马拉)",
+    "gt",
+    "502"
+  ],
+  [
+    "Guernsey (根西)",
+    "gg",
+    "44",
+    1
+  ],
+  [
+    "Guinea (几内亚)",
+    "gn",
+    "224"
+  ],
+  [
+    "Guinea-Bissau (几内亚比绍)",
+    "gw",
+    "245"
+  ],
+  [
+    "Guyana (圭亚那)",
+    "gy",
+    "592"
+  ],
+  [
+    "Haiti (海地)",
+    "ht",
+    "509"
+  ],
+  [
+    "Honduras (洪都拉斯)",
+    "hn",
+    "504"
+  ],
+  [
+    "Hong Kong (中国香港)",
+    "hk",
+    "852"
+  ],
+  [
+    "Hungary (匈牙利)",
+    "hu",
+    "36"
+  ],
+  [
+    "Iceland (冰岛)",
+    "is",
+    "354"
+  ],
+  [
+    "India (印度)",
+    "in",
+    "91"
+  ],
+  [
+    "Indonesia (印尼)",
+    "id",
+    "62"
+  ],
+  [
+    "Iran (伊朗)",
+    "ir",
+    "98"
+  ],
+  [
+    "Iraq (伊拉克)",
+    "iq",
+    "964"
+  ],
+  [
+    "Ireland (爱尔兰)",
+    "ie",
+    "353"
+  ],
+  [
+    "Isle of Man (马恩岛)",
+    "im",
+    "44",
+    2
+  ],
+  [
+    "Israel (以色列)",
+    "il",
+    "972"
+  ],
+  [
+    "Italy (意大利)",
+    "it",
+    "39",
+    0
+  ],
+  [
+    "Jamaica (牙买加)",
+    "jm",
+    "1",
+    4,
+    [
+      "876",
+      "658"
+    ]
+  ],
+  [
+    "Japan (日本)",
+    "jp",
+    "81"
+  ],
+  [
+    "Jersey (泽西)",
+    "je",
+    "44",
+    3
+  ],
+  [
+    "Jordan (约旦)",
+    "jo",
+    "962"
+  ],
+  [
+    "Kazakhstan (哈萨克)",
+    "kz",
+    "7",
+    1
+  ],
+  [
+    "Kenya (肯尼亚)",
+    "ke",
+    "254"
+  ],
+  [
+    "Kiribati (基里巴斯)",
+    "ki",
+    "686"
+  ],
+  [
+    "Kosovo (科索沃)",
+    "xk",
+    "383"
+  ],
+  [
+    "Kuwait (科威特)",
+    "kw",
+    "965"
+  ],
+  [
+    "Kyrgyzstan (吉尔吉斯)",
+    "kg",
+    "996"
+  ],
+  [
+    "Laos (老挝)",
+    "la",
+    "856"
+  ],
+  [
+    "Latvia (拉脱维亚)",
+    "lv",
+    "371"
+  ],
+  [
+    "Lebanon (黎巴嫩)",
+    "lb",
+    "961"
+  ],
+  [
+    "Lesotho (莱索托)",
+    "ls",
+    "266"
+  ],
+  [
+    "Liberia (利比里亚)",
+    "lr",
+    "231"
+  ],
+  [
+    "Libya (利比亚)",
+    "ly",
+    "218"
+  ],
+  [
+    "Liechtenstein (列支敦士登)",
+    "li",
+    "423"
+  ],
+  [
+    "Lithuania (立陶宛)",
+    "lt",
+    "370"
+  ],
+  [
+    "Luxembourg (卢森堡)",
+    "lu",
+    "352"
+  ],
+  [
+    "Macau (中国澳门)",
+    "mo",
+    "853"
+  ],
+  [
+    "Macedonia (FYROM) (北马其顿)",
+    "mk",
+    "389"
+  ],
+  [
+    "Madagascar (马达加斯加)",
+    "mg",
+    "261"
+  ],
+  [
+    "Malawi (马拉维)",
+    "mw",
+    "265"
+  ],
+  [
+    "Malaysia (大马)",
+    "my",
+    "60"
+  ],
+  [
+    "Maldives (马尔代夫)",
+    "mv",
+    "960"
+  ],
+  [
+    "Mali (马里)",
+    "ml",
+    "223"
+  ],
+  [
+    "Malta (马耳他)",
+    "mt",
+    "356"
+  ],
+  [
+    "Marshall Islands (马绍尔群岛)",
+    "mh",
+    "692"
+  ],
+  [
+    "Martinique (马提尼克)",
+    "mq",
+    "596"
+  ],
+  [
+    "Mauritania (毛里塔尼亚)",
+    "mr",
+    "222"
+  ],
+  [
+    "Mauritius (毛里求斯)",
+    "mu",
+    "230"
+  ],
+  [
+    "Mayotte (马约特)",
+    "yt",
+    "262",
+    1
+  ],
+  [
+    "Mexico (墨西哥)",
+    "mx",
+    "52"
+  ],
+  [
+    "Micronesia (密克罗尼西亚)",
+    "fm",
+    "691"
+  ],
+  [
+    "Moldova (摩尔多瓦)",
+    "md",
+    "373"
+  ],
+  [
+    "Monaco (摩纳哥)",
+    "mc",
+    "377"
+  ],
+  [
+    "Mongolia (蒙古)",
+    "mn",
+    "976"
+  ],
+  [
+    "Montenegro (黑山)",
+    "me",
+    "382"
+  ],
+  [
+    "Montserrat (蒙特塞拉特)",
+    "ms",
+    "1664"
+  ],
+  [
+    "Morocco (摩洛哥)",
+    "ma",
+    "212",
+    0
+  ],
+  [
+    "Mozambique (莫桑比克)",
+    "mz",
+    "258"
+  ],
+  [
+    "Myanmar (Burma) (缅甸)",
+    "mm",
+    "95"
+  ],
+  [
+    "Namibia (纳米比亚)",
+    "na",
+    "264"
+  ],
+  [
+    "Nauru (瑙鲁)",
+    "nr",
+    "674"
+  ],
+  [
+    "Nepal (尼泊尔)",
+    "np",
+    "977"
+  ],
+  [
+    "Netherlands (荷兰)",
+    "nl",
+    "31"
+  ],
+  [
+    "New Caledonia (新喀里多尼亚)",
+    "nc",
+    "687"
+  ],
+  [
+    "New Zealand (新西兰)",
+    "nz",
+    "64"
+  ],
+  [
+    "Nicaragua (尼加拉瓜)",
+    "ni",
+    "505"
+  ],
+  [
+    "Niger (尼日尔)",
+    "ne",
+    "227"
+  ],
+  [
+    "Nigeria (尼日利亚)",
+    "ng",
+    "234"
+  ],
+  [
+    "Niue (纽埃)",
+    "nu",
+    "683"
+  ],
+  [
+    "Norfolk Island (诺福克岛)",
+    "nf",
+    "672"
+  ],
+  [
+    "North Korea (朝鲜)",
+    "kp",
+    "850"
+  ],
+  [
+    "Northern Mariana Islands (北马里亚纳群岛)",
+    "mp",
+    "1670"
+  ],
+  [
+    "Norway (挪威)",
+    "no",
+    "47",
+    0
+  ],
+  [
+    "Oman (阿曼)",
+    "om",
+    "968"
+  ],
+  [
+    "Pakistan (巴基斯坦)",
+    "pk",
+    "92"
+  ],
+  [
+    "Palau (帕劳)",
+    "pw",
+    "680"
+  ],
+  [
+    "Palestine (巴勒斯坦)",
+    "ps",
+    "970"
+  ],
+  [
+    "Panama (巴拿马)",
+    "pa",
+    "507"
+  ],
+  [
+    "Papua New Guinea (巴新)",
+    "pg",
+    "675"
+  ],
+  [
+    "Paraguay (巴拉圭)",
+    "py",
+    "595"
+  ],
+  [
+    "Peru (秘鲁)",
+    "pe",
+    "51"
+  ],
+  [
+    "Philippines (菲律宾)",
+    "ph",
+    "63"
+  ],
+  [
+    "Poland (波兰)",
+    "pl",
+    "48"
+  ],
+  [
+    "Portugal (葡萄牙)",
+    "pt",
+    "351"
+  ],
+  [
+    "Puerto Rico (波多黎各)",
+    "pr",
+    "1",
+    3,
+    [
+      "787",
+      "939"
+    ]
+  ],
+  [
+    "Qatar (卡塔尔)",
+    "qa",
+    "974"
+  ],
+  [
+    "Réunion (留尼汪)",
+    "re",
+    "262",
+    0
+  ],
+  [
+    "Romania (罗马尼亚)",
+    "ro",
+    "40"
+  ],
+  [
+    "Russia (俄罗斯)",
+    "ru",
+    "7",
+    0
+  ],
+  [
+    "Rwanda (卢旺达)",
+    "rw",
+    "250"
+  ],
+  [
+    "Saint Barthélemy (圣巴泰勒米)",
+    "bl",
+    "590",
+    1
+  ],
+  [
+    "Saint Helena (圣赫勒拿)",
+    "sh",
+    "290"
+  ],
+  [
+    "Saint Kitts and Nevis (圣基茨)",
+    "kn",
+    "1869"
+  ],
+  [
+    "Saint Lucia (圣卢西亚)",
+    "lc",
+    "1758"
+  ],
+  [
+    "Saint Martin (Saint-Martin (partie française)) (法属圣马丁)",
+    "mf",
+    "590",
+    2
+  ],
+  [
+    "Saint Pierre and Miquelon (圣皮埃尔)",
+    "pm",
+    "508"
+  ],
+  [
+    "Saint Vincent and the Grenadines (圣文森特)",
+    "vc",
+    "1784"
+  ],
+  [
+    "Samoa (萨摩亚)",
+    "ws",
+    "685"
+  ],
+  [
+    "San Marino (圣马力诺)",
+    "sm",
+    "378"
+  ],
+  [
+    "São Tomé and Príncipe (圣普)",
+    "st",
+    "239"
+  ],
+  [
+    "Saudi Arabia (沙特)",
+    "sa",
+    "966"
+  ],
+  [
+    "Senegal (塞内加尔)",
+    "sn",
+    "221"
+  ],
+  [
+    "Serbia (塞尔维亚)",
+    "rs",
+    "381"
+  ],
+  [
+    "Seychelles (塞舌尔)",
+    "sc",
+    "248"
+  ],
+  [
+    "Sierra Leone (塞拉利昂)",
+    "sl",
+    "232"
+  ],
+  [
+    "Singapore (新加坡)",
+    "sg",
+    "65"
+  ],
+  [
+    "Sint Maarten (荷属圣马丁)",
+    "sx",
+    "1721"
+  ],
+  [
+    "Slovakia (斯洛伐克)",
+    "sk",
+    "421"
+  ],
+  [
+    "Slovenia (斯洛文尼亚)",
+    "si",
+    "386"
+  ],
+  [
+    "Solomon Islands (所罗门群岛)",
+    "sb",
+    "677"
+  ],
+  [
+    "Somalia (索马里)",
+    "so",
+    "252"
+  ],
+  [
+    "South Africa (南非)",
+    "za",
+    "27"
+  ],
+  [
+    "South Korea (韩国)",
+    "kr",
+    "82"
+  ],
+  [
+    "South Sudan (南苏丹)",
+    "ss",
+    "211"
+  ],
+  [
+    "Spain (西班牙)",
+    "es",
+    "34"
+  ],
+  [
+    "Sri Lanka (斯里兰卡)",
+    "lk",
+    "94"
+  ],
+  [
+    "Sudan (苏丹)",
+    "sd",
+    "249"
+  ],
+  [
+    "Suriname (苏里南)",
+    "sr",
+    "597"
+  ],
+  [
+    "Svalbard and Jan Mayen (斯瓦尔巴和扬马延)",
+    "sj",
+    "47",
+    1
+  ],
+  [
+    "Swaziland (斯威士兰)",
+    "sz",
+    "268"
+  ],
+  [
+    "Sweden (瑞典)",
+    "se",
+    "46"
+  ],
+  [
+    "Switzerland (瑞士)",
+    "ch",
+    "41"
+  ],
+  [
+    "Syria (叙利亚)",
+    "sy",
+    "963"
+  ],
+  [
+    "Taiwan (中国台湾)",
+    "tw",
+    "886"
+  ],
+  [
+    "Tajikistan (塔吉克)",
+    "tj",
+    "992"
+  ],
+  [
+    "Tanzania (坦桑)",
+    "tz",
+    "255"
+  ],
+  [
+    "Thailand (泰国)",
+    "th",
+    "66"
+  ],
+  [
+    "Timor-Leste (东帝汶)",
+    "tl",
+    "670"
+  ],
+  [
+    "Togo (多哥)",
+    "tg",
+    "228"
+  ],
+  [
+    "Tokelau (托克劳)",
+    "tk",
+    "690"
+  ],
+  [
+    "Tonga (汤加)",
+    "to",
+    "676"
+  ],
+  [
+    "Trinidad and Tobago (特立尼达和多巴哥)",
+    "tt",
+    "1868"
+  ],
+  [
+    "Tunisia (突尼斯)",
+    "tn",
+    "216"
+  ],
+  [
+    "Turkey (土耳其)",
+    "tr",
+    "90"
+  ],
+  [
+    "Turkmenistan (土库曼)",
+    "tm",
+    "993"
+  ],
+  [
+    "Turks and Caicos Islands (特克斯和凯科斯群岛)",
+    "tc",
+    "1649"
+  ],
+  [
+    "Tuvalu (图瓦卢)",
+    "tv",
+    "688"
+  ],
+  [
+    "U.S. Virgin Islands (美属维尔京群岛)",
+    "vi",
+    "1340"
+  ],
+  [
+    "Uganda (乌干达)",
+    "ug",
+    "256"
+  ],
+  [
+    "Ukraine (乌克兰)",
+    "ua",
+    "380"
+  ],
+  [
+    "United Arab Emirates (阿联酋)",
+    "ae",
+    "971"
+  ],
+  [
+    "United Kingdom (英国)",
+    "gb",
+    "44",
+    0
+  ],
+  [
+    "United States (美国)",
+    "us",
+    "1",
+    0
+  ],
+  [
+    "Uruguay (乌拉圭)",
+    "uy",
+    "598"
+  ],
+  [
+    "Uzbekistan (乌兹别克)",
+    "uz",
+    "998"
+  ],
+  [
+    "Vanuatu (瓦努阿图)",
+    "vu",
+    "678"
+  ],
+  [
+    "Vatican City (梵蒂冈)",
+    "va",
+    "39",
+    1
+  ],
+  [
+    "Venezuela (委内瑞拉)",
+    "ve",
+    "58"
+  ],
+  [
+    "Vietnam (越南)",
+    "vn",
+    "84"
+  ],
+  [
+    "Wallis and Futuna (瓦利斯)",
+    "wf",
+    "681"
+  ],
+  [
+    "Western Sahara (西撒哈拉)",
+    "eh",
+    "212",
+    1
+  ],
+  [
+    "Yemen (也门)",
+    "ye",
+    "967"
+  ],
+  [
+    "Zambia (赞比亚)",
+    "zm",
+    "260"
+  ],
+  [
+    "Zimbabwe (津巴布韦)",
+    "zw",
+    "263"
+  ],
+  [
+    "Åland Islands (奥兰群岛)",
+    "ax",
+    "358",
+    1
+  ],
+  [
+    "Antarctica (南极洲)",
+    "aq",
+    "672"
+  ],
+  [
+    "Bouvet Island (布韦岛)",
+    "bv",
+    "47"
+  ],
+  [
+    "South Georgia and the South Sandwich Islands (南乔治亚和南桑威奇群岛)",
+    "gs",
+    "500"
+  ],
+  [
+    "Heard Island and McDonald Islands (赫德岛和麦克唐纳群岛)",
+    "hm",
+    "672"
+  ],
+  [
+    "Pitcairn (皮特凯恩群岛)",
+    "pn",
+    "64"
+  ],
+  [
+    "French Southern Territories (法属南部领地)",
+    "tf",
+    "262"
+  ],
+  [
+    "United States Minor Outlying Islands (美国本土外小岛屿)",
+    "um",
+    "1"
+  ]
+]

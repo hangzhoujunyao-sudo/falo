@@ -145,6 +145,7 @@ function themeLabel(theme) {
   return theme || "light";
 }
 const PANEL_NAMES = Object.freeze([
+  "workbench",
   "overview",
   "accounts",
   "focus",

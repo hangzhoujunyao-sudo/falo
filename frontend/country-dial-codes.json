@@ -1097,4 +1097,242 @@
   [
     "Sri Lanka (斯里兰卡)",
     "lk",
-    "9
+    "94"
+  ],
+  [
+    "Sudan (苏丹)",
+    "sd",
+    "249"
+  ],
+  [
+    "Suriname (苏里南)",
+    "sr",
+    "597"
+  ],
+  [
+    "Svalbard and Jan Mayen (斯瓦尔巴和扬马延)",
+    "sj",
+    "47",
+    1
+  ],
+  [
+    "Swaziland (斯威士兰)",
+    "sz",
+    "268"
+  ],
+  [
+    "Sweden (瑞典)",
+    "se",
+    "46"
+  ],
+  [
+    "Switzerland (瑞士)",
+    "ch",
+    "41"
+  ],
+  [
+    "Syria (叙利亚)",
+    "sy",
+    "963"
+  ],
+  [
+    "Taiwan (中国台湾)",
+    "tw",
+    "886"
+  ],
+  [
+    "Tajikistan (塔吉克)",
+    "tj",
+    "992"
+  ],
+  [
+    "Tanzania (坦桑)",
+    "tz",
+    "255"
+  ],
+  [
+    "Thailand (泰国)",
+    "th",
+    "66"
+  ],
+  [
+    "Timor-Leste (东帝汶)",
+    "tl",
+    "670"
+  ],
+  [
+    "Togo (多哥)",
+    "tg",
+    "228"
+  ],
+  [
+    "Tokelau (托克劳)",
+    "tk",
+    "690"
+  ],
+  [
+    "Tonga (汤加)",
+    "to",
+    "676"
+  ],
+  [
+    "Trinidad and Tobago (特立尼达和多巴哥)",
+    "tt",
+    "1868"
+  ],
+  [
+    "Tunisia (突尼斯)",
+    "tn",
+    "216"
+  ],
+  [
+    "Turkey (土耳其)",
+    "tr",
+    "90"
+  ],
+  [
+    "Turkmenistan (土库曼)",
+    "tm",
+    "993"
+  ],
+  [
+    "Turks and Caicos Islands (特克斯和凯科斯群岛)",
+    "tc",
+    "1649"
+  ],
+  [
+    "Tuvalu (图瓦卢)",
+    "tv",
+    "688"
+  ],
+  [
+    "U.S. Virgin Islands (美属维尔京群岛)",
+    "vi",
+    "1340"
+  ],
+  [
+    "Uganda (乌干达)",
+    "ug",
+    "256"
+  ],
+  [
+    "Ukraine (乌克兰)",
+    "ua",
+    "380"
+  ],
+  [
+    "United Arab Emirates (阿联酋)",
+    "ae",
+    "971"
+  ],
+  [
+    "United Kingdom (英国)",
+    "gb",
+    "44",
+    0
+  ],
+  [
+    "United States (美国)",
+    "us",
+    "1",
+    0
+  ],
+  [
+    "Uruguay (乌拉圭)",
+    "uy",
+    "598"
+  ],
+  [
+    "Uzbekistan (乌兹别克)",
+    "uz",
+    "998"
+  ],
+  [
+    "Vanuatu (瓦努阿图)",
+    "vu",
+    "678"
+  ],
+  [
+    "Vatican City (梵蒂冈)",
+    "va",
+    "39",
+    1
+  ],
+  [
+    "Venezuela (委内瑞拉)",
+    "ve",
+    "58"
+  ],
+  [
+    "Vietnam (越南)",
+    "vn",
+    "84"
+  ],
+  [
+    "Wallis and Futuna (瓦利斯)",
+    "wf",
+    "681"
+  ],
+  [
+    "Western Sahara (西撒哈拉)",
+    "eh",
+    "212",
+    1
+  ],
+  [
+    "Yemen (也门)",
+    "ye",
+    "967"
+  ],
+  [
+    "Zambia (赞比亚)",
+    "zm",
+    "260"
+  ],
+  [
+    "Zimbabwe (津巴布韦)",
+    "zw",
+    "263"
+  ],
+  [
+    "Åland Islands (奥兰群岛)",
+    "ax",
+    "358",
+    1
+  ],
+  [
+    "Antarctica (南极洲)",
+    "aq",
+    "672"
+  ],
+  [
+    "Bouvet Island (布韦岛)",
+    "bv",
+    "47"
+  ],
+  [
+    "South Georgia and the South Sandwich Islands (南乔治亚和南桑威奇群岛)",
+    "gs",
+    "500"
+  ],
+  [
+    "Heard Island and McDonald Islands (赫德岛和麦克唐纳群岛)",
+    "hm",
+    "672"
+  ],
+  [
+    "Pitcairn (皮特凯恩群岛)",
+    "pn",
+    "64"
+  ],
+  [
+    "French Southern Territories (法属南部领地)",
+    "tf",
+    "262"
+  ],
+  [
+    "United States Minor Outlying Islands (美国本土外小岛屿)",
+    "um",
+    "1"
+  ]
+]

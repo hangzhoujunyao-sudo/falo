@@ -137,8 +137,9 @@ fn write_api_base_to_state(_state: &AppState, _api_base: &Url) -> Result<(), Str
 #[tauri::command]
 pub async fn membership_auth(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let device_id = payload
         .get("device_id")
         .and_then(|v| v.as_str())
@@ -187,8 +188,9 @@ pub async fn membership_auth(
 #[tauri::command]
 pub async fn membership_list_plans(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
 
     let response = state
@@ -215,8 +217,9 @@ pub async fn membership_list_plans(
 #[tauri::command]
 pub async fn membership_register(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let email = payload
         .get("email")
         .and_then(|v| v.as_str())
@@ -250,8 +253,9 @@ pub async fn membership_register(
 #[tauri::command]
 pub async fn membership_renew(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let license_key = payload
         .get("license_key")
         .and_then(|v| v.as_str())
@@ -301,8 +305,9 @@ pub async fn membership_renew(
 #[tauri::command]
 pub async fn membership_logout_others(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let license_key = payload
         .get("license_key")
         .and_then(|v| v.as_str())
@@ -341,8 +346,9 @@ pub async fn membership_logout_others(
 #[tauri::command]
 pub async fn membership_list_devices(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let license_key = payload
         .get("license_key")
         .and_then(|v| v.as_str())
@@ -386,8 +392,9 @@ pub async fn membership_list_devices(
 #[tauri::command]
 pub async fn membership_set_api_base(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let api_base = payload
         .get("api_base")
         .and_then(|v| v.as_str())

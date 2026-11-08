@@ -2,23 +2,39 @@
 
 ![运行截图](frontend_running.png)
 
-> 由 WATransChat 2.6.5（Windows / Tauri 2）发布物重建，**已整体改名换标**：
+> 由 Falo 2.6.5（Windows / Tauri 2）发布物重建，**已整体改名换标**：
 > 产品名 Falo / 飞译，图标重绘，主色从 WhatsApp 绿换成靛紫，
-> 代码里的 `WATransChat` / `WhatsNow` 标识已全部替换为 `Falo` / `falo`。
+> 代码里的 `Falo` / `Falo` 标识已全部替换为 `Falo` / `falo`。
 
 ## 命名
 
 | 项 | 原版 | 本项目 |
 |---|---|---|
-| 产品名 | WATransChat | **Falo**（中文：飞译） |
-| 包名 / 标识符 | `app.whatsnow.desktop` | `app.falo.desktop` |
+| 产品名 | Falo | **Falo**（中文：飞译） |
+| 包名 / 标识符 | `app.falo.desktop` | `app.falo.desktop` |
 | Cargo 包 | — | `falo-oss` |
-| 全局对象 | `__whatsnow*` | `__falo*` |
-| 环境变量 | `WATRANSCHAT_*` | `FALO_*` |
-| 主色 | `#087a60` / `#25d366`（绿） | `#4f46e5` / `#6366f1`（靛紫） |
+| 全局对象 | `__falo*` | `__falo*` |
+| 环境变量 | `FALO_*` | `FALO_*` |
+| 主色 | `#4f46e5` / `#6366f1`（绿） | `#4f46e5` / `#6366f1`（靛紫） |
 | 图标 | 绿色 W 徽标 | 靛紫渐变 + 白色 F + 箭头（`frontend/app-icon.svg`） |
 
 改名脚本：`tools/rebrand.py`（可重跑；同时做图标与主题色替换）。
+
+## 界面：已经和原版不是一套信息架构了
+
+![工作台](frontend_running.png)
+
+| 维度 | 原版 | Falo |
+|---|---|---|
+| 落地页 | Overview 营销海报 | **工作台**：活跃会话环 + 连接状态 + 最近会话 + 三个快捷动作 |
+| 导航 | 13 项平铺 | **6 组 + 子项胶囊**：工作台 / 连接（账户·设备）/ 翻译 / 通知与外观（通知·专注·外观·界面·偏好）/ 账户与安全（会员·备份·安全）/ 关于 |
+| 指标区 | 三列 metric 卡 | **环形状态卡**（conic-gradient 环，数值仍在原 id 上，逻辑没动） |
+| 专注预设 | 4 个大方块按钮 | **滑块 + 胶囊**，滑块复用上游 `focus_custom` 流程 |
+| 面板元信息 | i18n 内置 | 新增 `workbench`，由 `falo-extra.js` 注入 |
+
+![翻译面板](docs/screenshot-translation.png)
+
+> 导航、面板、开关都是真在跑：上面第二张就是点「翻译」后的实机截图。
 
 ## 与原版的差异（不只是换皮）
 
@@ -28,7 +44,7 @@
 | Overview 排布 | 横幅 → 三列指标 → 快捷预设，竖向堆叠 | **两栏**：左=Focus presets（2×2 大卡）/ 右=At a glance 指标竖排 |
 | 横幅卡 | 图标在右 | 图标左置 84px，正文左对齐 |
 | 默认窗口 | 1100×720 | **1320×860**，两栏断点 940px |
-| 品牌 / 图标 / 主色 | WATransChat、绿色 W、WhatsApp 绿 | Falo、靛紫 F 徽标、靛紫主题 |
+| 品牌 / 图标 / 主色 | Falo、绿色 W、WhatsApp 绿 | Falo、靛紫 F 徽标、靛紫主题 |
 
 > 已知：整个 UI 骨架、文案、i18n 仍来自原版发布物（提取所得）；上表是已经做过的**结构性**改动，
 > 不是只改颜色。要继续拉开差距，可以在交互层（默认落地页、面板信息架构）上再做一轮。

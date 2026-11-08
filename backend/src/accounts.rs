@@ -177,8 +177,9 @@ fn parse_proxy(proxy: &str) -> Result<Option<tauri::Url>, String> {
 #[tauri::command]
 pub async fn add_account(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
 
     let requested_id = payload
@@ -252,8 +253,9 @@ pub async fn add_account(
 pub async fn close_account(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let id = payload_account_id(&payload)?;
     let label = format!("acct-{id}");
@@ -279,8 +281,9 @@ pub async fn close_account(
 pub async fn open_account(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let id = payload_account_id(&payload)?;
 
@@ -333,8 +336,9 @@ pub async fn open_account(
 pub async fn remove_account(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let id = payload_account_id(&payload)?;
 
@@ -368,8 +372,9 @@ pub async fn remove_account(
 pub async fn rename_account(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let id = payload_account_id(&payload)?;
 
@@ -415,8 +420,9 @@ pub async fn rename_account(
 #[tauri::command]
 pub async fn list_accounts(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
     with_account_store(|store| Ok(json!(store.accounts)))
 }
@@ -426,8 +432,9 @@ pub async fn list_accounts(
 pub async fn list_account_tabs(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
 
     with_account_store(|store| {
@@ -464,8 +471,9 @@ pub async fn list_account_tabs(
 pub async fn list_open_account_tabs(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
 
     let mut windows: Vec<_> = app
@@ -493,8 +501,9 @@ pub async fn list_open_account_tabs(
 pub async fn open_accounts_settings(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
 
     let id = payload
@@ -521,8 +530,9 @@ pub async fn open_accounts_settings(
 pub async fn switch_account(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let id = payload_account_id(&payload)?;
     let label = format!("acct-{id}");

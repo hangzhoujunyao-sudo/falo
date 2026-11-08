@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Falo — Tabs</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        /* Match native Windows caption (backup used OS decorations). */
+        background: #f3f3f3;
+        color: #1a1a1a;
+        font: 600 12px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+        display: flex;
+        flex-direction: column;
+        color-scheme: light;
+      }
+      html[data-chrome="dark"],
+      html[data-chrome="dark"] body {
+        background: #202020;
+        color: #ffffff;
+        color-scheme: dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-chrome="light"]),
+        html:not([data-chrome="light"]) body {
+          background: #202020;
+          color: #ffffff;
+          color-scheme: dark;
+        }
+      }
+
+      /* Row 1: title bar — icon + title + pin + min + max + close */
+      #titlebar {
+        position: relative;
+        z-index: 60;
+        display: flex;
+        align-items: stretch;
+        flex: 0 0 32px;
+        height: 32px;
+        box-sizing: border-box;
+        background: #f3f3f3;
+        color: #1a1a1a;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        -webkit-app-region: drag;
+      }
+      html[data-chrome="dark"] #titlebar {
+        background: #202020;
+        color: #ffffff;
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-chrome="light"]) #titlebar {
+          background: #202020;
+          color: #ffffff;
+          border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+      }
+      #title-icon {
+        width: 16px;
+        height: 16px;
+        margin: 0 0 0 10px;
+        align-self: center;
+        flex: 0 0 auto;
+        border-radius: 3px;
+        -webkit-app-region: drag;
+        pointer-events: none;
+      }
+      #title-label {
+        display: flex;
+        align-items: center;
+        padding: 0 8px 0 8px;
+        min-width: 0;
+        max-width: 55%;
+        opacity: 0.9;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #title-drag {
+        flex: 1 1 auto;
+        min-width: 8px;
+      }
+      #win-controls {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: stretch;
+        -webkit-app-region: no-drag;
+      }
+      #win-controls button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        padding: 0;
+        opacity: 0.9;
+      }
+      #win-controls button:hover {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.06);
+      }
+      html[data-chrome="dark"] #win-controls button:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-chrome="light"]) #win-controls button:hover {
+          background: rgba(255, 255, 255, 0.08);
+        }
+      }
+      #win-controls button svg {
+        display: block;
+        width: 12px;
+        height: 12px;
+      }
+      #pin {
+        opacity: 0.85;
+      }
+      #pin svg {
+        width: 14px;
+        height: 14px;
+      }
+      #pin[aria-pressed="true"] {
+        opacity: 1;
+        color: #6366f1;
+      }
+      #win-close:hover {
+        background: #e81123 !important;
+        color: #fff;
+        opacity: 1;
+      }
+
+      /* Row 2: account tabs + settings (browser-style tab strip) */
+      #strip {
+        display: flex;
+        align-items: stretch;
+        flex: 0 0 36px;
+        height: 36px;
+        box-sizing: border-box;
+        background: #dee1e6;
+        color: #202124;
+        border-bottom: 1px solid #c4c7cc;
+      }
+      html[data-chrome="dark"] #strip {
+        background: #202124;
+        color: #e8eaed;
+        border-bottom-color: #3c4043;
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-chrome="light"]) #strip {
+          background: #202124;
+          color: #e8eaed;
+          border-bottom-color: #3c4043;
+        }
+      }
+      body.seat-pick #strip {
+        display: none;
+      }
+      #bar,
+      #composer {
+        display: flex;
+        align-items: stretch;
+        height: 100%;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      #composer {
+        display: none;
+        align-items: center;
+        gap: 6px;
+        padding: 0 8px;
+      }
+      #composer.open {
+        display: flex;
+      }
+      #bar.hidden {
+        display: none;
+      }
+      #tabs {
+        display: flex;
+        align-items: flex-end;
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        padding: 0 6px;
+        gap: 0;
+      }
+      /* Chrome-like trapezoid tab (slanted sides + soft bottom elbows). */
+      .tab {
+        --tab-fill: rgba(255, 255, 255, 0.32);
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex: 0 1 auto;
+        max-width: 200px;
+        min-width: 88px;
+        height: 32px;
+        margin: 0 -8px;
+        padding: 0 22px 0 20px;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: visible;
+        opacity: 0.82;
+        font: inherit;
+        font-weight: 500;
+      }
+      .tab::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        inset: 0 -2px 0 -2px;
+        background: var(--tab-fill);
+        pointer-events: none;
+        /* Trapezoid: slanted sides, rounded top, soft bottom elbows. */
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 36' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0 36C10 36 14 28 18 20L26 6Q28 0 36 0h128q8 0 10 6l8 14c4 8 8 16 18 16z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 36' preserveAspectRatio='none'%3E%3Cpath fill='black' d='M0 36C10 36 14 28 18 20L26 6Q28 0 36 0h128q8 0 10 6l8 14c4 8 8 16 18 16z'/%3E%3C/svg%3E");
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+      }
+      .tab:hover {
+        opacity: 1;
+        z-index: 2;
+        --tab-fill: rgba(255, 255, 255, 0.62);
+      }
+      .tab[aria-current="true"] {
+        opacity: 1;
+        z-index: 3;
+        --tab-fill: linear-gradient(180deg, #f8f9fa 0%, #ffffff 55%, #ffffff 100%);
+        color: #202124;
+      }
+      .tab[aria-current="true"]::before {
+        filter: drop-shadow(0 0 0.6px rgba(0, 0, 0, 0.22));
+      }
+      html[data-chrome="dark"] .tab {
+        --tab-fill: rgba(255, 255, 255, 0.05);
+      }
+      html[data-chrome="dark"] .tab:hover {
+        --tab-fill: rgba(255, 255, 255, 0.1);
+      }
+      html[data-chrome="dark"] .tab[aria-current="true"] {
+        --tab-fill: linear-gradient(180deg, #3c4043 0%, #303134 55%, #292a2d 100%);
+        color: #e8eaed;
+      }
+      html[data-chrome="dark"] .tab[aria-current="true"]::before {
+        filter: drop-shadow(0 0 0.6px rgba(0, 0, 0, 0.45));
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not([data-chrome="light"]) .tab {
+          --tab-fill: rgba(255, 255, 255, 0.05);
+        }
+        html:not([data-chrome="light"]) .tab:hover {
+          --tab-fill: rgba(255, 255, 255, 0.1);
+        }
+        html:not([data-chrome="light"]) .tab[aria-current="true"] {
+          --tab-fill: linear-gradient(180deg, #3c4043 0%, #303134 55%, #292a2d 100%);
+          color: #e8eaed;
+        }
+        html:not([data-chrome="light"]) .tab[aria-current="true"]::before {
+          filter: drop-shadow(0 0 0.6px rgba(0, 0, 0, 0.45));
+        }
+      }
+      .tab-label {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #add:hover,
+      #settings:hover,
+      #composer-ok:hover,
+      #composer-cancel:hover {
+        opacity: 1;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        box-sizing: border-box;
+        min-width: 14px;
+        height: 14px;
+        padding: 0 3px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 700;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+        background: #6366f1;
+        color: #fff;
+      }
+      #add,
+      #settings,
+      #composer-ok,
+      #composer-cancel {
+        flex: 0 0 auto;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+        font: inherit;
+        opacity: 0.75;
+        padding: 0 10px;
+      }
+      #add {
+        flex: 0 0 36px;
+        font-size: 18px;
+        line-height: 1;
+      }
+      #settings {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        padding: 0;
+      }
+      #settings svg {
+        display: block;
+        width: 16px;
+        height: 16px;
+      }
+      #new-name {
+        flex: 1;
+        min-width: 0;
+        height: 24px;
+        border: 1px solid #d1d7db;
+        border-radius: 6px;
+        padding: 0 8px;
+        background: #fff;
+        color: inherit;
+        font: inherit;
+        outline: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        #new-name {
+          border-color: #2a3942;
+          background: #111b21;
+          color: #e9edef;
+        }
+      }
+      #composer-error {
+        display: none;
+        color: #e35d6a;
+        font-weight: 600;
+        white-space: nowrap;
+        max-width: 40%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      #composer-error.show {
+        display: inline;
+      }
+
+      /* Seat-pick: below the title bar so pin / window controls stay usable */
+      #seat-pick {
+        display: none;
+        position: fixed;
+        top: 32px;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+        background: rgba(11, 20, 26, 0.55);
+      }
+      #seat-pick.open {
+        display: flex;
+      }
+      #seat-pick .dialog {
+        width: min(440px, 100%);
+        max-height: min(560px, 100%);
+        overflow: auto;
+        padding: 20px 22px;
+        border-radius: 14px;
+        background: #fff;
+        color: #111b21;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);
+        font: 500 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        #seat-pick .dialog {
+          background: #202c33;
+          color: #e9edef;
+        }
+      }
+      #seat-pick h2 {
+        margin: 0 0 8px;
+        font-size: 17px;
+        font-weight: 700;
+      }
+      #seat-pick .body {
+        margin: 0 0 14px;
+        opacity: 0.8;
+        font-weight: 500;
+      }
+      #seat-pick-list {
+        list-style: none;
+        margin: 0 0 14px;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+      }
+      #seat-pick-list li {
+        margin: 0;
+      }
+      #seat-pick-list label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid #d1d7db;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      @media (prefers-color-scheme: dark) {
+        #seat-pick-list label {
+          border-color: #2a3942;
+        }
+      }
+      #seat-pick-list input {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      #seat-pick .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      #seat-pick-confirm {
+        border: 0;
+        border-radius: 8px;
+        padding: 9px 16px;
+        background: #6366f1;
+        color: #fff;
+        font: 700 13px/1 inherit;
+        cursor: pointer;
+      }
+      #seat-pick-confirm:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+      }
+      #seat-pick-hint {
+        margin: 0;
+        flex: 1;
+        min-width: 120px;
+        opacity: 0.75;
+        font-size: 12px;
+      }
+      #seat-pick-note {
+        margin: 10px 0 0;
+        color: #e35d6a;
+        font-size: 12px;
+        min-height: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="titlebar" data-tauri-drag-region>
+      <img
+        id="title-icon"
+        src="titlebar-icon.png"
+        width="16"
+        height="16"
+        alt=""
+        aria-hidden="true"
+        data-tauri-drag-region
+      />
+      <span id="title-label" data-tauri-drag-region>Falo</span>
+      <div id="title-drag" data-tauri-drag-region aria-hidden="true"></div>
+      <div id="win-controls">
+        <button
+          id="pin"
+          type="button"
+          title="窗口置顶"
+          aria-label="窗口置顶"
+          aria-pressed="false"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M16 12V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"
+            />
+          </svg>
+        </button>
+        <button id="win-min" type="button" title="最小化" aria-label="最小化">
+          <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+            <rect x="1" y="5.25" width="10" height="1.5" />
+          </svg>
+        </button>
+        <button id="win-max" type="button" title="最大化" aria-label="最大化">
+          <svg id="win-max-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+            <rect x="1.5" y="1.5" width="9" height="9" />
+          </svg>
+        </button>
+        <button id="win-close" type="button" title="关闭" aria-label="关闭">
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M2 2l8 8M10 2L2 10" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div id="strip">
+      <div id="bar" role="tablist" aria-label="Falo 账号">
+        <div id="tabs"></div>
+        <button id="add" type="button" title="添加账号" aria-label="添加账号">+</button>
+        <button
+          id="settings"
+          type="button"
+          title="设置"
+          aria-label="设置"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.07 7.07 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.42l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.48a.5.5 0 0 0 .12.64l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.83 14.1a.5.5 0 0 0-.12.64l1.92 3.32c.13.23.4.32.64.22l2.39-.96c.5.4 1.05.72 1.63.94l.36 2.54c.05.24.26.42.49.42h3.8c.24 0 .44-.18.49-.42l.36-2.54c.58-.22 1.13-.54 1.63-.94l2.39.96c.24.1.51 0 .64-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"
+            />
+          </svg>
+        </button>
+      </div>
+      <div id="composer" aria-label="添加账号">
+        <input id="new-name" type="text" maxlength="60" placeholder="账号名称" autocomplete="off" />
+        <span id="composer-error"></span>
+        <button id="composer-ok" type="button">添加</button>
+        <button id="composer-cancel" type="button">取消</button>
+      </div>
+    </div>
+
+    <div id="seat-pick" aria-modal="true" role="dialog" aria-labelledby="seat-pick-title">
+      <div class="dialog">
+        <h2 id="seat-pick-title">选择要保留的坐席</h2>
+        <p class="body" id="seat-pick-body">
+          套餐坐席不足，请选择要继续使用的账号。未选中的账号将关闭标签并释放坐席，本地数据保留。
+        </p>
+        <ul id="seat-pick-list"></ul>
+        <div class="actions">
+          <button type="button" id="seat-pick-confirm" disabled>确认保留</button>
+          <p id="seat-pick-hint"></p>
+        </div>
+        <p id="seat-pick-note"></p>
+      </div>
+    </div>
+    <script src="tabs.js"></script>
+  </body>
+</html>

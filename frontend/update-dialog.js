@@ -324,4 +324,6 @@ if (window.__UPDATE_BOOT) {
 }
 
 fitWindowSize();
-// Tauri IPC may not be ready 
+// Tauri IPC may not be ready on the first frame.
+setTimeout(fitWindowSize, 50);
+setTimeout(fitWindowSize, 200);

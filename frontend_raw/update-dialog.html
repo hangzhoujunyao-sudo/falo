@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'" />
+  <title>Update</title>
+  <link rel="stylesheet" href="update-dialog.css" />
+</head>
+<body>
+  <div class="update-panel">
+    <header class="update-titlebar">
+      <h2 id="update-title" class="update-title">发现新版本</h2>
+      <button id="btn-close" type="button" class="update-close" title="关闭" aria-label="关闭">×</button>
+    </header>
+    <div class="update-body">
+      <p id="update-current" class="update-meta"></p>
+      <p id="update-latest" class="update-meta"></p>
+      <div id="update-changelog-wrap" class="update-changelog-wrap hidden">
+        <p class="update-changelog-label" id="update-changelog-label">更新内容</p>
+        <pre id="update-changelog" class="update-changelog"></pre>
+      </div>
+      <p id="update-status" class="update-status hidden"></p>
+      <div id="update-progress-wrap" class="update-progress-wrap hidden">
+        <div class="update-progress-track">
+          <div id="update-progress-bar" class="update-progress-bar"></div>
+        </div>
+      </div>
+      <p id="update-error" class="update-error hidden"></p>
+    </div>
+    <div class="update-actions">
+      <button id="update-btn-later" type="button" class="update-btn update-btn-secondary">稍后提醒</button>
+      <button id="update-btn-install" type="button" class="update-btn update-btn-primary">立即更新</button>
+    </div>
+  </div>
+  <script src="update-dialog.js"></script>
+</body>
+</html>

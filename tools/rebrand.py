@@ -12,7 +12,7 @@ import re
 
 from PIL import Image, ImageDraw
 
-ROOT = r"C:\Users\Administrator\Documents\deepseek-harness\default-workspace\wats_oss"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FE = os.path.join(ROOT, "frontend")
 CS = os.path.join(ROOT, "content-scripts")
 

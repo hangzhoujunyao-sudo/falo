@@ -1,0 +1,1175 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta id="theme_color" name="theme-color" content="#f3f7f5" />
+    <title data-i18n="doc.title">Falo v0.0.0 | Settings</title>
+    <link rel="stylesheet" href="style.css?v=2.6.3" />
+  </head>
+  <body>
+    <div class="window-titlebar" data-tauri-drag-region>
+      <span class="window-titlebar-name" data-tauri-drag-region data-i18n="titlebar.name">Falo v0.0.0 | Settings</span>
+      <button
+        type="button"
+        id="window-close"
+        class="window-close"
+        aria-label="Close settings"
+        data-i18n-aria-label="titlebar.close"
+        title="Close"
+        data-i18n-title="titlebar.closeTitle"
+      >
+        <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true">
+          <path
+            d="M1 1l10 10M11 1L1 11"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="settings-shell">
+      <aside class="side-rail" aria-label="Settings navigation">
+        <div class="brand-block">
+          <img class="brand-mark" src="app-icon.svg" alt="" aria-hidden="true" />
+          <div>
+            <strong>Falo</strong>
+            <span data-i18n="brand.sub">Personal workspace</span>
+          </div>
+        </div>
+
+        <nav class="settings-nav">
+          <button type="button" class="nav-item active" data-panel-target="overview">
+            <span class="nav-icon" aria-hidden="true">⌂</span>
+            <span data-i18n="nav.overview">Overview</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="accounts">
+            <span class="nav-icon" aria-hidden="true">◎</span>
+            <span data-i18n="nav.accounts">Accounts</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="focus">
+            <span class="nav-icon" aria-hidden="true">◷</span>
+            <span data-i18n="nav.focus">Focus</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="appearance">
+            <span class="nav-icon" aria-hidden="true">✦</span>
+            <span data-i18n="nav.appearance">Appearance</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="interface">
+            <span class="nav-icon" aria-hidden="true">☰</span>
+            <span data-i18n="nav.interface">界面</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="notifications">
+            <span class="nav-icon" aria-hidden="true">◉</span>
+            <span data-i18n="nav.notifications">Notifications</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="preferences">
+            <span class="nav-icon" aria-hidden="true">⌘</span>
+            <span data-i18n="nav.preferences">Preferences</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="membership">
+            <span class="nav-icon" aria-hidden="true">✦</span>
+            <span data-i18n="nav.membership">Membership</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="translation">
+            <span class="nav-icon" aria-hidden="true">文</span>
+            <span data-i18n="nav.translation">Translation</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="devices">
+            <span class="nav-icon" aria-hidden="true">▣</span>
+            <span data-i18n="nav.devices">Devices</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="backup">
+            <span class="nav-icon" aria-hidden="true">⇩</span>
+            <span data-i18n="nav.backup">Backup</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="security">
+            <span class="nav-icon" aria-hidden="true">◇</span>
+            <span data-i18n="nav.security">Security</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="about">
+            <span class="nav-icon" aria-hidden="true">i</span>
+            <span data-i18n="nav.about">About</span>
+          </button>
+        </nav>
+
+        <div class="rail-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="focus_status" data-i18n="rail.ready">Ready</span>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="workspace-header">
+          <div>
+            <p class="eyebrow" data-i18n="header.eyebrow">Settings workspace</p>
+            <h1 id="panel_title">Overview</h1>
+            <p id="panel_description">Your accounts, attention, and personal style at a glance.</p>
+          </div>
+          <button type="button" id="save" class="primary-action" data-i18n="header.save">Save changes</button>
+        </header>
+
+        <main class="panel-stage">
+          <section class="settings-panel active" data-panel="overview" aria-labelledby="panel_title">
+            <div class="welcome-card">
+              <div>
+                <p class="eyebrow" data-i18n="overview.eyebrow">Your communication cockpit</p>
+                <h2 data-i18n="overview.headline">Keep conversations close, without losing your focus.</h2>
+                <p>
+                  <span data-i18n="overview.body">Switch accounts, quiet interruptions, and personalize every Falo window from one compact workspace.</span>
+                </p>
+              </div>
+              <img src="app-icon.svg" alt="" aria-hidden="true" />
+            </div>
+
+            <div class="metric-grid">
+              <button type="button" class="metric-card" data-jump-panel="accounts">
+                <span class="metric-label" data-i18n="overview.metric.spaces">Connected spaces</span>
+                <strong id="overview_accounts">—</strong>
+                <small data-i18n="overview.metric.spacesHint">Manage accounts</small>
+              </button>
+              <button type="button" class="metric-card" data-jump-panel="focus">
+                <span class="metric-label" data-i18n="overview.metric.attention">Attention mode</span>
+                <strong id="overview_focus">Ready</strong>
+                <small data-i18n="overview.metric.attentionHint">Start a focus session</small>
+              </button>
+              <button type="button" class="metric-card" data-jump-panel="appearance">
+                <span class="metric-label" data-i18n="overview.metric.style">Current style</span>
+                <strong id="overview_theme">Dark</strong>
+                <small data-i18n="overview.metric.styleHint">Personalize Falo</small>
+              </button>
+            </div>
+
+            <div class="section-surface">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow" data-i18n="overview.quickEyebrow">Quick start</p>
+                  <h2 data-i18n="overview.focusPresets">Focus presets</h2>
+                </div>
+                <p data-i18n="overview.focusPresetsHint">Pause native notifications while every chat stays connected.</p>
+              </div>
+              <div class="focus-presets compact-presets" aria-label="Quick focus duration">
+                <button type="button" class="preset-button" data-focus-minutes="15">
+                  <strong>15</strong><span data-i18n="unit.minutes">minutes</span>
+                </button>
+                <button type="button" class="preset-button" data-focus-minutes="30">
+                  <strong>30</strong><span data-i18n="unit.minutes">minutes</span>
+                </button>
+                <button type="button" class="preset-button" data-focus-minutes="60">
+                  <strong>1</strong><span data-i18n="unit.hour">hour</span>
+                </button>
+                <button type="button" class="preset-button" data-focus-minutes="120">
+                  <strong>2</strong><span data-i18n="unit.hours">hours</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="accounts" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="accounts.eyebrow">Workspace</p>
+              <h2 data-i18n="accounts.title">Accounts</h2>
+              <p data-i18n="accounts.body">Keep work, personal, and project sessions separate and easy to reach.</p>
+            </div>
+            <div class="section-surface">
+              <div class="accounts-batch-bar">
+                <label class="accounts-select-all">
+                  <input type="checkbox" id="accounts_select_all" />
+                  <span data-i18n="accounts.selectAll">Select all</span>
+                </label>
+                <button type="button" id="accounts_open_selected" class="secondary" data-i18n="accounts.openSelected" disabled>
+                  Open selected
+                </button>
+                <button type="button" id="accounts_close_selected" class="secondary" data-i18n="accounts.closeSelected" disabled>
+                  Close selected
+                </button>
+                <button type="button" id="accounts_batch_cancel" class="secondary" data-i18n="accounts.batchCancel" hidden>
+                  Cancel queue
+                </button>
+              </div>
+              <p id="accounts_batch_note" class="field-note" aria-live="polite"></p>
+              <div id="accounts-list" class="accounts-list"></div>
+              <div class="add-row">
+                <input
+                  type="text"
+                  id="new_account_name"
+                  maxlength="60"
+                  placeholder="Account name, e.g. Work" data-i18n-placeholder="accounts.placeholder"
+                  aria-label="New account name"
+                />
+                <button id="add_account" data-i18n="accounts.add">Add account</button>
+              </div>
+              <p id="macos-note" class="warning-note" hidden><span data-i18n="accounts.macos">Multiple accounts require macOS 14 or newer.</span></p>
+            </div>
+            <div id="fingerprint-modal" class="device-limit-modal" hidden>
+              <div class="device-limit-dialog fingerprint-dialog" role="dialog" aria-modal="true" aria-labelledby="fingerprint-title">
+                <h3 id="fingerprint-title" data-i18n="accounts.fingerprintTitle">Browser fingerprint</h3>
+                <p id="fingerprint-subtitle" class="field-note"></p>
+                <pre id="fingerprint-json" class="fingerprint-json" tabindex="0" aria-label="Fingerprint JSON"></pre>
+                <div class="device-limit-actions">
+                  <button type="button" id="fingerprint-copy" class="secondary" data-i18n="accounts.fingerprintCopy">Copy JSON</button>
+                  <button type="button" id="fingerprint-close" class="primary-action" data-i18n="accounts.fingerprintClose">Close</button>
+                </div>
+                <p id="fingerprint-note" class="field-note" aria-live="polite"></p>
+              </div>
+            </div>
+            <div id="account-proxy-modal" class="device-limit-modal" hidden>
+              <div class="device-limit-dialog fingerprint-dialog" role="dialog" aria-modal="true" aria-labelledby="account-proxy-title">
+                <h3 id="account-proxy-title" data-i18n="accounts.proxyTitle">Account proxy</h3>
+                <p id="account-proxy-subtitle" class="field-note"></p>
+                <label class="switch-row">
+                  <span>
+                    <strong data-i18n="accounts.proxyInherit">Use global default</strong>
+                    <small data-i18n="accounts.proxyInheritHelp">Follow Preferences → Network when unchecked custom is off.</small>
+                  </span>
+                  <input type="checkbox" id="acct_proxy_inherit" checked />
+                </label>
+                <div id="acct_proxy_fields" class="proxy-fields" hidden>
+                  <label class="field" for="acct_proxy_scheme">
+                    <span data-i18n="network.scheme">Protocol</span>
+                    <select id="acct_proxy_scheme">
+                      <option value="http">HTTP</option>
+                      <option value="https">HTTPS</option>
+                      <option value="socks5">SOCKS5</option>
+                    </select>
+                  </label>
+                  <div class="hotkey-row">
+                    <label class="field" for="acct_proxy_host" style="flex:1">
+                      <span data-i18n="network.host">Host</span>
+                      <input type="text" id="acct_proxy_host" placeholder="127.0.0.1" autocomplete="off" />
+                    </label>
+                    <label class="field" for="acct_proxy_port" style="width:7rem">
+                      <span data-i18n="network.port">Port</span>
+                      <input type="number" id="acct_proxy_port" min="1" max="65535" placeholder="7890" />
+                    </label>
+                  </div>
+                  <div class="hotkey-row">
+                    <label class="field" for="acct_proxy_username" style="flex:1">
+                      <span data-i18n="network.username">Username (optional)</span>
+                      <input type="text" id="acct_proxy_username" autocomplete="off" />
+                    </label>
+                    <label class="field" for="acct_proxy_password" style="flex:1">
+                      <span data-i18n="network.password">Password (optional)</span>
+                      <input type="password" id="acct_proxy_password" autocomplete="new-password" />
+                    </label>
+                  </div>
+                </div>
+                <p id="account-proxy-note" class="field-note" aria-live="polite"></p>
+                <div class="device-limit-actions">
+                  <button type="button" id="account-proxy-check" class="secondary" data-i18n="network.check">Check exit IP</button>
+                  <button type="button" id="account-proxy-cancel" class="secondary" data-i18n="accounts.fingerprintClose">Close</button>
+                  <button type="button" id="account-proxy-save" class="primary-action" data-i18n="header.save">Save changes</button>
+                </div>
+                <p class="field-note" data-i18n="accounts.proxyRestartHint">Saving recreates an open tab so the new proxy applies.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="focus" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="focus.eyebrow">Productivity</p>
+              <h2 data-i18n="focus.title">Focus mode</h2>
+              <p data-i18n="focus.body">Pause native alerts for a chosen window of time without disconnecting chats.</p>
+            </div>
+            <div class="focus-presets" aria-label="Focus duration">
+              <button type="button" class="preset-button" data-focus-minutes="15">
+                <strong>15</strong><span data-i18n="unit.minutes">minutes</span>
+              </button>
+              <button type="button" class="preset-button" data-focus-minutes="30">
+                <strong>30</strong><span data-i18n="unit.minutes">minutes</span>
+              </button>
+              <button type="button" class="preset-button" data-focus-minutes="45">
+                <strong>45</strong><span data-i18n="unit.minutes">minutes</span>
+              </button>
+              <button type="button" class="preset-button" data-focus-minutes="60">
+                <strong>1</strong><span data-i18n="unit.hour">hour</span>
+              </button>
+              <button type="button" class="preset-button" data-focus-minutes="120">
+                <strong>2</strong><span data-i18n="unit.hours">hours</span>
+              </button>
+              <button type="button" class="preset-button" data-focus-minutes="240">
+                <strong>4</strong><span data-i18n="unit.hours">hours</span>
+              </button>
+            </div>
+            <div class="section-surface custom-focus">
+              <div class="custom-focus-copy">
+                <strong data-i18n="focus.custom">Custom duration</strong>
+                <span data-i18n="focus.customHint">Choose any focused interval from 1 minute to 24 hours.</span>
+              </div>
+              <label class="field custom-focus-field" for="focus_custom">
+                <span class="sr-only">Custom focus duration in minutes</span>
+                <div class="number-action">
+                  <input type="number" id="focus_custom" min="1" max="1440" value="90" />
+                  <span data-i18n="unit.minutes">minutes</span>
+                  <button type="button" id="focus_custom_start" data-i18n="focus.start">Start focus</button>
+                </div>
+              </label>
+              <button type="button" id="focus_off" class="quiet" hidden data-i18n="focus.end">End current focus</button>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="appearance" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="appearance.eyebrow">Personalize</p>
+              <h2 data-i18n="appearance.title">Appearance</h2>
+              <p>
+                <span data-i18n="appearance.body">Choose a readable personality for Settings, app lock, native chrome, and the WhatsApp chatting workspace.</span>
+              </p>
+            </div>
+            <fieldset class="theme-picker">
+              <legend class="sr-only">Falo theme</legend>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="system" />
+                <span class="theme-swatch theme-swatch-system" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.system">Dark</strong><small data-i18n="theme.systemHint">Official WhatsApp dark with doodles</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="light" />
+                <span class="theme-swatch theme-swatch-light" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.light">Light</strong><small data-i18n="theme.lightHint">Official WhatsApp light with doodles</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="graphite" />
+                <span class="theme-swatch theme-swatch-graphite" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.graphite">Graphite</strong><small data-i18n="theme.graphiteHint">Strong and minimal</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="midnight" />
+                <span class="theme-swatch theme-swatch-midnight" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.midnight">Midnight</strong><small data-i18n="theme.midnightHint">Deep blue focus</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="forest" />
+                <span class="theme-swatch theme-swatch-forest" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.forest">Forest</strong><small data-i18n="theme.forestHint">Grounded green calm</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="ocean" />
+                <span class="theme-swatch theme-swatch-ocean" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.ocean">Ocean</strong><small data-i18n="theme.oceanHint">Cool, calm energy</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="blush" />
+                <span class="theme-swatch theme-swatch-blush" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.blush">Blush</strong><small data-i18n="theme.blushHint">Gentle rose warmth</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="lavender" />
+                <span class="theme-swatch theme-swatch-lavender" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.lavender">Lavender</strong><small data-i18n="theme.lavenderHint">Soft violet quiet</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="candy" />
+                <span class="theme-swatch theme-swatch-candy" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.candy">Candy</strong><small data-i18n="theme.candyHint">Playful pastel</small></span>
+              </label>
+              <label class="theme-option">
+                <input type="radio" name="theme" value="aurora" />
+                <span class="theme-swatch theme-swatch-aurora" aria-hidden="true"></span>
+                <span><strong data-i18n="theme.aurora">Aurora</strong><small data-i18n="theme.auroraHint">Soft pastel spectrum</small></span>
+              </label>
+            </fieldset>
+            <p class="field-note">
+              <span data-i18n="appearance.note">Preview appears here immediately. Save to apply it to all open chat windows. Dark and Light preserve WhatsApp's complete official interface and doodles. Personality themes change only the conversation wallpaper and hide doodles.</span>
+            </p>
+          </section>
+
+          
+          <section class="settings-panel" data-panel="interface" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="interface.eyebrow">Display</p>
+              <h2 data-i18n="interface.title">Interface</h2>
+              <p data-i18n="interface.body">Set the app language and choose which helpers show in the chat window.</p>
+            </div>
+            <div class="section-surface setting-list">
+              <label class="field" for="ui_lang">
+                <span data-i18n="interface.langLabel">App language</span>
+                <small data-i18n="interface.langHelp">Applies to Settings and chat helper labels. Message translation languages stay under Translation.</small>
+                <select id="ui_lang">
+                  <option value="zh" selected data-i18n="interface.lang.zh">中文</option>
+                  <option value="en" data-i18n="interface.lang.en">English</option>
+                </select>
+              </label>
+            </div>
+            <div class="section-surface setting-list">
+              <h3 data-i18n="interface.displayHeading">Chat display helpers</h3>
+              <div class="switch-row">
+                <label class="switch-row-main" for="show_quick_phrases">
+                  <strong data-i18n="interface.phrases">Quick phrases</strong>
+                  <small data-i18n="interface.phrasesHelp">Show the quick-phrase bar near the composer.</small>
+                </label>
+                <span class="switch-row-controls">
+                  <button
+                    type="button"
+                    id="waqp-phrase-settings"
+                    class="waqp-phrase-settings"
+                    data-i18n-title="interface.phrasesSettings"
+                    data-i18n-aria-label="interface.phrasesSettings"
+                    title="Manage quick phrases"
+                    aria-label="Manage quick phrases"
+                  >
+                    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                      <path
+                        fill="currentColor"
+                        d="M10.82 22c-.45 0-.83-.15-1.16-.45a1.9 1.9 0 0 1-.59-1.1l-.22-1.65a3.79 3.79 0 0 1-.61-.3c-.2-.12-.38-.24-.57-.38l-1.55.65c-.41.19-.83.2-1.25.05a1.84 1.84 0 0 1-.97-.8l-1.18-2.04c-.23-.39-.3-.8-.2-1.23.1-.43.33-.8.68-1.07l1.32-1a2.39 2.39 0 0 1-.02-.34v-.68c0-.1 0-.22.02-.34l-1.32-1a1.9 1.9 0 0 1-.68-1.07c-.1-.43-.03-.84.2-1.22L3.9 5.98c.23-.39.56-.66.97-.8.42-.15.84-.14 1.25.04l1.55.66a6.82 6.82 0 0 1 1.18-.68l.22-1.65c.07-.43.27-.8.6-1.1.32-.3.7-.45 1.15-.45h2.36c.45 0 .83.15 1.16.45.32.3.52.67.59 1.1l.22 1.65a5.5 5.5 0 0 1 1.17.68l1.55-.66c.42-.18.84-.2 1.25-.04.42.15.75.41.98.8l1.17 2.04c.24.39.3.8.2 1.23-.1.43-.32.8-.67 1.07l-1.32 1 .02.34v.68c0 .1-.02.22-.05.34l1.32 1c.36.28.58.64.68 1.07.1.43.03.84-.2 1.22l-1.2 2.05c-.23.39-.56.66-.98.8-.41.16-.83.14-1.25-.05l-1.5-.64a6.84 6.84 0 0 1-1.17.67l-.22 1.65c-.07.43-.27.8-.6 1.1-.32.3-.7.45-1.15.45h-2.36Zm.18-2h1.97l.35-2.65a5.6 5.6 0 0 0 2.65-1.53l2.48 1.03.98-1.7-2.16-1.63c.09-.23.15-.47.18-.73a6.15 6.15 0 0 0 0-1.58c-.03-.26-.1-.5-.18-.74l2.16-1.62-.98-1.7-2.47 1.05a5.56 5.56 0 0 0-2.66-1.55L13 4h-1.97l-.35 2.65a5.6 5.6 0 0 0-2.66 1.53L5.55 7.15l-.98 1.7 2.15 1.6a6.06 6.06 0 0 0 0 3.08l-2.15 1.62.98 1.7 2.47-1.05a5.55 5.55 0 0 0 2.66 1.55L11 20Z"
+                      />
+                      <path
+                        fill="currentColor"
+                        fill-rule="evenodd"
+                        d="M12 13.5c.44 0 .75-.13 1.06-.44.3-.3.44-.62.44-1.06 0-.44-.13-.75-.44-1.06-.3-.3-.62-.44-1.06-.44-.46 0-.78.14-1.06.43-.3.3-.44.63-.44 1.07 0 .44.13.76.44 1.07.28.3.6.43 1.06.43Zm2.47.97A3.37 3.37 0 0 1 12 15.5c-.98 0-1.81-.34-2.49-1.03A3.4 3.4 0 0 1 8.5 12c0-.97.34-1.8 1.01-2.47A3.36 3.36 0 0 1 12 8.5c.97 0 1.8.34 2.47 1.03.69.68 1.03 1.5 1.03 2.47 0 .97-.34 1.8-1.03 2.47Z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                  <input type="checkbox" id="show_quick_phrases" />
+                </span>
+              </div>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.remark">Quick remark</strong>
+                  <small data-i18n="interface.remarkHelp">Show the remark shortcut on chat headers.</small>
+                </span>
+                <input type="checkbox" id="show_quick_remark" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.device">Message device</strong>
+                  <small data-i18n="interface.deviceHelp">Show whether a message came from phone or desktop.</small>
+                </span>
+                <input type="checkbox" id="show_msg_device" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.badge">Business badge</strong>
+                  <small data-i18n="interface.badgeHelp">Mark business accounts in the chat list.</small>
+                </span>
+                <input type="checkbox" id="show_business_badge" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.country">Chat list country</strong>
+                  <small data-i18n="interface.countryHelp">Show country hints next to phone numbers.</small>
+                </span>
+                <input type="checkbox" id="show_chatlist_country" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.fx">Currency (FX) hints</strong>
+                  <small data-i18n="interface.fxHelp">Highlight amounts and open the FX helper.</small>
+                </span>
+                <input type="checkbox" id="show_fx" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="interface.followup">Follow-up todos</strong>
+                  <small data-i18n="interface.followupHelp">Show customer follow-up todos, today’s list, and due reminders.</small>
+                </span>
+                <input type="checkbox" id="show_followup_todos" />
+              </label>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="notifications" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="notifications.eyebrow">Attention</p>
+              <h2 data-i18n="notifications.title">Notifications</h2>
+              <p data-i18n="notifications.body">Choose how much message detail reaches your desktop.</p>
+            </div>
+            <div class="section-surface setting-list">
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="notifications.native">Native notifications</strong>
+                  <small data-i18n="notifications.nativeHelp">Show desktop alerts for incoming messages.</small>
+                </span>
+                <input type="checkbox" id="notifications" />
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="notifications.previews">Show message previews</strong>
+                  <small data-i18n="notifications.previewsHelp">Turn this off to show a private generic alert.</small>
+                </span>
+                <input type="checkbox" id="notification_previews" />
+              </label>
+              <label class="duration-row" for="notification_preview_duration_secs">
+                <span>
+                  <strong data-i18n="notifications.duration">Preview duration</strong>
+                  <small data-i18n="notifications.durationHelp">Banner time on screen (15+ seconds uses Windows' extended banner). Toasts also stay in the notification center so you can reopen them later.</small>
+                </span>
+                <span class="duration-control">
+                  <input
+                    type="number"
+                    id="notification_preview_duration_secs"
+                    min="2"
+                    max="30"
+                    step="1"
+                    value="2"
+                    inputmode="numeric"
+                  />
+                  <span data-i18n="unit.seconds">seconds</span>
+                </span>
+              </label>
+              <div class="inline-action">
+                <button type="button" id="test_notification" class="secondary" data-i18n="notifications.test">
+                  Send test notification
+                </button>
+                <span id="test_notification_note" class="muted-note"></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="preferences" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="preferences.eyebrow">Desktop</p>
+              <h2 data-i18n="preferences.title">Preferences</h2>
+              <p data-i18n="preferences.body">Control how Falo stays available while you work.</p>
+            </div>
+            <div class="section-surface setting-list">
+              <label class="switch-row">
+                <span><strong data-i18n="preferences.tray">Close to tray</strong><small data-i18n="preferences.trayHelp">Keep accounts connected in the background.</small></span>
+                <input type="checkbox" id="close_to_tray" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="preferences.minimized">Start minimized</strong><small data-i18n="preferences.minimizedHelp">Open quietly in the system tray.</small></span>
+                <input type="checkbox" id="start_minimized" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="preferences.autostart">Launch at startup</strong><small data-i18n="preferences.autostartHelp">Start Falo after you sign in.</small></span>
+                <input type="checkbox" id="autostart" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="preferences.onTop">Keep chat windows on top</strong><small data-i18n="preferences.onTopHelp">Apply to every account window.</small></span>
+                <input type="checkbox" id="always_on_top" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="preferences.hotkey">Global show/hide shortcut</strong><small data-i18n="preferences.hotkeyHelp">Bring your active account forward from anywhere.</small></span>
+                <input type="checkbox" id="hotkey_enabled" />
+              </label>
+            </div>
+            <div class="section-surface shortcut-surface">
+              <label class="field" for="hotkey">
+                <span data-i18n="preferences.shortcut">Shortcut</span>
+                <div class="hotkey-row">
+                  <input type="text" id="hotkey" placeholder="Alt+W" />
+                  <button type="button" id="record_hotkey" class="secondary" data-i18n="preferences.record">Record</button>
+                </div>
+              </label>
+              <div id="hotkey_presets" class="shortcut-presets" aria-label="Suggested shortcuts">
+                <button type="button" class="chip" data-hotkey-preset="platform" data-i18n="preferences.recommended">Recommended</button>
+                <button type="button" class="chip" data-hotkey-preset="Ctrl+Alt+W">Ctrl + Alt + W</button>
+                <button type="button" class="chip" data-hotkey-preset="CmdOrCtrl+Shift+W">Ctrl/Cmd + Shift + W</button>
+              </div>
+              <p id="hotkey_hint" class="hotkey-hint" hidden></p>
+              <p class="field-note" id="platform_shortcut_note"></p>
+            </div>
+            <div class="section-surface setting-list" id="network-proxy-section">
+              <h3 data-i18n="network.title">Network / Proxy</h3>
+              <p class="field-note" data-i18n="network.help">
+                Default for all accounts. Per-account overrides live under Accounts. Use Clash system proxy, or fill a local HTTP/SOCKS5 port.
+              </p>
+              <label class="field" for="proxy_mode">
+                <span data-i18n="network.mode">Default mode</span>
+                <select id="proxy_mode">
+                  <option value="system" data-i18n="network.modeSystem">Follow system proxy</option>
+                  <option value="direct" data-i18n="network.modeDirect">Direct (no proxy)</option>
+                  <option value="custom" data-i18n="network.modeCustom">Custom proxy</option>
+                </select>
+              </label>
+              <div id="proxy_custom_fields" class="proxy-fields" hidden>
+                <label class="field" for="proxy_scheme">
+                  <span data-i18n="network.scheme">Protocol</span>
+                  <select id="proxy_scheme">
+                    <option value="http">HTTP</option>
+                    <option value="https">HTTPS</option>
+                    <option value="socks5">SOCKS5</option>
+                  </select>
+                </label>
+                <div class="hotkey-row">
+                  <label class="field" for="proxy_host" style="flex:1">
+                    <span data-i18n="network.host">Host</span>
+                    <input type="text" id="proxy_host" placeholder="127.0.0.1" autocomplete="off" />
+                  </label>
+                  <label class="field" for="proxy_port" style="width:7rem">
+                    <span data-i18n="network.port">Port</span>
+                    <input type="number" id="proxy_port" min="1" max="65535" placeholder="7890" />
+                  </label>
+                </div>
+                <div class="hotkey-row">
+                  <label class="field" for="proxy_username" style="flex:1">
+                    <span data-i18n="network.username">Username (optional)</span>
+                    <input type="text" id="proxy_username" autocomplete="off" />
+                  </label>
+                  <label class="field" for="proxy_password" style="flex:1">
+                    <span data-i18n="network.password">Password (optional)</span>
+                    <input type="password" id="proxy_password" autocomplete="new-password" />
+                  </label>
+                </div>
+              </div>
+              <div class="hotkey-row" style="margin-top:0.75rem;gap:0.5rem;align-items:center">
+                <button type="button" id="proxy_check_btn" class="secondary" data-i18n="network.check">Check exit IP</button>
+                <p id="proxy_check_note" class="field-note" aria-live="polite" style="margin:0"></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="membership" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="membership.eyebrow">Subscription</p>
+              <h2 data-i18n="membership.title">Membership</h2>
+              <p data-i18n="membership.body">登陆可使用翻译等功能</p>
+            </div>
+            <div class="section-surface" id="membership-logged-out">
+              <label class="field" for="membership_email">
+                <span data-i18n="membership.email">Email</span>
+                <input type="email" id="membership_email" autocomplete="username" />
+              </label>
+              <label class="field" for="membership_password">
+                <span data-i18n="membership.password">Password</span>
+                <input type="password" id="membership_password" autocomplete="current-password" />
+              </label>
+              <label class="field" for="membership_api_base">
+                <span data-i18n="membership.apiBase">API base (optional)</span>
+                <input type="url" id="membership_api_base" placeholder="https://serial.babyamy.store" />
+              </label>
+              <button type="button" id="membership_login" class="primary-action" data-i18n="membership.signIn">Sign in</button>
+              <p id="membership_note" class="field-note"></p>
+            </div>
+            <div id="device-limit-modal" class="device-limit-modal" hidden>
+              <div class="device-limit-dialog" role="dialog" aria-modal="true" aria-labelledby="dl-title">
+                <div class="device-limit-dialog-head">
+                  <h3 id="dl-title" data-i18n="devices.deviceLimitTitle">设备已超限</h3>
+                  <button type="button" id="dl-cancel" class="device-limit-close-btn" data-i18n-title="membership.close" title="关闭" aria-label="关闭">&times;</button>
+                </div>
+                <p id="dl-desc" class="device-limit-desc" data-i18n="devices.deviceLimitDesc">请注销一台旧设备后再登录。</p>
+                <div class="device-limit-list-head">
+                  <strong id="dl-list-title" data-i18n="devices.signedInDevices">已登录设备</strong>
+                  <div class="device-limit-list-actions">
+                    <button type="button" id="dl-logout-all" class="device-remove-btn" data-i18n="devices.signOutAllDevices">注销所有设备</button>
+                    <button type="button" id="dl-refresh" class="secondary" data-i18n="devices.refreshShort">刷新</button>
+                  </div>
+                </div>
+                <div class="device-select-toolbar" id="dl-select-toolbar">
+                  <label class="device-select-all-wrap">
+                    <input type="checkbox" id="dl-select-all" />
+                    <span data-i18n="devices.selectAll">全选</span>
+                  </label>
+                  <button type="button" id="dl-select-offline" class="secondary" data-i18n="devices.selectOffline">全选离线</button>
+                  <button type="button" id="dl-logout-selected" class="device-remove-btn" disabled data-i18n="devices.logoutSelected">注销已选</button>
+                </div>
+                <div id="dl-devices-list" class="devices-list"></div>
+                <p id="dl-status" class="field-note device-limit-status" aria-live="polite"></p>
+              </div>
+            </div>
+            <div class="section-surface" id="membership-logged-in" hidden>
+              <p><strong id="membership_email_display">—</strong></p>
+              <p class="field-note"><span data-i18n="membership.plan">Plan: </span><span id="membership_plan">—</span> · <span data-i18n="membership.status">Status: </span><span id="membership_status_text">—</span></p>
+              <p class="field-note"><span data-i18n="membership.expires">Expires: </span><span id="membership_expires">—</span></p>
+              <p class="field-note"><span data-i18n="membership.seats">Seats: </span><span id="membership_seats">0</span> / <span id="membership_limit">0</span></p>
+              <div class="button-group membership-actions">
+                <button type="button" id="membership_logout" class="secondary" data-i18n="membership.signOut">Sign out</button>
+                <button type="button" id="membership_refresh" class="secondary" data-i18n="membership.refresh">Refresh status</button>
+              </div>
+              <p id="membership_status_note" class="field-note" aria-live="polite"></p>
+            </div>
+            <div id="subscription-plans-section" class="subscription-plans-section">
+              <h3 data-i18n="membership.plansTitle">Subscription plans</h3>
+              <p class="field-note" data-i18n="membership.plansBody">Choose a plan to subscribe or renew.</p>
+              <div id="plans-container" class="plans-container" aria-live="polite"></div>
+              <p id="plans_note" class="field-note" aria-live="polite"></p>
+            </div>
+            <div id="wechat-pay-modal" class="device-limit-modal" hidden>
+              <div class="device-limit-dialog wechat-pay-dialog" role="dialog" aria-modal="true" aria-labelledby="wechat-pay-title">
+                <h3 id="wechat-pay-title" data-i18n="membership.wechatPayTitle">Scan to pay</h3>
+                <p class="field-note" data-i18n="membership.wechatPayBody">Scan the WeChat QR code to complete payment, then refresh status.</p>
+                <img id="wechat-pay-qr" class="wechat-pay-qr" alt="" />
+                <div class="device-limit-actions">
+                  <button type="button" id="wechat-pay-close" class="secondary" data-i18n="membership.close">Close</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="translation" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="translation.eyebrow">Translate</p>
+              <h2 data-i18n="translation.title">Translation</h2>
+              <p data-i18n="translation.body">翻译接口、语言与输入行为</p>
+            </div>
+            <div class="section-surface setting-list">
+              <label class="switch-row">
+                <span><strong data-i18n="translation.enable">启用消息翻译</strong><small data-i18n="translation.enableHelp">消息翻译功能</small></span>
+                <input type="checkbox" id="translate_enabled" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="translation.incoming">Auto-translate incoming</strong><small data-i18n="translation.incomingHelp">Show translations under received messages.</small></span>
+                <input type="checkbox" id="translate_incoming" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="translation.compose">添加翻译开关</strong><small data-i18n="translation.composeHelp">在输入框旁显示圆形开/关，关闭开关后发送原文。</small></span>
+                <input type="checkbox" id="translate_compose" />
+              </label>
+              <label class="switch-row">
+                <span><strong data-i18n="translation.autoSend">Auto-translate before send</strong><small data-i18n="translation.autoSendHelp">Translate compose text on Enter / Send.</small></span>
+                <input type="checkbox" id="auto_send_input_translation" />
+              </label>
+              <!-- Synced with translate_compose (extension enableTranslateButton). Kept for settings schema. -->
+              <label class="switch-row" hidden aria-hidden="true">
+                <span><strong data-i18n="translation.inline">添加翻译开关（同步）</strong><small data-i18n="translation.inlineHelp">与上方相同。</small></span>
+                <input type="checkbox" id="enable_translate_button" />
+              </label>
+            </div>
+            <div class="section-surface">
+              <label class="field" for="translate_source_lang">
+                <span data-i18n="translation.yourLang">你的语言</span>
+                <small>
+                  <span data-i18n="translation.yourLangHelp">与浏览器扩展一致：收到消息翻译成该语言；发送时作源语言，并与客户语言相同时跳过翻译。选「自动」时收到消息默认译为中文。</span>
+                </small>
+                <select id="translate_source_lang"></select>
+              </label>
+              <label class="field" for="default_customer_lang">
+                <span data-i18n="translation.customerLang">默认客户语言</span>
+                <small>
+                  <span data-i18n="translation.customerLangHelp">未单独设置客户语言的会话，回复时默认翻译成该语言。选择「自动」时根据对方号码区号推断。</span>
+                </small>
+                <select id="default_customer_lang"></select>
+              </label>
+              <label class="field" for="translate_engine">
+                <span data-i18n="translation.globalEngine">全局输入框翻译接口</span>
+                <select id="translate_engine"></select>
+              </label>
+              <label class="field" for="chat_history_engine">
+                <span data-i18n="translation.historyEngine">聊天记录翻译接口</span>
+                <select id="chat_history_engine"></select>
+              </label>
+              <label class="field" for="translate_text_color">
+                <span data-i18n="translation.color">Translation text color</span>
+                <input type="color" id="translate_text_color" value="#333333" />
+              </label>
+              <label class="field" for="translate_font_size">
+                <span data-i18n="translation.fontSize">Translation font size</span>
+                <input type="number" id="translate_font_size" min="10" max="28" value="14" />
+              </label>
+            </div>
+            <div class="section-surface api-keys-surface">
+              <h3 data-i18n="translation.apiKeys">API keys (optional)</h3>
+
+              <div class="api-key-group">
+                <h4 data-i18n="translation.groupDeepl">DeepL</h4>
+                <label class="field field-bare" for="deepl_api_key">
+                  <span class="sr-only" data-i18n="translation.lbDeeplKey">DeepL API Key</span>
+                  <input type="password" id="deepl_api_key" autocomplete="off" placeholder="Enter API Key" data-i18n-placeholder="translation.phApiKey" />
+                </label>
+              </div>
+
+              <hr class="api-key-divider" aria-hidden="true" />
+
+              <div class="api-key-group">
+                <h4 data-i18n="translation.groupChatgpt">ChatGPT</h4>
+                <label class="field field-bare" for="chatgpt_api_key">
+                  <span class="sr-only" data-i18n="translation.lbChatgptKey">ChatGPT API Key</span>
+                  <input type="password" id="chatgpt_api_key" autocomplete="off" placeholder="Enter API Key" data-i18n-placeholder="translation.phApiKey" />
+                </label>
+                <label class="field field-bare" for="chatgpt_model">
+                  <span class="sr-only" data-i18n="translation.lbChatgptModel">ChatGPT model</span>
+                  <input type="text" id="chatgpt_model" placeholder="Enter model name, e.g. gpt-4o-mini" data-i18n-placeholder="translation.phChatgptModel" />
+                </label>
+              </div>
+
+              <hr class="api-key-divider" aria-hidden="true" />
+
+              <div class="api-key-group">
+                <h4 data-i18n="translation.groupOpenai">OpenAI Custom</h4>
+                <p class="field-note api-key-desc" data-i18n="translation.descOpenai">Saved locally only, not synced to the server. Enter an OpenAI Chat Completions-compatible endpoint, model, and API Key.</p>
+                <label class="field field-bare" for="openai_custom_api_url">
+                  <span class="sr-only" data-i18n="translation.lbOpenaiUrl">OpenAI API URL</span>
+                  <input type="url" id="openai_custom_api_url" placeholder="https://api.openai.com/v1/chat/completions" data-i18n-placeholder="translation.phOpenaiUrl" />
+                </label>
+                <label class="field field-bare" for="openai_custom_model">
+                  <span class="sr-only" data-i18n="translation.lbOpenaiModel">OpenAI model</span>
+                  <input type="text" id="openai_custom_model" placeholder="Enter model name, e.g. gpt-4o-mini" data-i18n-placeholder="translation.phOpenaiModel" />
+                </label>
+                <label class="field field-bare" for="openai_custom_api_key">
+                  <span class="sr-only" data-i18n="translation.lbOpenaiKey">OpenAI API Key</span>
+                  <input type="password" id="openai_custom_api_key" autocomplete="off" placeholder="Enter API Key" data-i18n-placeholder="translation.phApiKey" />
+                </label>
+              </div>
+
+              <hr class="api-key-divider" aria-hidden="true" />
+
+              <div class="api-key-group">
+                <h4 data-i18n="translation.groupDeepseek">Deepseek Custom</h4>
+                <p class="field-note api-key-desc" data-i18n="translation.descDeepseek">Saved locally only, not synced to the server. Enter a DeepSeek-compatible endpoint, model, and API Key.</p>
+                <label class="field field-bare" for="deepseek_custom_api_url">
+                  <span class="sr-only" data-i18n="translation.lbDeepseekUrl">DeepSeek API URL</span>
+                  <input type="url" id="deepseek_custom_api_url" placeholder="https://api.deepseek.com/chat/completions" data-i18n-placeholder="translation.phDeepseekUrl" />
+                </label>
+                <label class="field field-bare" for="deepseek_custom_model">
+                  <span class="sr-only" data-i18n="translation.lbDeepseekModel">DeepSeek model</span>
+                  <input type="text" id="deepseek_custom_model" placeholder="Enter model name, e.g. deepseek-chat" data-i18n-placeholder="translation.phDeepseekModel" />
+                </label>
+                <label class="field field-bare" for="deepseek_custom_api_key">
+                  <span class="sr-only" data-i18n="translation.lbDeepseekKey">DeepSeek API Key</span>
+                  <input type="password" id="deepseek_custom_api_key" autocomplete="off" placeholder="Enter API Key" data-i18n-placeholder="translation.phApiKey" />
+                </label>
+              </div>
+            </div>
+            <div class="section-surface">
+              <h3 data-i18n="translation.latencyTitle">Engine latency</h3>
+              <p class="field-note" data-i18n="translation.latencyHelp">Ping engine domains only (no translate body). Useful to see which APIs are reachable from this network.</p>
+              <div class="row-actions">
+                <button type="button" id="probe_engine_latency" class="secondary" data-i18n="translation.latencyProbe">Probe latency</button>
+                <span id="latency_probe_status" class="field-note" aria-live="polite"></span>
+              </div>
+              <ul id="latency_probe_list" class="setting-list" hidden></ul>
+            </div>
+            <div class="section-surface">
+              <h3 data-i18n="translation.qualityTitle">Quality test</h3>
+              <p class="field-note" data-i18n="translation.qualityHelp">Translate a short sample with multiple engines and compare results. Limited to 10 runs per day.</p>
+              <div class="quality-lang-grid">
+                <label class="field" for="quality_source_lang">
+                  <span data-i18n="translation.qualitySource">Source language</span>
+                  <select id="quality_source_lang"></select>
+                </label>
+                <label class="field" for="quality_target_lang">
+                  <span data-i18n="translation.qualityTarget">Target language</span>
+                  <select id="quality_target_lang"></select>
+                </label>
+              </div>
+              <label class="field" for="quality_test_text">
+                <span data-i18n="translation.qualitySample">Sample text</span>
+                <textarea id="quality_test_text" rows="3" maxlength="500" placeholder="Hello, how are you?"></textarea>
+              </label>
+              <div class="row-actions">
+                <button type="button" id="quality_translate_test" class="secondary" data-i18n="translation.qualityRun">Run quality test</button>
+                <button type="button" id="quality_copy_ai" class="secondary" data-i18n="translation.qualityCopyAi" disabled>Copy for AI compare</button>
+                <span id="quality_test_status" class="field-note" aria-live="polite"></span>
+              </div>
+              <div id="quality_test_list" class="quality-test-results" hidden aria-live="polite"></div>
+            </div>
+            <div class="section-surface" id="ai-prompt-section" hidden>
+              <h3 id="opt-ai-prompt-title" data-i18n="translation.aiPromptTitle">AI 翻译提示词</h3>
+              <p class="field-note" id="opt-ai-prompt-desc" data-i18n="translation.aiPromptDesc">仅用于当前 AI 翻译接口的系统提示词。支持 ${toCode} 占位符。</p>
+              <label class="field" for="ai-system-prompt-input">
+                <span class="sr-only" data-i18n="translation.aiPromptLabel">系统提示词</span>
+                <textarea id="ai-system-prompt-input" rows="12" spellcheck="false"></textarea>
+              </label>
+              <div class="row-actions ai-prompt-actions">
+                <button type="button" id="ai-prompt-save-btn" data-i18n="translation.aiPromptSave">保存提示词</button>
+                <button type="button" id="ai-prompt-restore-default-btn" class="secondary" data-i18n="translation.aiPromptRestore">恢复默认</button>
+                <button type="button" id="ai-prompt-template-btn" class="secondary" data-i18n="translation.aiPromptTemplate">行业提示词模板</button>
+                <span id="ai-prompt-status" class="field-note" aria-live="polite"></span>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="devices" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="devices.eyebrow">Devices</p>
+              <h2 id="opt-devices-title" data-i18n="devices.title">设备</h2>
+              <p id="opt-devices-desc" class="devices-desc" data-i18n="devices.body">查看当前账号已登录的设备，并可注销不再使用的设备。</p>
+            </div>
+            <div class="section-surface devices-panel-body">
+              <p class="field-note" id="devices_summary" hidden></p>
+              <div class="current-device-card">
+                <div>
+                  <h3 id="opt-current-device-title" data-i18n="devices.currentDeviceTitle">当前设备</h3>
+                  <p id="current-device-name">-</p>
+                </div>
+                <span class="current-device-badge" id="current-device-badge" data-i18n="devices.currentDeviceBadge">当前使用</span>
+              </div>
+              <div class="device-list-header">
+                <h3 id="opt-devices-list-title" data-i18n="devices.listTitle">已登录设备</h3>
+                <button type="button" id="btn-refresh-devices" class="secondary" data-i18n="devices.refresh">刷新设备列表</button>
+              </div>
+              <div class="device-select-toolbar" id="device-select-toolbar" hidden>
+                <label class="device-select-all-wrap">
+                  <input type="checkbox" id="device-select-all" />
+                  <span data-i18n="devices.selectAll">全选</span>
+                </label>
+                <button type="button" id="btn-select-offline-devices" class="secondary" data-i18n="devices.selectOffline">全选离线</button>
+                <button type="button" id="btn-logout-selected-devices" class="device-remove-btn" disabled data-i18n="devices.logoutSelected">注销已选</button>
+              </div>
+              <div id="devices-list" class="devices-list"></div>
+              <div class="devices-footer">
+                <button type="button" id="btn-logout-other-devices" class="device-remove-btn" data-i18n="devices.logoutOthers">注销其它设备</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="backup" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="backup.eyebrow">Data</p>
+              <h2 data-i18n="backup.title">Backup &amp; support</h2>
+              <p data-i18n="backup.body">Export contacts from open account tabs, or back up app preferences.</p>
+            </div>
+
+            <div class="section-surface backup-block">
+              <h3 data-i18n="cb.title">Contacts backup</h3>
+              <p class="field-note" data-i18n="cb.desc">Export group members, chats, labels, or country-filtered numbers from open WhatsApp account tabs.</p>
+
+              <label class="field" for="cb-account">
+                <span data-i18n="cb.account">Account tab</span>
+                <select id="cb-account"></select>
+              </label>
+
+              <div id="cb-status" class="contacts-backup-status" data-state="unknown"></div>
+
+              <div class="backup-toolbar">
+                <button type="button" id="cb-btn-refresh" class="secondary" data-i18n="cb.refresh">Refresh list</button>
+                <button type="button" id="cb-btn-open-wa" class="secondary" data-i18n="cb.openWa">Open account</button>
+                <button type="button" id="cb-btn-export-all" class="secondary" data-i18n="cb.exportAll">Export all open accounts</button>
+              </div>
+
+              <div class="contacts-backup-tabs" role="tablist">
+                <button type="button" class="contacts-backup-tab active" data-source="groups" id="cb-tab-groups" data-i18n="cb.tabGroups">Groups</button>
+                <button type="button" class="contacts-backup-tab" data-source="chats" id="cb-tab-chats" data-i18n="cb.tabChats">Chats</button>
+                <button type="button" class="contacts-backup-tab" data-source="labels" id="cb-tab-labels" data-i18n="cb.tabLabels">Labels</button>
+                <button type="button" class="contacts-backup-tab" data-source="countries" id="cb-tab-countries" data-i18n="cb.tabCountries">Countries</button>
+              </div>
+
+              <div class="contacts-backup-source-panels">
+                <div id="cb-panel-groups" class="contacts-backup-source active">
+                  <label class="contacts-backup-check">
+                    <input type="checkbox" id="cb-include-admin" checked />
+                    <span data-i18n="cb.includeAdmin">Include admins</span>
+                  </label>
+                  <div id="cb-group-list" class="contacts-backup-checklist"></div>
+                </div>
+                <div id="cb-panel-chats" class="contacts-backup-source" hidden>
+                  <div class="contacts-backup-radio-row">
+                    <label class="contacts-backup-check">
+                      <input type="radio" name="cb-chats-mode" value="chats" checked />
+                      <span data-i18n="cb.modeChats">Chat contacts</span>
+                    </label>
+                    <label class="contacts-backup-check">
+                      <input type="radio" name="cb-chats-mode" value="contacts" />
+                      <span data-i18n="cb.modeContacts">Saved contacts</span>
+                    </label>
+                  </div>
+                  <p id="cb-chats-summary" class="contacts-backup-summary"></p>
+                </div>
+                <div id="cb-panel-labels" class="contacts-backup-source" hidden>
+                  <div id="cb-label-list" class="contacts-backup-checklist"></div>
+                </div>
+                <div id="cb-panel-countries" class="contacts-backup-source" hidden>
+                  <div id="cb-country-list" class="contacts-backup-checklist"></div>
+                </div>
+              </div>
+
+              <div class="contacts-backup-format-row">
+                <span data-i18n="cb.formatLabel">Format</span>
+                <label class="contacts-backup-check"><input type="radio" name="cb-format" value="excel" checked /> Excel</label>
+                <label class="contacts-backup-check"><input type="radio" name="cb-format" value="csv" /> CSV</label>
+                <label class="contacts-backup-check"><input type="radio" name="cb-format" value="json" /> JSON</label>
+                <label class="contacts-backup-check"><input type="radio" name="cb-format" value="vcard" /> VCard</label>
+              </div>
+
+              <div class="backup-toolbar">
+                <button type="button" id="cb-btn-export" data-i18n="cb.exportBtn">Start export</button>
+                <button type="button" id="cb-btn-download" class="secondary" disabled data-i18n="cb.downloadBtn">Download</button>
+              </div>
+
+              <div id="cb-progress" class="contacts-backup-progress" hidden>
+                <div class="contacts-backup-progress-bar"><span id="cb-progress-fill"></span></div>
+                <p id="cb-progress-text"></p>
+              </div>
+              <p id="cb-result-summary" class="contacts-backup-summary"></p>
+            </div>
+
+            <div class="section-surface backup-block">
+              <h3 data-i18n="sb.title">Settings backup</h3>
+              <p class="field-note" data-i18n="sb.desc">Export or import local preferences. Membership login and API keys are never included.</p>
+
+              <div class="settings-backup-select-head">
+                <strong data-i18n="sb.exportItemsTitle">Items</strong>
+                <div class="backup-toolbar">
+                  <button type="button" id="sb-select-all" class="link-btn" data-i18n="sb.selectAll">Select all</button>
+                  <button type="button" id="sb-clear-all" class="link-btn" data-i18n="sb.clearAll">Clear</button>
+                </div>
+              </div>
+              <div class="settings-backup-options" id="sb-category-list">
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-translation" checked /><span data-i18n="sb.cat_translation">Translation</span></label>
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-customerLang" checked /><span data-i18n="sb.cat_customerLang">Per-customer languages</span></label>
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-uiDisplay" checked /><span data-i18n="sb.cat_uiDisplay">UI &amp; display</span></label>
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-quickRemark" checked /><span data-i18n="sb.cat_quickRemark">Quick remarks</span></label>
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-followup" checked /><span data-i18n="sb.cat_followup">Follow-up todos</span></label>
+                <label class="contacts-backup-check"><input type="checkbox" id="sb-cat-fx" checked /><span data-i18n="sb.cat_fx">FX panel</span></label>
+              </div>
+
+              <div class="backup-toolbar">
+                <button type="button" id="sb-btn-export" data-i18n="sb.exportBtn">Export file</button>
+              </div>
+
+              <div class="settings-backup-select-head" style="margin-top:1rem">
+                <strong data-i18n="sb.importModeTitle">Import mode</strong>
+              </div>
+              <div class="settings-backup-options">
+                <label class="contacts-backup-check"><input type="radio" name="sb-import-mode" value="merge" checked /><span data-i18n="sb.importModeMerge">Merge (keep newer)</span></label>
+                <label class="contacts-backup-check"><input type="radio" name="sb-import-mode" value="replace" /><span data-i18n="sb.importModeReplace">Replace</span></label>
+              </div>
+              <p class="field-note" data-i18n="sb.importScopeHint">Import uses the checkboxes above. Unopened account tabs skip page data.</p>
+              <div class="backup-toolbar">
+                <button type="button" id="sb-btn-import" class="secondary" data-i18n="sb.importBtn">Choose file &amp; import</button>
+                <input type="file" id="sb-import-file" accept="application/json,.json" hidden />
+              </div>
+              <p id="sb-hint" class="field-note"></p>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="security" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="security.eyebrow">Privacy</p>
+              <h2 data-i18n="security.title">App lock</h2>
+              <p data-i18n="security.body">Require authentication before any Falo chat is revealed.</p>
+            </div>
+            <div class="section-surface">
+              <div id="lock-disabled">
+                <div class="password-grid">
+                  <label class="field" for="lock_pw1">
+                    <span data-i18n="security.password">Password (minimum 4 characters)</span>
+                    <input type="password" id="lock_pw1" autocomplete="new-password" />
+                  </label>
+                  <label class="field" for="lock_pw2">
+                    <span data-i18n="security.confirm">Confirm password</span>
+                    <input type="password" id="lock_pw2" autocomplete="new-password" />
+                  </label>
+                </div>
+                <button id="enable_lock" data-i18n="security.enable">Enable app lock</button>
+              </div>
+
+              <div id="lock-enabled" hidden>
+                <label class="switch-row" id="biometric_row" hidden>
+                  <span><strong id="biometric_label">Use biometric</strong></span>
+                  <input type="checkbox" id="biometric_enabled" />
+                </label>
+                <label class="switch-row">
+                  <span><strong data-i18n="security.lockLaunch">Lock on launch</strong></span>
+                  <input type="checkbox" id="lock_on_launch" />
+                </label>
+                <label class="switch-row">
+                  <span><strong data-i18n="security.lockHide">Lock when hidden to tray</strong></span>
+                  <input type="checkbox" id="lock_on_hide" />
+                </label>
+                <label class="field compact-field" for="idle_min">
+                  <span data-i18n="security.idle">Auto-lock after inactivity (minutes, 0 = off)</span>
+                  <input type="number" id="idle_min" min="0" max="1440" step="1" value="0" />
+                </label>
+                <div class="button-group">
+                  <button id="lock_now" data-i18n="security.lockNow">Lock now</button>
+                  <button id="change_pw" class="secondary" data-i18n="security.changePw">Change password</button>
+                  <button id="disable_lock" class="danger" data-i18n="security.disable">Disable lock</button>
+                </div>
+              </div>
+              <p class="field-note">
+                <span data-i18n="security.note">App lock controls access to Falo windows. It does not encrypt session data on disk; use full-disk encryption for at-rest protection.</span>
+              </p>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="about" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="about.eyebrow">Identity</p>
+              <h2 data-i18n="about.title">About Falo</h2>
+              <p data-i18n="about.body">A focused desktop workspace for clearer, calmer WhatsApp communication.</p>
+            </div>
+            <div class="section-surface about-card">
+              <img src="app-icon.svg" alt="" aria-hidden="true" />
+              <div class="about-copy">
+                <span class="about-version" data-version-ref>Falo 0.0.0</span>
+                <h3 data-i18n="about.tagline">Designed for productive conversations.</h3>
+                <p>
+                  <span data-i18n="about.thanks"></a>.
+                </p>
+                <p class="about-legal">
+                  <span data-i18n="about.legal"></span>
+                </p>
+                <div class="about-actions">
+                  <button type="button" id="about_check_update" class="ghost-btn" data-i18n="about.checkUpdate">
+                    Check for updates
+                  </button>
+                  <span id="about_update_note" class="field-note" role="status"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer class="workspace-footer">
+          <span id="note" class="save-note" role="status"></span>
+          <span data-version-ref>Falo 0.0.0</span>
+        </footer>
+      </div>
+    </div>
+
+    <div id="phrase-manage-modal" class="device-limit-modal" hidden>
+      <div
+        class="device-limit-dialog phrase-manage-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="phrase-manage-title"
+      >
+        <div class="device-limit-dialog-head">
+          <h3 id="phrase-manage-title" data-i18n="interface.phrases">Quick phrases</h3>
+          <button
+            type="button"
+            id="phrase-manage-close"
+            class="device-limit-close-btn"
+            data-i18n-aria-label="interface.phrasesClose"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <div id="phrase-manage-list" class="phrase-manage-list"></div>
+        <div class="phrase-manage-compose">
+          <textarea
+            id="phrase-manage-new"
+            class="phrase-manage-new"
+            rows="3"
+            data-i18n-placeholder="interface.phrasesNewPlaceholder"
+            placeholder="Enter a new phrase"
+          ></textarea>
+          <div class="phrase-manage-compose-actions">
+            <button type="button" id="phrase-manage-add" class="secondary" data-i18n="interface.phrasesAdd">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendor/xlsx.full.min.js?v=2.6.0"></script>
+    <script src="falo-lang-list.js?v=2.6.0"></script>
+    <script src="falo-engine-list.js?v=2.6.0"></script>
+    <script src="i18n.js?v=2.6.3"></script>
+    <script src="theme.js?v=2.6.0"></script>
+    <script src="confirm.js?v=2.6.4"></script>
+    <script src="hotkey.js?v=2.6.0"></script>
+    <script src="contacts-backup.js?v=2.6.0"></script>
+    <script src="settings-backup.js?v=2.6.0"></script>
+    <script src="main.js?v=2.6.3"></script>
+    <script>
+      // Seamless window: the page draws its own titlebar (drag region + close
+      // button). Wire the close button to the native window (window.close fallback).
+      (function () {
+        var close = document.getElementById("window-close");
+        var closeWindow = function () {
+          var win =
+            window.__TAURI__ &&
+            window.__TAURI__.window &&
+            window.__TAURI__.window.getCurrentWindow();
+          if (win && win.close) {
+            win.close().catch(function () {
+              window.close();
+            });
+          } else {
+            window.close();
+          }
+        };
+        if (close) {
+          close.addEventListener("click", closeWindow);
+        }
+      })();
+    </script>
+  </body>
+</html>

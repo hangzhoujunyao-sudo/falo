@@ -40,58 +40,53 @@
         </div>
 
         <nav class="settings-nav">
-          <p class="nav-group">核心</p>
-          <button type="button" class="nav-item active" data-panel-target="overview">
-            <span class="nav-icon" aria-hidden="true">⌂</span>
-            <span data-i18n="nav.overview">Overview</span>
+          <p class="nav-group">工作台</p>
+          <button type="button" class="nav-item active" data-panel-target="workbench">
+            <span class="nav-icon" aria-hidden="true">◉</span>
+            <span>工作台</span>
           </button>
-          <button type="button" class="nav-item" data-panel-target="translation">
-            <span class="nav-icon" aria-hidden="true">文</span>
-            <span data-i18n="nav.translation">Translation</span>
-          </button>
+
+          <p class="nav-group">连接</p>
           <button type="button" class="nav-item" data-panel-target="accounts">
             <span class="nav-icon" aria-hidden="true">◎</span>
             <span data-i18n="nav.accounts">Accounts</span>
           </button>
-          <button type="button" class="nav-item" data-panel-target="focus">
-            <span class="nav-icon" aria-hidden="true">◷</span>
-            <span data-i18n="nav.focus">Focus</span>
+          <div class="nav-sub">
+            <button type="button" class="sub-pill" data-panel-target="accounts">账户</button>
+            <button type="button" class="sub-pill" data-panel-target="devices">设备</button>
+          </div>
+
+          <p class="nav-group">翻译</p>
+          <button type="button" class="nav-item" data-panel-target="translation">
+            <span class="nav-icon" aria-hidden="true">文</span>
+            <span data-i18n="nav.translation">Translation</span>
           </button>
-          <p class="nav-group">偏好</p>
+
+          <p class="nav-group">通知与外观</p>
           <button type="button" class="nav-item" data-panel-target="notifications">
-            <span class="nav-icon" aria-hidden="true">◉</span>
+            <span class="nav-icon" aria-hidden="true">◐</span>
             <span data-i18n="nav.notifications">Notifications</span>
           </button>
-          <button type="button" class="nav-item" data-panel-target="appearance">
-            <span class="nav-icon" aria-hidden="true">✦</span>
-            <span data-i18n="nav.appearance">Appearance</span>
-          </button>
-          <button type="button" class="nav-item" data-panel-target="interface">
-            <span class="nav-icon" aria-hidden="true">☰</span>
-            <span data-i18n="nav.interface">界面</span>
-          </button>
-          <button type="button" class="nav-item" data-panel-target="preferences">
-            <span class="nav-icon" aria-hidden="true">⌘</span>
-            <span data-i18n="nav.preferences">Preferences</span>
-          </button>
+          <div class="nav-sub">
+            <button type="button" class="sub-pill" data-panel-target="notifications">通知</button>
+            <button type="button" class="sub-pill" data-panel-target="focus">专注</button>
+            <button type="button" class="sub-pill" data-panel-target="appearance">外观</button>
+            <button type="button" class="sub-pill" data-panel-target="interface">界面</button>
+            <button type="button" class="sub-pill" data-panel-target="preferences">偏好</button>
+          </div>
+
           <p class="nav-group">账户与安全</p>
-          <button type="button" class="nav-item" data-panel-target="devices">
-            <span class="nav-icon" aria-hidden="true">▣</span>
-            <span data-i18n="nav.devices">Devices</span>
-          </button>
-          <button type="button" class="nav-item" data-panel-target="membership">
-            <span class="nav-icon" aria-hidden="true">✦</span>
-            <span data-i18n="nav.membership">Membership</span>
-          </button>
-          <button type="button" class="nav-item" data-panel-target="backup">
-            <span class="nav-icon" aria-hidden="true">⇩</span>
-            <span data-i18n="nav.backup">Backup</span>
-          </button>
           <button type="button" class="nav-item" data-panel-target="security">
             <span class="nav-icon" aria-hidden="true">◇</span>
             <span data-i18n="nav.security">Security</span>
           </button>
-          <p class="nav-group">其他</p>
+          <div class="nav-sub">
+            <button type="button" class="sub-pill" data-panel-target="membership">会员</button>
+            <button type="button" class="sub-pill" data-panel-target="backup">备份</button>
+            <button type="button" class="sub-pill" data-panel-target="security">安全</button>
+          </div>
+
+          <p class="nav-group">关于</p>
           <button type="button" class="nav-item" data-panel-target="about">
             <span class="nav-icon" aria-hidden="true">i</span>
             <span data-i18n="nav.about">About</span>
@@ -115,7 +110,55 @@
         </header>
 
         <main class="panel-stage">
-          <section class="settings-panel active" data-panel="overview" aria-labelledby="panel_title">
+          <section class="settings-panel active" data-panel="workbench" aria-labelledby="panel_title">
+          <div class="wb-hero">
+            <div class="wb-hero-text">
+              <p class="eyebrow">Falo 工作台</p>
+              <h2>连接、翻译、专注，一个屏幕搞定</h2>
+              <p>左边选要管的东西；这里看当前连接、最近会话和常用动作。改完记得点右上角保存。</p>
+              <div class="wb-actions">
+                <button type="button" class="primary-action" data-jump-panel="translation">开始翻译</button>
+                <button type="button" class="secondary" data-jump-panel="accounts">管理账号</button>
+                <button type="button" class="secondary" data-jump-panel="focus">开启专注</button>
+              </div>
+            </div>
+            <div class="wb-ring-wrap">
+              <span class="ring" style="--p: 0"><b id="wb_ring_value">0</b></span>
+              <small>活跃会话</small>
+            </div>
+          </div>
+
+          <div class="wb-grid">
+            <section class="section-surface">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">状态</p>
+                  <h2>连接与偏好</h2>
+                </div>
+              </div>
+              <ul class="wb-status">
+                <li><span class="dot" id="wb_dot_accounts"></span>账号 <strong id="wb_accounts">—</strong></li>
+                <li><span class="dot ok"></span>主题 <strong id="wb_theme">Dark</strong></li>
+                <li><span class="dot" id="wb_dot_focus"></span>专注 <strong id="wb_focus">Ready</strong></li>
+                <li><span class="dot ok"></span>运行方式 <strong>本地桌面</strong></li>
+              </ul>
+            </section>
+            <section class="section-surface">
+              <div class="section-heading">
+                <div>
+                  <p class="eyebrow">最近</p>
+                  <h2>最近会话</h2>
+                </div>
+                <p>点一下直接跳过去。</p>
+              </div>
+              <div class="wb-sessions" id="wb_sessions">
+                <p class="wb-empty">还没有会话 —— 先去「连接 → 账户」添加一个。</p>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="settings-panel" data-panel="overview" aria-labelledby="panel_title" hidden>
           <div class="welcome-card">
             <img src="app-icon.svg" alt="" aria-hidden="true" class="welcome-mark" />
             <div>
@@ -136,93 +179,42 @@
                 </div>
                 <p data-i18n="overview.focusPresetsHint">Pause native notifications while every chat stays connected.</p>
               </div>
-              <div class="focus-presets compact-presets" aria-label="Quick focus duration">
-                <button type="button" class="preset-button" data-focus-minutes="15">
-                  <strong>15</strong><span data-i18n="unit.minutes">minutes</span>
-                </button>
-                <button type="button" class="preset-button" data-focus-minutes="30">
-                  <strong>30</strong><span data-i18n="unit.minutes">minutes</span>
-                </button>
-                <button type="button" class="preset-button" data-focus-minutes="60">
-                  <strong>1</strong><span data-i18n="unit.hour">hour</span>
-                </button>
-                <button type="button" class="preset-button" data-focus-minutes="120">
-                  <strong>2</strong><span data-i18n="unit.hours">hours</span>
-                </button>
+              <div class="focus-controls">
+                <div class="focus-slider-row">
+                  <input type="range" id="focus_slider" min="5" max="120" step="5" value="30"
+                         aria-label="Focus duration in minutes" />
+                  <span class="focus-slider-value" id="focus_slider_value">30 分钟</span>
+                  <button type="button" class="primary-action" id="focus_slider_apply">开始专注</button>
+                </div>
+                <div class="chip-row">
+                  <button type="button" class="chip" data-focus-minutes="15">15 分钟</button>
+                  <button type="button" class="chip" data-focus-minutes="30">30 分钟</button>
+                  <button type="button" class="chip" data-focus-minutes="60">1 小时</button>
+                  <button type="button" class="chip" data-focus-minutes="120">2 小时</button>
+                </div>
               </div>
             </section>
 
             <aside class="overview-side">
-              <p class="side-title" data-i18n="overview.sideTitle">At a glance</p>
-              <div class="metric-stack">
-                <button type="button" class="metric-card" data-jump-panel="accounts">
-                  <span class="metric-label" data-i18n="overview.metric.spaces">Connected spaces</span>
-                  <strong id="overview_accounts">—</strong>
+              <p class="side-title">速览</p>
+              <div class="ring-grid">
+                <button type="button" class="ring-card" data-jump-panel="accounts">
+                  <span class="ring" style="--p: 12"><b id="overview_accounts">—</b></span>
+                  <span class="label" data-i18n="overview.metric.spaces">Connected spaces</span>
                   <small data-i18n="overview.metric.spacesHint">Manage accounts</small>
                 </button>
-                <button type="button" class="metric-card" data-jump-panel="focus">
-                  <span class="metric-label" data-i18n="overview.metric.attention">Attention mode</span>
-                  <strong id="overview_focus">Ready</strong>
+                <button type="button" class="ring-card" data-jump-panel="focus">
+                  <span class="ring" style="--p: 45"><b id="overview_focus">Ready</b></span>
+                  <span class="label" data-i18n="overview.metric.attention">Attention mode</span>
                   <small data-i18n="overview.metric.attentionHint">Start a focus session</small>
                 </button>
-                <button type="button" class="metric-card" data-jump-panel="appearance">
-                  <span class="metric-label" data-i18n="overview.metric.style">Current style</span>
-                  <strong id="overview_theme">Dark</strong>
+                <button type="button" class="ring-card" data-jump-panel="appearance">
+                  <span class="ring" style="--p: 70"><b id="overview_theme">Dark</b></span>
+                  <span class="label" data-i18n="overview.metric.style">Current style</span>
                   <small data-i18n="overview.metric.styleHint">Personalize Falo</small>
                 </button>
               </div>
-            </aside>
-          </div>
-        </section>
-
-        <section class="settings-panel" data-panel="accounts" hidden>
-            <div class="panel-intro">
-              <p class="eyebrow" data-i18n="accounts.eyebrow">Workspace</p>
-              <h2 data-i18n="accounts.title">Accounts</h2>
-              <p data-i18n="accounts.body">Keep work, personal, and project sessions separate and easy to reach.</p>
-            </div>
-            <div class="section-surface">
-              <div class="accounts-batch-bar">
-                <label class="accounts-select-all">
-                  <input type="checkbox" id="accounts_select_all" />
-                  <span data-i18n="accounts.selectAll">Select all</span>
-                </label>
-                <button type="button" id="accounts_open_selected" class="secondary" data-i18n="accounts.openSelected" disabled>
-                  Open selected
-                </button>
-                <button type="button" id="accounts_close_selected" class="secondary" data-i18n="accounts.closeSelected" disabled>
-                  Close selected
-                </button>
-                <button type="button" id="accounts_batch_cancel" class="secondary" data-i18n="accounts.batchCancel" hidden>
-                  Cancel queue
-                </button>
-              </div>
-              <p id="accounts_batch_note" class="field-note" aria-live="polite"></p>
-              <div id="accounts-list" class="accounts-list"></div>
-              <div class="add-row">
-                <input
-                  type="text"
-                  id="new_account_name"
-                  maxlength="60"
-                  placeholder="Account name, e.g. Work" data-i18n-placeholder="accounts.placeholder"
-                  aria-label="New account name"
-                />
-                <button id="add_account" data-i18n="accounts.add">Add account</button>
-              </div>
-              <p id="macos-note" class="warning-note" hidden><span data-i18n="accounts.macos">Multiple accounts require macOS 14 or newer.</span></p>
-            </div>
-            <div id="fingerprint-modal" class="device-limit-modal" hidden>
-              <div class="device-limit-dialog fingerprint-dialog" role="dialog" aria-modal="true" aria-labelledby="fingerprint-title">
-                <h3 id="fingerprint-title" data-i18n="accounts.fingerprintTitle">Browser fingerprint</h3>
-                <p id="fingerprint-subtitle" class="field-note"></p>
-                <pre id="fingerprint-json" class="fingerprint-json" tabindex="0" aria-label="Fingerprint JSON"></pre>
-                <div class="device-limit-actions">
-                  <button type="button" id="fingerprint-copy" class="secondary" data-i18n="accounts.fingerprintCopy">Copy JSON</button>
-                  <button type="button" id="fingerprint-close" class="primary-action" data-i18n="accounts.fingerprintClose">Close</button>
-                </div>
-                <p id="fingerprint-note" class="field-note" aria-live="polite"></p>
-              </div>
-            </div>
+            
             <div id="account-proxy-modal" class="device-limit-modal" hidden>
               <div class="device-limit-dialog fingerprint-dialog" role="dialog" aria-modal="true" aria-labelledby="account-proxy-title">
                 <h3 id="account-proxy-title" data-i18n="accounts.proxyTitle">Account proxy</h3>
@@ -1070,4 +1062,116 @@
                 </div>
               </div>
               <p class="field-note">
-                <span data-i18n="security.note">App lock controls access to Falo windows. It does not encrypt session data on disk; use full-disk encrypt
+                <span data-i18n="security.note">App lock controls access to Falo windows. It does not encrypt session data on disk; use full-disk encryption for at-rest protection.</span>
+              </p>
+            </div>
+          </section>
+
+          <section class="settings-panel" data-panel="about" hidden>
+            <div class="panel-intro">
+              <p class="eyebrow" data-i18n="about.eyebrow">Identity</p>
+              <h2 data-i18n="about.title">About Falo</h2>
+              <p data-i18n="about.body">A focused desktop workspace for clearer, calmer WhatsApp communication.</p>
+            </div>
+            <div class="section-surface about-card">
+              <img src="app-icon.svg" alt="" aria-hidden="true" />
+              <div class="about-copy">
+                <span class="about-version" data-version-ref>Falo 0.0.0</span>
+                <h3 data-i18n="about.tagline">Designed for productive conversations.</h3>
+                <p>
+                  <span data-i18n="about.thanks"></a>.
+                </p>
+                <p class="about-legal">
+                  <span data-i18n="about.legal"></span>
+                </p>
+                <div class="about-actions">
+                  <button type="button" id="about_check_update" class="ghost-btn" data-i18n="about.checkUpdate">
+                    Check for updates
+                  </button>
+                  <span id="about_update_note" class="field-note" role="status"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer class="workspace-footer">
+          <span id="note" class="save-note" role="status"></span>
+          <span data-version-ref>Falo 0.0.0</span>
+        </footer>
+      </div>
+    </div>
+
+    <div id="phrase-manage-modal" class="device-limit-modal" hidden>
+      <div
+        class="device-limit-dialog phrase-manage-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="phrase-manage-title"
+      >
+        <div class="device-limit-dialog-head">
+          <h3 id="phrase-manage-title" data-i18n="interface.phrases">Quick phrases</h3>
+          <button
+            type="button"
+            id="phrase-manage-close"
+            class="device-limit-close-btn"
+            data-i18n-aria-label="interface.phrasesClose"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+        <div id="phrase-manage-list" class="phrase-manage-list"></div>
+        <div class="phrase-manage-compose">
+          <textarea
+            id="phrase-manage-new"
+            class="phrase-manage-new"
+            rows="3"
+            data-i18n-placeholder="interface.phrasesNewPlaceholder"
+            placeholder="Enter a new phrase"
+          ></textarea>
+          <div class="phrase-manage-compose-actions">
+            <button type="button" id="phrase-manage-add" class="secondary" data-i18n="interface.phrasesAdd">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="vendor/xlsx.full.min.js?v=2.6.0"></script>
+    <script src="falo-lang-list.js?v=2.6.0"></script>
+    <script src="falo-engine-list.js?v=2.6.0"></script>
+    <script src="i18n.js?v=2.6.3"></script>
+    <script src="theme.js?v=2.6.0"></script>
+    <script src="confirm.js?v=2.6.4"></script>
+    <script src="hotkey.js?v=2.6.0"></script>
+    <script src="contacts-backup.js?v=2.6.0"></script>
+    <script src="settings-backup.js?v=2.6.0"></script>
+    <script src="main.js?v=2.6.3"></script>
+    <script>
+      // Seamless window: the page draws its own titlebar (drag region + close
+      // button). Wire the close button to the native window (window.close fallback).
+      (function () {
+        var close = document.getElementById("window-close");
+        var closeWindow = function () {
+          var win =
+            window.__TAURI__ &&
+            window.__TAURI__.window &&
+            window.__TAURI__.window.getCurrentWindow();
+          if (win && win.close) {
+            win.close().catch(function () {
+              window.close();
+            });
+          } else {
+            window.close();
+          }
+        };
+        if (close) {
+          close.addEventListener("click", closeWindow);
+        }
+      })();
+    </script>
+    <script src="falo-extra.js"></script>
+  </body>
+</html>

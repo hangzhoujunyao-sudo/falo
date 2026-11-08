@@ -116,8 +116,9 @@ fn write_cache<T>(cache: &Mutex<Vec<T>>, items: Vec<T>) -> Result<(), String> {
 #[tauri::command]
 pub async fn common_phrases_pull(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
 
     match state.api.get_json("/v1/phrases").await {
@@ -148,8 +149,9 @@ pub async fn common_phrases_pull(
 #[tauri::command]
 pub async fn common_phrases_push(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let empty = json!([]);
     let input = if payload.is_array() {
         &payload
@@ -188,8 +190,9 @@ pub async fn common_phrases_push(
 #[tauri::command]
 pub async fn followup_todos_pull(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
 
     match state.api.get_json("/v1/todos").await {
@@ -220,8 +223,9 @@ pub async fn followup_todos_pull(
 #[tauri::command]
 pub async fn followup_todos_push(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let empty = json!([]);
     let input = if payload.is_array() {
         &payload

@@ -59,8 +59,9 @@ fn encode_membership_query(value: &str) -> String {
 #[tauri::command]
 pub async fn membership_login(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let account = payload
         .get("account")
         .and_then(|v| v.as_str())
@@ -115,8 +116,9 @@ pub async fn membership_login(
 #[tauri::command]
 pub async fn membership_logout(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let device_id = payload
         .get("device_id")
         .and_then(|v| v.as_str())
@@ -141,8 +143,9 @@ pub async fn membership_logout(
 #[tauri::command]
 pub async fn membership_status(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
 
     let response = state
@@ -159,8 +162,9 @@ pub async fn membership_status(
 pub async fn membership_open_pay(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let plan = payload
         .get("plan")
         .and_then(|v| v.as_str())
@@ -225,8 +229,9 @@ pub async fn membership_open_pay(
 #[tauri::command]
 pub async fn membership_devices_by_challenge(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let challenge = payload
         .get("challenge")
         .and_then(|v| v.as_str())
@@ -250,8 +255,9 @@ pub async fn membership_devices_by_challenge(
 #[tauri::command]
 pub async fn membership_logout_device(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let device_id = payload
         .get("device_id")
         .and_then(|v| v.as_str())
@@ -280,8 +286,9 @@ pub async fn membership_logout_device(
 #[tauri::command]
 pub async fn membership_logout_device_by_challenge(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let challenge = payload
         .get("challenge")
         .and_then(|v| v.as_str())
@@ -318,8 +325,9 @@ pub async fn membership_logout_device_by_challenge(
 #[tauri::command]
 pub async fn membership_apply_seat_pick(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let challenge = payload
         .get("challenge")
         .and_then(|v| v.as_str())
@@ -362,8 +370,9 @@ pub async fn membership_apply_seat_pick(
 #[tauri::command]
 pub async fn seat_pick_status(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let challenge = payload
         .get("challenge")
         .and_then(|v| v.as_str())

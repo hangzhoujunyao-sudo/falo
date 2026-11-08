@@ -293,8 +293,9 @@ async fn dispatch_translation(
 #[tauri::command]
 pub async fn translate_text(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let request = TranslationRequest::read(&payload, "")?;
     let start = Instant::now();
     let translated = dispatch_translation(&state.api, &request).await?;
@@ -310,8 +311,9 @@ pub async fn translate_text(
 #[tauri::command]
 pub async fn quality_translate(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let request = TranslationRequest::read(&payload, "")?;
     if request.text.trim().is_empty() {
         return Err("upstream: quality translation requires nonempty text".into());
@@ -360,8 +362,9 @@ pub async fn quality_translate(
 #[tauri::command]
 pub async fn translate_test(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let request = TranslationRequest::read(&payload, "Hello, world!")?;
     if request.text.trim().is_empty() {
         return Err("upstream: translation test requires nonempty text".into());
@@ -433,8 +436,9 @@ async fn concurrent_probes(api: &ApiClient) -> [Result<u64, String>; 3] {
 #[tauri::command]
 pub async fn probe_engine_latency(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
     let [yandex, exchange, currency] = concurrent_probes(&state.api).await;
 
@@ -458,8 +462,9 @@ pub async fn probe_engine_latency(
 #[tauri::command]
 pub async fn fetch_inline_button_config(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
 
     Ok(json!({
@@ -487,8 +492,9 @@ pub async fn fetch_inline_button_config(
 #[tauri::command]
 pub async fn fetch_fx_rates(
     state: tauri::State<'_, AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = payload;
     let response = state
         .api

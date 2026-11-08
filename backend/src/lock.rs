@@ -381,8 +381,9 @@ fn sha256(input: &[u8]) -> [u8; 32] {
 #[tauri::command]
 pub async fn change_app_lock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let old_password = payload
         .get("old_password")
@@ -406,8 +407,9 @@ pub async fn change_app_lock_password(
 #[tauri::command]
 pub async fn disable_app_lock(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let password = payload
         .get("password")
@@ -433,8 +435,9 @@ pub async fn disable_app_lock(
 #[tauri::command]
 pub async fn get_lock_status(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
     with_lock(|runtime| Ok(status(runtime)))
 }
@@ -444,8 +447,9 @@ pub async fn get_lock_status(
 pub async fn lock_app(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
     let window = app
         .get_webview_window("main")
@@ -472,8 +476,9 @@ pub async fn lock_app(
 #[tauri::command]
 pub async fn reset_app_lock(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let password = payload
         .get("password")
@@ -496,8 +501,9 @@ pub async fn reset_app_lock(
 #[tauri::command]
 pub async fn set_app_lock_options(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let options = payload
         .get("options")
@@ -525,8 +531,9 @@ pub async fn set_app_lock_options(
 #[tauri::command]
 pub async fn set_app_lock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let password = payload
         .get("password")
@@ -550,8 +557,9 @@ pub async fn set_app_lock_password(
 #[tauri::command]
 pub async fn set_biometric_enabled(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let enabled = payload
         .get("enabled")
@@ -577,8 +585,9 @@ pub async fn set_biometric_enabled(
 #[tauri::command]
 pub async fn unlock_biometric(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = (state, payload);
 
     with_lock(|runtime| {
@@ -598,8 +607,9 @@ pub async fn unlock_biometric(
 #[tauri::command]
 pub async fn unlock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: serde_json::Value,
+    payload: Option<serde_json::Value>,
 ) -> Result<serde_json::Value, String> {
+    let payload = payload.unwrap_or(serde_json::Value::Null);
     let _ = state;
     let password = payload
         .get("password")

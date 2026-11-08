@@ -1132,4 +1132,109 @@
       "about.updateLatest": "当前已是最新版本（{version}）。",
       "about.updateFail": "检查更新失败：{error}",
       "save.saving": "正在保存…",
-      "save.ok": "所有更改
+      "save.ok": "所有更改已保存并应用。",
+      "save.warn": "已保存，但有警告：{warn}",
+      "save.fail": "无法保存更改：{error}",
+      "save.loadFail": "无法加载设置：{error}",
+      "save.appearanceFail": "无法应用译文外观：{error}",
+      "link.browser": "请选择浏览器打开此链接：{error}",
+      "runtime.required": "Falo 设置需要桌面运行时。",
+    }),
+  });
+
+  let currentLang = "zh";
+
+  function normalize(lang) {
+    const t = String(lang || "")
+      .trim()
+      .toLowerCase();
+    if (t === "en" || t.startsWith("en-") || t.startsWith("en_")) return "en";
+    return "zh";
+  }
+
+  function fill(template, vars) {
+    if (!vars) return template;
+    return String(template).replace(/\{(\w+)\}/g, (_, key) =>
+      vars[key] == null ? "" : String(vars[key]),
+    );
+  }
+
+  function appVersion() {
+    try {
+      return window.__faloAppVersion || "0.0.0";
+    } catch (_) {
+      return "0.0.0";
+    }
+  }
+
+  function t(key, vars) {
+    const pack = STRINGS[currentLang] || STRINGS.zh;
+    const fallback = STRINGS.en[key] || STRINGS.zh[key] || key;
+    const merged = Object.assign({ version: appVersion() }, vars || {});
+    return fill(pack[key] || fallback, merged);
+  }
+
+  function apply(root) {
+    const scope = root || document;
+    for (const el of scope.querySelectorAll("[data-i18n]")) {
+      const key = el.getAttribute("data-i18n");
+      if (!key) continue;
+      el.textContent = t(key);
+    }
+    for (const el of scope.querySelectorAll("[data-i18n-html]")) {
+      const key = el.getAttribute("data-i18n-html");
+      if (!key) continue;
+      el.innerHTML = t(key);
+    }
+    for (const el of scope.querySelectorAll("[data-i18n-placeholder]")) {
+      const key = el.getAttribute("data-i18n-placeholder");
+      if (key) el.setAttribute("placeholder", t(key));
+    }
+    for (const el of scope.querySelectorAll("[data-i18n-title]")) {
+      const key = el.getAttribute("data-i18n-title");
+      if (key) el.setAttribute("title", t(key));
+    }
+    for (const el of scope.querySelectorAll("[data-i18n-aria-label]")) {
+      const key = el.getAttribute("data-i18n-aria-label");
+      if (key) el.setAttribute("aria-label", t(key));
+    }
+    document.title = t("doc.title");
+    document.documentElement.lang = currentLang === "en" ? "en" : "zh-CN";
+  }
+
+  function setLang(lang) {
+    currentLang = normalize(lang);
+    apply(document);
+    try {
+      document.dispatchEvent(
+        new CustomEvent("falo-ui-lang", { detail: { lang: currentLang } }),
+      );
+    } catch (_) {}
+    return currentLang;
+  }
+
+  function getLang() {
+    return currentLang;
+  }
+
+  function panelMeta(name) {
+    return [t(`panel.${name}.title`), t(`panel.${name}.desc`)];
+  }
+
+  function themeLabel(theme) {
+    const key = `theme.${theme === "dark" ? "system" : theme}`;
+    const pack = STRINGS[currentLang] || STRINGS.zh;
+    return pack[key] || STRINGS.en[key] || theme;
+  }
+
+  global.FaloI18n = {
+    normalize,
+    t,
+    apply,
+    setLang,
+    getLang,
+    panelMeta,
+    themeLabel,
+    STRINGS,
+  };
+})(window);
