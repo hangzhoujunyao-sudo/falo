@@ -11,7 +11,7 @@ use std::{
 // ApiClient 负责上游鉴权、HTTP 状态检查和请求超时。
 // 如果同一 ApiClient 无法分别配置不同服务的鉴权，可通过以下环境变量
 // 指向自行部署的鉴权代理；代理需保持对应供应商的请求、响应格式：
-// WATRANSCHAT_YANDEX_URL / WATRANSCHAT_DEEPL_URL / WATRANSCHAT_OPENAI_URL。
+// FALO_YANDEX_URL / FALO_DEEPL_URL / FALO_OPENAI_URL。
 // 未配置代理时使用供应商地址，缺少凭据时正常返回上游错误。
 // Google Web 接口属于非官方接口，可能受到限流或发生格式变更。
 
@@ -133,7 +133,7 @@ async fn yandex_translate(
     api: &ApiClient,
     request: &TranslationRequest<'_>,
 ) -> Result<String, String> {
-    let endpoint = configured_value("WATRANSCHAT_YANDEX_URL", YANDEX_URL)?;
+    let endpoint = configured_value("FALO_YANDEX_URL", YANDEX_URL)?;
     let mut body = json!({
         "targetLanguageCode": request.to,
         "format": "PLAIN_TEXT",
@@ -144,7 +144,7 @@ async fn yandex_translate(
         body["sourceLanguageCode"] = json!(request.from);
     }
 
-    let folder_id = configured_value("WATRANSCHAT_YANDEX_FOLDER_ID", "")?;
+    let folder_id = configured_value("FALO_YANDEX_FOLDER_ID", "")?;
     if !folder_id.is_empty() {
         body["folderId"] = json!(folder_id);
     }
@@ -185,7 +185,7 @@ async fn deepl_translate(
     api: &ApiClient,
     request: &TranslationRequest<'_>,
 ) -> Result<String, String> {
-    let endpoint = configured_value("WATRANSCHAT_DEEPL_URL", DEEPL_URL)?;
+    let endpoint = configured_value("FALO_DEEPL_URL", DEEPL_URL)?;
     let mut body = json!({
         "text": [request.text],
         "target_lang": deepl_target_language(request.to)
@@ -214,8 +214,8 @@ async fn openai_content(
     input: Value,
     json_response: bool,
 ) -> Result<String, String> {
-    let endpoint = configured_value("WATRANSCHAT_OPENAI_URL", OPENAI_URL)?;
-    let model = configured_value("WATRANSCHAT_OPENAI_MODEL", "gpt-4o-mini")?;
+    let endpoint = configured_value("FALO_OPENAI_URL", OPENAI_URL)?;
+    let model = configured_value("FALO_OPENAI_MODEL", "gpt-4o-mini")?;
 
     let mut body = json!({
         "model": model,

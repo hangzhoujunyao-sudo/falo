@@ -1,6 +1,6 @@
 # frontend（已恢复）
 
-这里的文件是从 `watranschat.exe` 的 `.rdata` 里把 **brotli 流**逐条解出来的，
+这里的文件是从 `falo.exe` 的 `.rdata` 里把 **brotli 流**逐条解出来的，
 不是手写、也不是占位页。
 
 ## 怎么解出来的（关键点）
@@ -26,7 +26,7 @@
 | `lock.js/css` | 13 KB | 应用锁 |
 | `confirm.js` / `hotkey.js` / `update-dialog.*` | 20 KB | 对话框、快捷键、更新提示 |
 | `i18n.js` + `country-dial-codes.json` | 78 KB | 多语言运行时 + 国家区号 |
-| `watrans-lang-list.js` / `watrans-engine-list.js` | 33 KB | 语言表 / 引擎表 |
+| `falo-lang-list.js` / `falo-engine-list.js` | 33 KB | 语言表 / 引擎表 |
 | `Tq_contacts-backup.js` / `settings-backup.js` | 34 KB | 通讯录备份 / 设置备份 |
 | `content.js` | 278 KB | 注入到 WhatsApp Web 的主脚本（与 `../content-scripts/` 同源） |
 | `vendor_xlsx.full.min.js` | 861 KB | SheetJS（表格导入导出） |

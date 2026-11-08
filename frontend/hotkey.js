@@ -1,4 +1,4 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
+// Falo — authored and maintained solely by @benedictusrey.
 // Pure helpers: turn a captured key combo into a Tauri accelerator string.
 // Assigned to globalThis.HotkeyFmt so the page (window.HotkeyFmt, since
 // window === globalThis in a browser) and the node test share ONE source.

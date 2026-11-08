@@ -2,19 +2,19 @@
   color-scheme: light;
   font-family:
     Inter, "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --bg: #edf4f1;
-  --rail: #102c24;
+  --bg: #eef1f6;
+  --rail: #151b2e;
   --rail-text: #eefbf5;
-  --rail-muted: #a9c4b8;
+  --rail-muted: #aab4c8;
   --surface: #ffffff;
   --surface-soft: #f3f8f6;
   --surface-raised: #ffffff;
   --border: #d7e4df;
   --text: #15231e;
   --muted: #63756e;
-  --accent: #087a60;
-  --accent-strong: #05634e;
-  --accent-soft: #d9eee7;
+  --accent: #4f46e5;
+  --accent-strong: #4338ca;
+  --accent-soft: #e0e7ff;
   --danger: #b62d43;
   --shadow: 0 18px 50px rgb(18 61 48 / 12%);
   --focus-ring: 0 0 0 3px rgb(8 122 96 / 24%);
@@ -22,22 +22,22 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0b1210;
-  --rail: #07100d;
-  --rail-text: #eff8f4;
-  --rail-muted: #9db2a9;
-  --surface: #121c18;
-  --surface-soft: #17241f;
-  --surface-raised: #1a2923;
-  --border: #2c4037;
+  --bg: #0b0f14;
+  --rail: #0d1020;
+  --rail-text: #f0f3fa;
+  --rail-muted: #a3aec4;
+  --surface: #151a2b;
+  --surface-soft: #1b2135;
+  --surface-raised: #202741;
+  --border: #2b3450;
   --text: #eef6f2;
-  --muted: #acbdb5;
-  --accent: #55d2aa;
-  --accent-strong: #77e2bf;
-  --accent-soft: #153f32;
+  --muted: #b3bcd0;
+  --accent: #818cf8;
+  --accent-strong: #a5b4fc;
+  --accent-soft: #312e81;
   --danger: #ff8b9c;
   --shadow: 0 18px 55px rgb(0 0 0 / 30%);
-  --focus-ring: 0 0 0 3px rgb(85 210 170 / 28%);
+  --focus-ring: 0 0 0 3px rgb(129 140 248 / 28%);
 }
 
 :root[data-theme="midnight"] {
@@ -52,9 +52,9 @@
   --border: #26415e;
   --text: #f0f6ff;
   --muted: #adc0d7;
-  --accent: #44d6c7;
-  --accent-strong: #70e8dc;
-  --accent-soft: #103d44;
+  --accent: #22d3ee;
+  --accent-strong: #67e8f9;
+  --accent-soft: #164e63;
   --danger: #ff91a1;
   --shadow: 0 18px 55px rgb(0 0 0 / 34%);
   --focus-ring: 0 0 0 3px rgb(68 214 199 / 28%);
@@ -62,19 +62,19 @@
 
 :root[data-theme="forest"] {
   color-scheme: dark;
-  --bg: #06130e;
-  --rail: #04100b;
+  --bg: #0b1019;
+  --rail: #080b16;
   --rail-text: #effaf3;
-  --rail-muted: #9fbeaa;
-  --surface: #0b1c14;
-  --surface-soft: #10281d;
-  --surface-raised: #153225;
-  --border: #284d39;
+  --rail-muted: #9fb0c8;
+  --surface: #0d1424;
+  --surface-soft: #161d33;
+  --surface-raised: #1d2743;
+  --border: #33406b;
   --text: #eff9f3;
-  --muted: #aac7b5;
-  --accent: #4bd394;
-  --accent-strong: #72e2ae;
-  --accent-soft: #15452f;
+  --muted: #b3b9d6;
+  --accent: #a78bfa;
+  --accent-strong: #c4b5fd;
+  --accent-soft: #3b0764;
   --danger: #ff8fa0;
   --shadow: 0 18px 55px rgb(0 0 0 / 32%);
   --focus-ring: 0 0 0 3px rgb(75 211 148 / 28%);
@@ -92,9 +92,9 @@
   --border: #343f48;
   --text: #f3f5f6;
   --muted: #b5bec5;
-  --accent: #64d2b3;
-  --accent-strong: #84dfc5;
-  --accent-soft: #1b4037;
+  --accent: #818cf8;
+  --accent-strong: #a5b4fc;
+  --accent-soft: #2a2f52;
   --danger: #ff8ca0;
   --shadow: 0 20px 60px rgb(0 0 0 / 36%);
   --focus-ring: 0 0 0 3px rgb(100 210 179 / 28%);
@@ -106,7 +106,7 @@
   --rail: #041017;
   --rail-text: #effcff;
   --rail-muted: #9cc0c8;
-  --surface: #0a2029;
+  --surface: #0a1524;
   --surface-soft: #0e2b36;
   --surface-raised: #123641;
   --border: #28505d;
@@ -218,7 +218,7 @@ body {
   overflow: hidden;
 }
 
-/* Seamless window: custom title bar drawn by the page — "WhatsNow — Settings"
+/* Seamless window: custom title bar drawn by the page — "Falo — Settings"
    on the left, a functional close/X on the right. The whole bar is a drag
    region; the close button is explicitly excluded so it stays clickable. */
 .window-titlebar {
@@ -979,7 +979,7 @@ textarea {
   font-weight: 500;
 }
 
-/* WATransChat options.css quality-test-card parity */
+/* Falo options.css quality-test-card parity */
 .quality-test-results {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1238,16 +1238,16 @@ input[type="radio"] {
 }
 
 .theme-swatch-system { background: linear-gradient(135deg, #f5f7f6 0 50%, #10231c 50%); }
-.theme-swatch-light { background: linear-gradient(135deg, #fff 0 60%, #d9fdd3 60%); }
-.theme-swatch-dark { background: linear-gradient(135deg, #111b21 0 60%, #005c4b 60%); }
+.theme-swatch-light { background: linear-gradient(135deg, #fff 0 60%, #e4e1fd 60%); }
+.theme-swatch-dark { background: linear-gradient(135deg, #111b21 0 60%, #4338ca 60%); }
 .theme-swatch-midnight { background: linear-gradient(135deg, #081525 0 60%, #14535e 60%); }
-.theme-swatch-forest { background: linear-gradient(135deg, #0a1d14 0 60%, #1b684c 60%); }
+.theme-swatch-forest { background: linear-gradient(135deg, #0f1224 0 60%, #4f46e5 60%); }
 .theme-swatch-graphite { background: linear-gradient(135deg, #171c21 0 60%, #425d57 60%); }
 .theme-swatch-ocean { background: linear-gradient(135deg, #08242d 0 60%, #147787 60%); }
 .theme-swatch-blush { background: linear-gradient(135deg, #fffafb 0 60%, #f3cfda 60%); }
 .theme-swatch-lavender { background: linear-gradient(135deg, #fcfaff 0 60%, #ddd0ee 60%); }
 .theme-swatch-candy { background: linear-gradient(135deg, #fffafd 0 52%, #f2d0e2 52% 76%, #cae9ea 76%); }
-.theme-swatch-aurora { background: linear-gradient(135deg, #ffdfe9 0%, #eadfff 35%, #dff2ff 68%, #dcf5e7 100%); }
+.theme-swatch-aurora { background: linear-gradient(135deg, #ffdfe9 0%, #eadfff 35%, #dff2ff 68%, #e6e4fd 100%); }
 
 .setting-list {
   padding: 0 20px;
@@ -2214,7 +2214,7 @@ button.danger:hover {
   margin-top: 10px;
 }
 
-/* WATransChat options.css — Devices panel */
+/* Falo options.css — Devices panel */
 .devices-desc {
   font-size: 14px;
   color: #666;
@@ -2341,7 +2341,7 @@ button.danger:hover {
 }
 
 .device-status-active {
-  background: #d3f9d8;
+  background: #ded9fd;
   color: #2b8a3e;
 }
 
@@ -2493,7 +2493,7 @@ button.danger:hover {
 }
 
 .fingerprint-json .fp-string {
-  color: #c3e88d;
+  color: #c4b5fd;
 }
 
 .fingerprint-json .fp-number {
@@ -2553,7 +2553,7 @@ button.danger:hover {
   flex-shrink: 0;
 }
 
-/* WATransChat options.css lang-search-select (searchable language lists) */
+/* Falo options.css lang-search-select (searchable language lists) */
 select.lang-search-select-native {
   position: absolute !important;
   width: 1px !important;

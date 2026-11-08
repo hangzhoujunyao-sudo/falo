@@ -2,9 +2,9 @@
 
 ## 样本
 
-- `watranschat.exe` 9,801,728 B（安装于 `%LOCALAPPDATA%\WATransChat`）
+- `falo.exe` 9,801,728 B（安装于 `%LOCALAPPDATA%\Falo`）
 - Tauri 2.11.2 构建（rustc 路径 `tauri-2.11.2`），WebView2 前端
-- 另有 `WATransChat_2.6.5_windows_x64-setup.exe`、`WATransChat3.51.apk`（原生 Kotlin，不含 Web 资源）、`WATransChat.ipa`
+- 另有 `Falo_2.6.5_windows_x64-setup.exe`、`Falo3.51.apk`（原生 Kotlin，不含 Web 资源）、`Falo.ipa`
 
 ## 依据
 

@@ -76,13 +76,13 @@ fn validate_writable_directory(path: PathBuf) -> Result<PathBuf, String> {
     }
 
     let mut probe = tempfile::Builder::new()
-        .prefix(".watranschat-write-probe-")
+        .prefix(".falo-write-probe-")
         .tempfile_in(&canonical)
         .map_err(|e| e.to_string())?;
 
     probe
         .as_file_mut()
-        .write_all(b"WATransChat")
+        .write_all(b"Falo")
         .map_err(|e| e.to_string())?;
     probe.as_file_mut().flush().map_err(|e| e.to_string())?;
     probe.close().map_err(|e| e.to_string())?;
@@ -90,7 +90,7 @@ fn validate_writable_directory(path: PathBuf) -> Result<PathBuf, String> {
     Ok(canonical)
 }
 
-/// 对接前端未读消息数量更新，将主窗口标题设为带数量的 WATransChat 标题。
+/// 对接前端未读消息数量更新，将主窗口标题设为带数量的 Falo 标题。
 #[tauri::command]
 pub async fn set_unread_count(
     state: tauri::State<'_, AppState>,
@@ -107,9 +107,9 @@ pub async fn set_unread_count(
     };
 
     let title = if count == 0 {
-        "WATransChat".to_owned()
+        "Falo".to_owned()
     } else {
-        format!("[{count}] WATransChat")
+        format!("[{count}] Falo")
     };
 
     main_window()?

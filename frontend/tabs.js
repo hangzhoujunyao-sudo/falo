@@ -1,10 +1,10 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
+// Falo — authored and maintained solely by @benedictusrey.
 // Local tabs chrome for Scheme B (shell window + child account webviews).
 const invoke =
   window.__TAURI__?.core?.invoke ??
   window.__TAURI_INTERNALS__?.invoke ??
   (async () => {
-    throw new Error("WATransChat tabs require the desktop runtime.");
+    throw new Error("Falo tabs require the desktop runtime.");
   });
 
 const titleLabelEl = document.getElementById("title-label");
@@ -49,7 +49,7 @@ const STR = {
     close: "Close",
     addAccount: "Add account",
     settings: "Settings",
-    accountsAria: "WATransChat accounts",
+    accountsAria: "Falo accounts",
     accountName: "Account name",
     add: "Add",
     cancel: "Cancel",
@@ -71,7 +71,7 @@ const STR = {
     close: "关闭",
     addAccount: "添加账号",
     settings: "设置",
-    accountsAria: "WATransChat 账号",
+    accountsAria: "Falo 账号",
     accountName: "账号名称",
     add: "添加",
     cancel: "取消",
@@ -418,18 +418,18 @@ async function confirmSeatPick() {
 }
 
 /** Host (Rust) calls this after downgrade / login over-limit. */
-window.__whatsnowSeatPickRequired = function seatPickRequired() {
+window.__faloSeatPickRequired = function seatPickRequired() {
   refreshSeatPick().catch(() => {});
 };
 
-window.__whatsnowRefreshAccountTabs = scheduleRefresh;
-window.__whatsnowRefreshPin = () => {
+window.__faloRefreshAccountTabs = scheduleRefresh;
+window.__faloRefreshPin = () => {
   refreshPinState().catch(() => {});
 };
-window.__whatsnowRefreshTitle = () => {
+window.__faloRefreshTitle = () => {
   refreshTitleLabel().catch(() => {});
 };
-window.__whatsnowRefreshChromeTheme = () => {
+window.__faloRefreshChromeTheme = () => {
   refreshChromeTheme().catch(() => {});
 };
 
@@ -532,7 +532,7 @@ async function refreshUiLang() {
   }
 }
 
-window.__whatsnowRefreshTabsLang = () => {
+window.__faloRefreshTabsLang = () => {
   refreshUiLang().catch(() => {});
 };
 

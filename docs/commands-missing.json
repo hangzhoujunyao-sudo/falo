@@ -1,12 +1,12 @@
 {
   "dlog": [
-    "03_watrans-ui.js",
-    "08_watrans-voice-stt.js",
+    "03_falo-ui.js",
+    "08_falo-voice-stt.js",
     "15_content-quick-remark.js",
-    "18_watrans-fx.js",
+    "18_falo-fx.js",
     "20_content-send-hook.js",
     "content.js",
-    "watrans-content-bundle.js"
+    "falo-content-bundle.js"
   ],
   "unlock_password": [
     "lock.js"

@@ -1,15 +1,15 @@
  + content-voice-stt.js.
  * Same-world: localStorage cache + Tauri ai_proxy(/api/proxy/audio/transcribe).
- * Sole author provenance: WATransChat by @benedictusrey; STT logic from WATransChat.
+ * Sole author provenance: Falo by @benedictusrey; STT logic from Falo.
  */
 (() => {
-	if (window.__WhatsNowVoiceSttInstalled) return;
-	window.__WhatsNowVoiceSttInstalled = true;
+	if (window.__FaloVoiceSttInstalled) return;
+	window.__FaloVoiceSttInstalled = true;
 
 	try {
-		if (!document.getElementById('whatsnow-voice-stt-style')) {
+		if (!document.getElementById('falo-voice-stt-style')) {
 			const st = document.createElement('style');
-			st.id = 'whatsnow-voice-stt-style';
+			st.id = 'falo-voice-stt-style';
 			st.textContent =
 				'.wa-audio-to-text-ui{position:relative;z-index:0;box-sizing:border-box;}' +
 				'.wa-audio-to-text-ui.wa-audio-to-text-ui--has-text{padding-bottom:26px!important;}';
@@ -164,21 +164,21 @@
 		const msg = (voiceUiStrings && voiceUiStrings.proOnly) ||
 			'此功能仅专业版会员可用，请升级到专业版会员。';
 		try {
-			if (typeof window.__whatsnowShowNotice === 'function') {
-				window.__whatsnowShowNotice(msg);
+			if (typeof window.__faloShowNotice === 'function') {
+				window.__faloShowNotice(msg);
 				return;
 			}
 		} catch (_) {}
-		try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
+		try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
 	}
 
-	/** Extension: caps.voice_stt (or pro proxy). WATransChat: __whatsnowCan. */
+	/** Extension: caps.voice_stt (or pro proxy). Falo: __faloCan. */
 	function checkPermissionOnce() {
 		try {
-			if (typeof window.__whatsnowCan === 'function') {
+			if (typeof window.__faloCan === 'function') {
 				return !!(
-					window.__whatsnowCan('voice_stt') ||
-					window.__whatsnowCan('ai_proxy')
+					window.__faloCan('voice_stt') ||
+					window.__faloCan('ai_proxy')
 				);
 			}
 		} catch (_) {}
@@ -237,7 +237,7 @@
 	}
 
 	try {
-		window.__WhatsNowVoiceSttReady = true;
+		window.__FaloVoiceSttReady = true;
 	} catch (_) {}
 
 	const RECOGNIZE_BTN_COLOR = '#4b5563';
@@ -267,7 +267,7 @@
 
 	function pushVoiceUiStringsFromCfg() {
 		try {
-			const ui = (window.__whatsnowTranslateCfg && window.__whatsnowTranslateCfg.uiLang) || 'zh';
+			const ui = (window.__faloTranslateCfg && window.__faloTranslateCfg.uiLang) || 'zh';
 			if (String(ui).toLowerCase().indexOf('en') === 0) {
 				voiceUiStrings = Object.assign({}, voiceUiStrings, {
 					recognize: 'Transcribe',
@@ -572,8 +572,8 @@
 		syncVoiceUiHasTextClass(uiRoot, msgId);
 		// Kick bridge translate scan so transcription gets a .translated-text line.
 		try {
-			if (window.__whatsnowTranslateHelpers && typeof window.__whatsnowTranslateHelpers.scheduleScan === 'function') {
-				window.__whatsnowTranslateHelpers.scheduleScan(200);
+			if (window.__faloTranslateHelpers && typeof window.__faloTranslateHelpers.scheduleScan === 'function') {
+				window.__faloTranslateHelpers.scheduleScan(200);
 			}
 		} catch (_) {}
 	}

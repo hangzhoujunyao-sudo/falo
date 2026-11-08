@@ -57,7 +57,7 @@ impl AccountStore {
             .filter(|value| !value.is_empty())
             .ok_or_else(|| "未找到 APPDATA 环境变量".to_string())?;
 
-        let directory = PathBuf::from(appdata).join("WATransChat");
+        let directory = PathBuf::from(appdata).join("Falo");
         if !directory.is_absolute() {
             return Err("APPDATA 必须是绝对路径".into());
         }
@@ -198,7 +198,7 @@ pub async fn add_account(
     let color = payload
         .get("color")
         .and_then(|v| v.as_str())
-        .unwrap_or("#25D366")
+        .unwrap_or("#6366f1")
         .to_owned();
 
     let proxy = payload

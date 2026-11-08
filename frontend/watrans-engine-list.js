@@ -1,7 +1,7 @@
-/*! WATransChat translation engines — 1:1 from WATransChat options.js / content-customer-lang.js */
+/*! Falo translation engines — 1:1 from Falo options.js / content-customer-lang.js */
 (function (global) {
   "use strict";
-  if (global.__whatsnowEngineList) return;
+  if (global.__faloEngineList) return;
 
   // options.js GLOBAL_INPUT_ENGINES (客户语言 / 全局输入框)
   var GLOBAL_INPUT_ENGINES = [
@@ -100,10 +100,10 @@
 
   function isProMember() {
     try {
-      if (window.__whatsnowCan) {
-        if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+      if (window.__faloCan) {
+        if (window.__faloCan("pro_engines") || window.__faloCan("ai_proxy")) return true;
       }
-      var c = window.__whatsnowCaps;
+      var c = window.__faloCaps;
       if (c && (c.isPro || c.isPremium)) return true;
     } catch (_) {}
     return false;
@@ -150,10 +150,10 @@
     try {
       if (typeof opts.uiLang === "function") return String(opts.uiLang() || "zh");
       if (opts.uiLang) return String(opts.uiLang);
-      var i18n = global.__whatsnowPageI18n;
+      var i18n = global.__faloPageI18n;
       if (i18n && i18n.getUiLang) return String(i18n.getUiLang() || "zh");
-      if (global.WhatsNowI18n && global.WhatsNowI18n.getLang) {
-        return String(global.WhatsNowI18n.getLang() || "zh");
+      if (global.FaloI18n && global.FaloI18n.getLang) {
+        return String(global.FaloI18n.getLang() || "zh");
       }
     } catch (_) {}
     return "zh";
@@ -165,7 +165,7 @@
 
   function readDefaultKeyConfig() {
     try {
-      var cfg = global.__whatsnowTranslateCfg || global.__whatsnowTranslateBoot || {};
+      var cfg = global.__faloTranslateCfg || global.__faloTranslateBoot || {};
       return {
         deeplApiKey: cfg.deeplApiKey || "",
         chatgptApiKey: cfg.chatgptApiKey || "",
@@ -191,7 +191,7 @@
 
   function pageT(uiLang, key, zhFb, enFb) {
     try {
-      var i18n = global.__whatsnowPageI18n;
+      var i18n = global.__faloPageI18n;
       if (i18n && i18n.t) {
         var fb = String(uiLang || "zh").toLowerCase().indexOf("en") === 0 ? enFb : zhFb;
         return i18n.t(uiLang, key, fb);
@@ -200,7 +200,7 @@
     return String(uiLang || "zh").toLowerCase().indexOf("en") === 0 ? enFb : zhFb;
   }
 
-  /** WATransChat / AI Suggest parity: block keyed engines until API fields are filled. */
+  /** Falo / AI Suggest parity: block keyed engines until API fields are filled. */
   function checkKeyedEngineReady(engine, keyCfg, uiLang) {
     var id = String(engine || "");
     var cfg = keyCfg || {};
@@ -290,7 +290,7 @@
                 "This engine requires Pro membership. Please upgrade."
               );
             }
-            try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (typeof window.appAlert === "function") window.appAlert(msg); else alert(msg); } catch (_) {}
+            try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (typeof window.appAlert === "function") window.appAlert(msg); else alert(msg); } catch (_) {}
             var fallback = previous;
             if (isProEngine(fallback, kind) && !pro) fallback = "google_web";
             selectEl.value = fallback;
@@ -300,8 +300,8 @@
           if (!keyReady.ok) {
             try {
               var keyMsg = keyReady.error || "Please configure API Key in settings.";
-              if (window.__whatsnowNotice) window.__whatsnowNotice(keyMsg);
-              else if (window.__whatsnowAlert) window.__whatsnowAlert(keyMsg);
+              if (window.__faloNotice) window.__faloNotice(keyMsg);
+              else if (window.__faloAlert) window.__faloAlert(keyMsg);
               else if (typeof window.appAlert === "function") window.appAlert(keyMsg);
               else alert(keyMsg);
             } catch (_) {}
@@ -322,7 +322,7 @@
     });
   }
 
-  global.__whatsnowEngineList = {
+  global.__faloEngineList = {
     GLOBAL_INPUT_ENGINES: GLOBAL_INPUT_ENGINES,
     CHAT_HISTORY_ENGINES: CHAT_HISTORY_ENGINES,
     PRO_ENGINES_GLOBAL: PRO_ENGINES_GLOBAL,

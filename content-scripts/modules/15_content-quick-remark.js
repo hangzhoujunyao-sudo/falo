@@ -1,7 +1,7 @@
  1:1) ----------
   /**
    * Locked header stack: title → country → remark → subtitle.
-   * Shared with watrans-country-fx so same-frame inserts never leave remark above country.
+   * Shared with falo-country-fx so same-frame inserts never leave remark above country.
    */
   function stabilizeConversationHeaderStack(infoHeader) {
     if (!infoHeader) return;
@@ -27,7 +27,7 @@
     } catch (_) {}
   }
   try {
-    window.__whatsnowStabilizeHeaderStack = stabilizeConversationHeaderStack;
+    window.__faloStabilizeHeaderStack = stabilizeConversationHeaderStack;
   } catch (_) {}
 
   var STORAGE_KEY = "chatQuickRemarks";
@@ -67,11 +67,11 @@
   }
 
   function ensureRemarkStyles() {
-    if (document.getElementById("whatsnow-remark-styles")) return;
+    if (document.getElementById("falo-remark-styles")) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement("style");
-    s.id = "whatsnow-remark-styles";
+    s.id = "falo-remark-styles";
     s.textContent =
       "/* ========================= Quick Remark (Look World \u540c\u6b3e\uff1a\u540d\u5b57\u4e0b\u65b9\u53e0\u5c42) ========================= */\n.wa-quick-remark-list {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  width: 100%;\n  height: 40px;\n  font-size: 16px;\n  white-space: nowrap;\n  overflow: visible;\n  pointer-events: none;\n  z-index: 2;\n}\n\n.wa-quick-remark-text {\n  position: absolute;\n  top: 24px;\n  left: 0;\n  right: 0;\n  z-index: 2;\n  box-sizing: border-box;\n  display: block;\n  width: 100%;\n  max-width: 100%;\n  height: 14px;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 400;\n  color: #008069;\n  pointer-events: none;\n}\n\nheader[data-testid=\"conversation-header\"]:has(.wa-quick-remark-header),\nheader[data-testid=\"conversation-header\"]:has(.wa-native-note-row) {\n  height: auto !important;\n  min-height: var(--x20strc, auto);\n  overflow: visible;\n}\n\n.wa-native-note-row {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  margin-top: 2px;\n  pointer-events: none;\n}\n\n.wa-native-note-label {\n  flex: 0 0 auto;\n  font-size: 12px;\n  line-height: 18px;\n  color: #667781;\n  opacity: 0.9;\n}\n\n.wa-native-note-text {\n  flex: 1 1 auto;\n  min-width: 0;\n  max-width: 360px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 12px;\n  line-height: 18px;\n  font-weight: 500;\n  color: #008069;\n}\n\n.dark .wa-native-note-label,\nbody.dark .wa-native-note-label,\nhtml[data-color-mode=\"dark\"] .wa-native-note-label {\n  color: #8696a0;\n}\n\n.dark .wa-native-note-text,\nbody.dark .wa-native-note-text,\nhtml[data-color-mode=\"dark\"] .wa-native-note-text {\n  color: #00a884;\n}\n\n.wa-quick-remark-header {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  margin-top: 4px;\n  pointer-events: auto;\n}\n\n.wa-quick-remark-ipt {\n  position: absolute;\n  top: 24px;\n  left: 0;\n  right: 0;\n  z-index: 2;\n  box-sizing: border-box;\n  display: block;\n  width: 100%;\n  max-width: 100%;\n  height: 14px;\n  margin: 0;\n  padding: 0;\n  border: none;\n  border-radius: 0;\n  outline: none;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 400;\n  color: #008069;\n  background: transparent;\n}\n\n.wa-quick-remark-ipt--header {\n  position: static;\n  top: auto;\n  left: auto;\n  right: auto;\n  z-index: auto;\n  width: 100%;\n  max-width: 320px;\n  height: 18px;\n  font-size: 12px;\n  line-height: 18px;\n  color: #008069;\n  background: transparent;\n}\n\n.wa-quick-remark-ipt:hover,\n.wa-quick-remark-ipt:focus {\n  background: transparent;\n  border: none;\n  color: #008069;\n}\n\n.wa-quick-remark-ipt::placeholder {\n  opacity: 0.55;\n}\n\n.dark .wa-quick-remark-text,\nbody.dark .wa-quick-remark-text,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-text {\n  color: #00a884;\n}\n\n.dark .wa-quick-remark-ipt,\n.dark .wa-quick-remark-ipt--header,\n.dark .wa-quick-remark-ipt:hover,\n.dark .wa-quick-remark-ipt:focus,\nbody.dark .wa-quick-remark-ipt,\nbody.dark .wa-quick-remark-ipt--header,\nbody.dark .wa-quick-remark-ipt:hover,\nbody.dark .wa-quick-remark-ipt:focus,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt--header,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt:hover,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt:focus {\n  color: #00a884;\n}\n\n.dark .wa-quick-remark-ipt::placeholder,\nbody.dark .wa-quick-remark-ipt::placeholder,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt::placeholder {\n  color: #8696a0;\n  opacity: 1;\n}\n/* ========================= End Quick Remark ========================= */";
     parent.appendChild(s);
@@ -116,7 +116,7 @@
   function callRemarkStore(action, payload, timeoutMs) {
     var ms = timeoutMs || 8000;
     try {
-      var api = window.__whatsnowStorePhone;
+      var api = window.__faloStorePhone;
       if (api) {
         if (action === "GET_ACTIVE_NOTE" && typeof api.getActiveContactNote === "function") {
           return Promise.resolve(api.getActiveContactNote())
@@ -186,7 +186,7 @@
         try {
           if (event.source !== window) return;
           var data = event.data;
-          if (!data || data.source !== "whatsnow" || data.dir !== "p2c") return;
+          if (!data || data.source !== "falo" || data.dir !== "p2c") return;
           if (String(data.type) !== "WAContactExport:result") return;
           var detail = data.payload;
           if (!detail || String(detail.reqId) !== reqId) return;
@@ -197,7 +197,7 @@
       try {
         window.postMessage(
           {
-            source: "whatsnow",
+            source: "falo",
             dir: "c2p",
             type: "WAContactExport:cmd",
             requestId: reqId,
@@ -468,7 +468,7 @@
       var val = input.value || "";
       if (val.length > MAX_LEN) {
         input.value = val.slice(0, MAX_LEN);
-        try { if (window.__whatsnowNotice) window.__whatsnowNotice(tooLongText()); else if (window.__whatsnowAlert) window.__whatsnowAlert(tooLongText()); else if (window.appAlert) window.appAlert(tooLongText()); else alert(tooLongText()); } catch (_) {}
+        try { if (window.__faloNotice) window.__faloNotice(tooLongText()); else if (window.__faloAlert) window.__faloAlert(tooLongText()); else if (window.appAlert) window.appAlert(tooLongText()); else alert(tooLongText()); } catch (_) {}
       }
       input.title = input.value || placeholderText();
       clearTimeout(saveTimer);
@@ -1007,7 +1007,7 @@
   }
 
   function setRemarkEnabled(next) {
-    // WhatsNow: driven by cfg().showRemark + canCore via isRemarkEnabled();
+    // Falo: driven by cfg().showRemark + canCore via isRemarkEnabled();
     // force refresh when settings event fires.
     if (!next) removeAllRemarkUi();
     else {
@@ -1107,19 +1107,19 @@
         if (event.source !== window) return;
         var data = event.data;
         if (!data || data.dir !== "p2c") return;
-        if (data.source !== "whatsnow" && data.source !== "wa-transchat") return;
+        if (data.source !== "falo" && data.source !== "wa-transchat") return;
         if (data.type === "WAContactExport:noteChanged") onNativeNoteChanged(data.payload);
       } catch (_) {}
     });
   } catch (_) {}
 
   try {
-    window.__whatsnowRefreshQuickRemarks = function () {
+    window.__faloRefreshQuickRemarks = function () {
       refreshActive();
       scheduleScan();
       if (preferNative !== false) refreshWaListLookup();
     };
-    window.__whatsnowGetChatQuickRemarksMap = function () {
+    window.__faloGetChatQuickRemarksMap = function () {
       return Object.assign({}, remarkMap);
     };
   } catch (_) {}
@@ -1196,9 +1196,9 @@
 
   function isPhraseLoggedIn() {
     try {
-      var caps = window.__whatsnowCaps;
+      var caps = window.__faloCaps;
       if (caps && caps.loggedIn === true) return true;
-      var m = window.__whatsnowMembership;
+      var m = window.__faloMembership;
       if (m && m.loggedIn === true) return true;
     } catch (_) {}
     return false;
@@ -1214,11 +1214,11 @@
   }
 
   function ensurePhraseStyles() {
-    if (document.getElementById("whatsnow-waqp-styles")) return;
+    if (document.getElementById("falo-waqp-styles")) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement("style");
-    s.id = "whatsnow-waqp-styles";
+    s.id = "falo-waqp-styles";
     s.textContent = "/* WA Quick Phrases */\n.waqp-phrase-bar {\n  position: relative;\n  padding: 2px 8px 0;\n  margin: 0;\n  border: none;\n}\n\n.waqp-phrase-bar--empty {\n  min-height: 28px;\n}\n\n.waqp-phrase-settings {\n  position: absolute;\n  top: 2px;\n  right: 22px;\n  z-index: 2;\n  width: 22px;\n  height: 22px;\n  padding: 0;\n  border: none;\n  border-radius: 6px;\n  background: transparent;\n  color: #54656f;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  opacity: 0.72;\n}\n\n.waqp-phrase-settings:hover {\n  opacity: 1;\n  background: rgba(11, 20, 26, 0.06);\n  color: #111b21;\n}\n\n.waqp-phrase-settings svg {\n  width: 15px;\n  height: 15px;\n  display: block;\n}\n\n.waqp-phrase-list {\n  margin: 0;\n  padding-left: 18px;\n  padding-right: 28px;\n  max-height: 160px;\n  overflow-y: auto;\n}\n\n.waqp-phrase-item {\n  font-size: 13px;\n  line-height: 1.45;\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  display: block;\n}\n\n.waqp-phrase-item:hover {\n  background-color: rgba(69, 222, 69, 0.16);\n}\n\nbody.dark .waqp-phrase-settings,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-settings {\n  color: #aebac1;\n}\n\nbody.dark .waqp-phrase-settings:hover,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-settings:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\nbody.dark .waqp-phrase-item:hover,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-item:hover {\n  background-color: rgba(69, 222, 69, 0.22);\n}\n\n/* WA Quick Phrases manage modal\uff1a\u6cbf\u7528\u539f\u5e03\u5c40\uff0c\u914d\u8272\u5bf9\u9f50 options \u5e38\u7528\u77ed\u8bed */\n.waqp-modal-overlay {\n  --wc-primary: #1c7ed6;\n  --wc-primary-hover: #1864ab;\n  --wc-danger: #c92a2a;\n  --wc-danger-border: #ffc9c9;\n  --wc-radius-sm: 8px;\n  --wc-btn-height: 34px;\n  --wc-text: #343a40;\n  --wc-muted: #868e96;\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(17, 24, 39, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.waqp-modal {\n  width: min(480px, 94vw);\n  max-height: min(82vh, 720px);\n  overflow: hidden;\n  background: #fff;\n  color: #333;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  box-sizing: border-box;\n}\n\n.waqp-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  flex-shrink: 0;\n}\n\n.waqp-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 600;\n  line-height: 1.3;\n  color: #555;\n}\n\n.waqp-modal-close {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  border: none;\n  border-radius: var(--wc-radius-sm);\n  background: transparent;\n  color: #868e96;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.waqp-modal-close:hover {\n  background: #f1f3f5;\n  color: #343a40;\n}\n\n.waqp-modal-toggle {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin: 0 16px 8px;\n  padding: 8px 10px;\n  border-radius: var(--wc-radius-sm);\n  background: #f8f9fa;\n  cursor: pointer;\n  user-select: none;\n  flex-shrink: 0;\n}\n\n.waqp-modal-toggle-input {\n  width: 16px;\n  height: 16px;\n  margin: 0;\n  flex-shrink: 0;\n  accent-color: var(--wc-primary);\n  cursor: pointer;\n}\n\n.waqp-modal-toggle-label {\n  font-size: 13px;\n  line-height: 1.35;\n  color: #333;\n}\n\n.waqp-modal-body {\n  flex: 1 1 auto;\n  overflow-y: auto;\n  padding: 4px 16px 8px;\n  min-height: 80px;\n}\n\n.waqp-modal-empty {\n  font-size: 13px;\n  color: var(--wc-muted);\n  padding: 12px 0;\n}\n\n.waqp-modal-item {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 10px 0;\n  border-bottom: 1px solid #e9ecef;\n}\n\n.waqp-modal-item:last-child {\n  border-bottom: none;\n}\n\n.waqp-modal-item-text {\n  width: 100%;\n  min-height: 56px;\n  resize: vertical;\n  box-sizing: border-box;\n  padding: 8px 10px;\n  border: 1px solid #dee2e6;\n  border-radius: var(--wc-radius-sm);\n  font: inherit;\n  font-size: 14px;\n  line-height: 1.45;\n  color: #333;\n  background: #fff;\n}\n\n.waqp-modal-item-text:focus {\n  outline: none;\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.12);\n}\n\n.waqp-modal-item-actions {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  flex-wrap: wrap;\n}\n\n.waqp-modal-compose {\n  flex-shrink: 0;\n  padding: 10px 16px 16px;\n  border-top: 1px solid #e9ecef;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  background: #fafbfc;\n}\n\n.waqp-modal-new {\n  width: 100%;\n  min-height: 72px;\n  resize: vertical;\n  box-sizing: border-box;\n  padding: 12px;\n  border: 1px solid #dee2e6;\n  border-radius: var(--wc-radius-sm);\n  font: inherit;\n  font-size: 14px;\n  line-height: 1.45;\n  color: #333;\n  background: #fff;\n}\n\n.waqp-modal-new:focus {\n  outline: none;\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.12);\n}\n\n.waqp-modal-compose-actions {\n  display: flex;\n  justify-content: flex-end;\n}\n\n.waqp-modal .wc-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 6px;\n  height: var(--wc-btn-height);\n  padding: 0 14px;\n  margin: 0;\n  width: auto;\n  min-width: 0;\n  border-radius: var(--wc-radius-sm);\n  font-size: 13px;\n  font-weight: 500;\n  line-height: 1;\n  cursor: pointer;\n  border: 1px solid transparent;\n  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;\n  box-shadow: none;\n  transform: none;\n  box-sizing: border-box;\n}\n\n.waqp-modal .wc-btn:active:not(:disabled) {\n  transform: translateY(1px);\n}\n\n.waqp-modal .wc-btn:disabled {\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n\n.waqp-modal .wc-btn svg {\n  flex-shrink: 0;\n}\n\n.waqp-modal .wc-btn-icon {\n  width: var(--wc-btn-height);\n  min-width: var(--wc-btn-height);\n  padding: 0;\n}\n\n.waqp-modal .wc-btn-secondary {\n  background: #fff;\n  color: var(--wc-text);\n  border-color: #ced4da;\n}\n\n.waqp-modal .wc-btn-secondary:hover:not(:disabled) {\n  background: #f8f9fa;\n  border-color: #adb5bd;\n}\n\n.waqp-modal .wc-btn-danger {\n  background: #fff;\n  color: var(--wc-danger);\n  border-color: var(--wc-danger-border);\n}\n\n.waqp-modal .wc-btn-danger:hover:not(:disabled) {\n  background: #fff5f5;\n  border-color: #ffa8a8;\n}\n\n.waqp-modal-overlay.dark .waqp-modal,\nbody.dark .waqp-modal-overlay .waqp-modal,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal {\n  background: #1b242b;\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-title,\nbody.dark .waqp-modal-overlay .waqp-modal-title,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-title {\n  color: #c5cdd3;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-close,\nbody.dark .waqp-modal-overlay .waqp-modal-close,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-close {\n  color: #8a99a6;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-close:hover,\nbody.dark .waqp-modal-overlay .waqp-modal-close:hover,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-toggle,\nbody.dark .waqp-modal-overlay .waqp-modal-toggle,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-toggle {\n  background: #121a20;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-toggle-label,\nbody.dark .waqp-modal-overlay .waqp-modal-toggle-label,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-toggle-label {\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-empty,\nbody.dark .waqp-modal-overlay .waqp-modal-empty,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-empty {\n  color: #8a99a6;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item,\nbody.dark .waqp-modal-overlay .waqp-modal-item,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item {\n  border-bottom-color: #2a3640;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item-text,\n.waqp-modal-overlay.dark .waqp-modal-new,\nbody.dark .waqp-modal-overlay .waqp-modal-item-text,\nbody.dark .waqp-modal-overlay .waqp-modal-new,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item-text,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-new {\n  background: #121a20;\n  border-color: #3b4a54;\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item-text:focus,\n.waqp-modal-overlay.dark .waqp-modal-new:focus,\nbody.dark .waqp-modal-overlay .waqp-modal-item-text:focus,\nbody.dark .waqp-modal-overlay .waqp-modal-new:focus,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item-text:focus,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-new:focus {\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.25);\n}\n\n.waqp-modal-overlay.dark .waqp-modal-compose,\nbody.dark .waqp-modal-overlay .waqp-modal-compose,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-compose {\n  background: #121a20;\n  border-top-color: #2a3640;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-secondary,\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-secondary,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-secondary {\n  background: #1b242b;\n  color: #e6e9ec;\n  border-color: #3b4a54;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-secondary:hover:not(:disabled),\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-secondary:hover:not(:disabled),\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-secondary:hover:not(:disabled) {\n  background: #243039;\n  border-color: #4a5a66;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-danger,\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-danger,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-danger {\n  background: #1b242b;\n  color: #ff8787;\n  border-color: #862e2e;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-danger:hover:not(:disabled),\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-danger:hover:not(:disabled),\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-danger:hover:not(:disabled) {\n  background: #2b1d1d;\n  border-color: #a61e4d;\n}";
     parent.appendChild(s);
   }
@@ -1342,10 +1342,10 @@
   }
 
   function phrasesCacheGet() {
-    if (!window.__whatsnowPhrasesCache) {
-      window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+    if (!window.__faloPhrasesCache) {
+      window.__faloPhrasesCache = readFullPhrasesFromCfg();
     }
-    return window.__whatsnowPhrasesCache;
+    return window.__faloPhrasesCache;
   }
 
   function markPhrasesDirty(ids) {
@@ -1368,14 +1368,14 @@
   }
 
   function seedPhrasesOnce() {
-    if (window.__whatsnowPhrasesSeeded) return;
-    window.__whatsnowPhrasesSeeded = true;
+    if (window.__faloPhrasesSeeded) return;
+    window.__faloPhrasesSeeded = true;
     readSyncMetaFromCfg();
-    window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+    window.__faloPhrasesCache = readFullPhrasesFromCfg();
   }
 
   function findComposer() {
-    var helpers = window.__whatsnowTranslateHelpers;
+    var helpers = window.__faloTranslateHelpers;
     try {
       if (helpers && typeof helpers.getNativeComposerElement === "function") {
         var ed = helpers.getNativeComposerElement();
@@ -1397,7 +1397,7 @@
   }
 
   function pastePhrase(text) {
-    var helpers = window.__whatsnowTranslateHelpers;
+    var helpers = window.__faloTranslateHelpers;
     var input = findComposer();
     if (!input) return;
     var wrote = false;
@@ -1442,13 +1442,13 @@
   function persistPhrases(list, showPhrases, opts) {
     opts = opts || {};
     var full = normalizePhraseList(list);
-    window.__whatsnowPhrasesCache = full;
+    window.__faloPhrasesCache = full;
     var json = JSON.stringify(full);
     var metaJson = JSON.stringify(syncMetaPayload());
     var c = cfg();
     var show = typeof showPhrases === "boolean" ? showPhrases : c.showPhrases !== false;
-    if (window.__whatsnowApplyTranslateConfig) {
-      window.__whatsnowApplyTranslateConfig(
+    if (window.__faloApplyTranslateConfig) {
+      window.__faloApplyTranslateConfig(
         Object.assign({}, c, {
           quickPhrasesJson: json,
           quickPhrasesSyncMetaJson: metaJson,
@@ -1475,7 +1475,7 @@
   function clearLocalPhraseCloudState() {
     phraseLastSyncAt = 0;
     phraseDirtyIds = {};
-    window.__whatsnowPhrasesCache = [];
+    window.__faloPhrasesCache = [];
     persistPhrases([], undefined, { skipCloudPush: true });
   }
 
@@ -1533,7 +1533,7 @@
         var merged = forceFull
           ? normalizePhraseList(res.common_phrases)
           : mergePhraseLists(phrasesCacheGet(), res.common_phrases);
-        window.__whatsnowPhrasesCache = merged;
+        window.__faloPhrasesCache = merged;
         bumpPhraseLastSyncAt(res.revision || res.server_time);
         persistPhrases(merged, undefined, { skipCloudPush: true });
         try {
@@ -1592,7 +1592,7 @@
     }
   }
 
-  window.__whatsnowOnPhraseMembershipUpdate = onPhraseMembershipUpdate;
+  window.__faloOnPhraseMembershipUpdate = onPhraseMembershipUpdate;
 
   function removePhraseBar() {
     try {
@@ -1756,8 +1756,8 @@
   function setShowPhrasesEnabled(enabled) {
     var next = !!enabled;
     var c = cfg();
-    if (window.__whatsnowApplyTranslateConfig) {
-      window.__whatsnowApplyTranslateConfig(Object.assign({}, c, { showPhrases: next }));
+    if (window.__faloApplyTranslateConfig) {
+      window.__faloApplyTranslateConfig(Object.assign({}, c, { showPhrases: next }));
     }
     persistPhrases(phrasesCacheGet(), next);
     if (!next) {
@@ -1979,11 +1979,11 @@
     }
   }
 
-  // WATransChat content-quick-phrases 1:1: storage/config → immediate re-paint
-  window.addEventListener("whatsnow-translate-config", function () {
+  // Falo content-quick-phrases 1:1: storage/config → immediate re-paint
+  window.addEventListener("falo-translate-config", function () {
     try {
       readSyncMetaFromCfg();
-      window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+      window.__faloPhrasesCache = readFullPhrasesFromCfg();
     } catch (_) {}
     try {
       if (!canCore()) {
@@ -2000,7 +2000,7 @@
     } catch (_) {}
   });
 
-  // WATransChat content-quick-phrases 1:1: dedicated undebounced MO.
+  // Falo content-quick-phrases 1:1: dedicated undebounced MO.
   // Do NOT use shared domMutationBus (400ms debounce) — chat switch rebuilds
   // footer and the extension re-mounts the bar on the same mutation tick.
   try {
@@ -2127,9 +2127,9 @@
       } catch (_) {}
     }
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       bus.register(uiTickOnDom, { id: "ui-tick" });
     } else {
@@ -2138,7 +2138,7 @@
       if (t) mo.observe(t, { childList: true, subtree: true });
     }
   } catch (_) {}
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     scheduleTick(40);
     try {
       refreshAllRemarkUiTexts();
@@ -2157,7 +2157,7 @@
     });
   } catch (_) {}
 
-  // ---------- Open chat by phone / @username (WATransChat NumberTextInput 1:1) ----------
+  // ---------- Open chat by phone / @username (Falo NumberTextInput 1:1) ----------
   var PHONE_INPUT_STYLE_ID = "wa-phone-input-styles";
   var PHONE_INPUT_CSS =
     "#NumberTextInput::selection{background-color:#007bff;color:#fff}" +
@@ -2199,8 +2199,8 @@
   }
 
   function openChatByQuery(query) {
-    if (typeof window.__whatsnowOpenChatByQuery === "function") {
-      return window.__whatsnowOpenChatByQuery(query);
+    if (typeof window.__faloOpenChatByQuery === "function") {
+      return window.__faloOpenChatByQuery(query);
     }
     return Promise.resolve({ ok: false, error: "store_unavailable" });
   }
@@ -2217,7 +2217,7 @@
       var side = document.querySelector("#side");
       if (!side || !side.parentNode) return false;
 
-      // Prefer inserting before #side (WATransChat 1:1). If parent is weird, still try.
+      // Prefer inserting before #side (Falo 1:1). If parent is weird, still try.
       ensurePhoneInputStyles();
 
       var inputElement = document.createElement("input");
@@ -2263,7 +2263,7 @@
             var msg = isUsername
               ? tUi("openChatByUsernameFailed", "无法打开聊天，请确认该 @账号 有效")
               : tUi("openChatByPhoneFailed", "无法打开聊天，请确认号码已在 WhatsApp 注册");
-            try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
+            try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
           })
           .catch(function () {
             if (!isUsername) {
@@ -2362,7 +2362,7 @@
       } catch (_) {}
     }
   }, 1000);
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     try {
       refreshPhoneInputUiLang();
     } catch (_) {}
@@ -2370,11 +2370,11 @@
       ensurePhoneInputBar();
     } catch (_) {}
   });
-  window.__whatsnowEnsurePhoneInputBar = ensurePhoneInputBar;
+  window.__faloEnsurePhoneInputBar = ensurePhoneInputBar;
 
   try {
     if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke) {
-      window.__TAURI__.core.invoke("dlog", { msg: "watrans-ui: customer-lang/remark/inline/phrases ready" });
+      window.__TAURI__.core.invoke("dlog", { msg: "falo-ui: customer-lang/remark/inline/phrases ready" });
     }
   } catch (_) {}
 })();

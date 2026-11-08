@@ -83,7 +83,7 @@
 
   function isTranslateButtonSettingOn() {
     var c = cfg();
-    // Extension enableTranslateButton ≡ inlineBtn; compose is WATransChat's
+    // Extension enableTranslateButton ≡ inlineBtn; compose is Falo's
     // "输入框翻译按钮" label — treat either as show-switch.
     return !!(c.inlineBtn || c.compose);
   }
@@ -186,8 +186,8 @@
     document.querySelectorAll(".wa-inline-translate-btn").forEach(updateInlineTranslateButtonVisual);
     // Extension: 开/关 only sets the flag — NOT autoSendInputTranslation.
     try {
-      if (typeof window.__whatsnowRefreshComposerHint === "function") {
-        window.__whatsnowRefreshComposerHint();
+      if (typeof window.__faloRefreshComposerHint === "function") {
+        window.__faloRefreshComposerHint();
       }
     } catch (_) {}
   }
@@ -267,17 +267,17 @@
       localStorage.removeItem(INLINE_LS_KEY);
     } catch (_) {}
     try {
-      if (typeof window.__whatsnowRefreshComposerHint === "function") {
-        window.__whatsnowRefreshComposerHint();
+      if (typeof window.__faloRefreshComposerHint === "function") {
+        window.__faloRefreshComposerHint();
       }
     } catch (_) {}
   }
 
   function createInlineTranslateButtonForInput() {
     try {
-      // Remove legacy absolute 译 button from older WATransChat builds
+      // Remove legacy absolute 译 button from older Falo builds
       try {
-        var legacy = document.getElementById("whatsnow-tr-btn");
+        var legacy = document.getElementById("falo-tr-btn");
         if (legacy) legacy.remove();
       } catch (_) {}
 
@@ -348,9 +348,9 @@
     }
     tryAddButton();
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       if (translateButtonObserver) {
         try {
@@ -409,9 +409,9 @@
   }
 
   try {
-    window.__whatsnowSetInlineTranslateDisabled = setInlineTranslateDisabled;
-    window.__whatsnowTranslateHelpers = Object.assign(
-      window.__whatsnowTranslateHelpers || {},
+    window.__faloSetInlineTranslateDisabled = setInlineTranslateDisabled;
+    window.__faloTranslateHelpers = Object.assign(
+      window.__faloTranslateHelpers || {},
       {
         setInlineTranslateDisabled: setInlineTranslateDisabled,
         createInlineTranslateButtonForInput: createInlineTranslateButtonForInput,

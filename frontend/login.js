@@ -1,13 +1,13 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
+// Falo — authored and maintained solely by @benedictusrey.
 const invoke =
   window.__TAURI__?.core?.invoke ??
   (async () => {
-    throw new Error("WATransChat login requires the desktop runtime.");
+    throw new Error("Falo login requires the desktop runtime.");
   });
 
 const STR = {
   en: {
-    brand: "WATransChat",
+    brand: "Falo",
     subtitleLogin: "Sign in with your membership account to continue.",
     subtitleRegister: "Create an account to start your free trial.",
     tabLogin: "Sign in",
@@ -78,7 +78,7 @@ const STR = {
     stillFull: "A seat is still in use. Sign out another device.",
   },
   zh: {
-    brand: "WATransChat",
+    brand: "Falo",
     subtitleLogin: "请使用会员账号登录后继续。",
     subtitleRegister: "注册账号即可开始免费试用。",
     tabLogin: "登录",
@@ -182,16 +182,16 @@ function t(key, vars) {
 }
 
 function applyTheme(theme) {
-  if (window.WhatsNowTheme) {
-    window.WhatsNowTheme.apply(document, theme, systemDark.matches);
+  if (window.FaloTheme) {
+    window.FaloTheme.apply(document, theme, systemDark.matches);
   }
 }
 
 function applyCopy() {
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
   const appVer =
-    (window.__whatsnowAppVersion && String(window.__whatsnowAppVersion)) || "0.0.0";
-  const brand = "WATransChat v" + appVer;
+    (window.__faloAppVersion && String(window.__faloAppVersion)) || "0.0.0";
+  const brand = "Falo v" + appVer;
   document.title =
     mode === "register" ? t("tabRegister") + " · " + brand : t("tabLogin") + " · " + brand;
   document.getElementById("login-heading").textContent = t("brand");
@@ -227,7 +227,7 @@ function setError(msg, kind) {
   el.classList.toggle("is-success", kind === "success");
 }
 
-/** WATransChat options.js parity: map server English auth errors to UI language. */
+/** Falo options.js parity: map server English auth errors to UI language. */
 function localizeAuthError(raw) {
   let err = String(raw == null ? "" : raw).trim();
   if (!err) return t("loginFailed");

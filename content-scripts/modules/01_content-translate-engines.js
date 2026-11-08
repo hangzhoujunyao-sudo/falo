@@ -54,7 +54,7 @@
     var RETRANSLATE_SVG =
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg>';
     var scanTimer = null;
-    var STYLE_ID = "whatsnow-translate-style-v2";
+    var STYLE_ID = "falo-translate-style-v2";
     var started = false;
     var pendingCfg = null;
     var busyHosts = typeof WeakSet !== "undefined" ? new WeakSet() : null;
@@ -185,7 +185,7 @@
       return Math.min(28, Math.max(10, n));
     }
 
-    // WATransChat parity: user color/size win over dark-theme defaults.
+    // Falo parity: user color/size win over dark-theme defaults.
     // Apply to already-rendered nodes immediately when Settings change.
     function refreshTranslatedAppearance() {
       var color = normalizeTextColor(cfg.textColor);
@@ -194,8 +194,8 @@
       cfg.textColor = color;
       cfg.fontSize = size;
       try {
-        document.documentElement.style.setProperty("--whatsnow-tr-color", color);
-        document.documentElement.style.setProperty("--whatsnow-tr-font-size", sizeCss);
+        document.documentElement.style.setProperty("--falo-tr-color", color);
+        document.documentElement.style.setProperty("--falo-tr-font-size", sizeCss);
       } catch (_) {}
       try {
         document.querySelectorAll(".translated-text").forEach(function (el) {
@@ -229,13 +229,13 @@
         // Do NOT force a dark-mode color — that fought the user's translation color.
         s.textContent =
           ".translated-text{display:block;margin:4px 0 0 0;" +
-          "font-size:var(--whatsnow-tr-font-size,14px);line-height:1.5}" +
+          "font-size:var(--falo-tr-font-size,14px);line-height:1.5}" +
           ".translated-text > .selectable-text.copyable-text{" +
           "user-select:text;border-top:1px dashed #bbb;margin:4px 0 0 0;padding:4px 0 0 0;" +
-          "white-space:pre-wrap;color:var(--whatsnow-tr-color,#333333);" +
-          "font-size:var(--whatsnow-tr-font-size,14px);line-height:1.5;" +
+          "white-space:pre-wrap;color:var(--falo-tr-color,#333333);" +
+          "font-size:var(--falo-tr-font-size,14px);line-height:1.5;" +
           "min-width:100px;box-sizing:border-box}" +
           "body.dark .translated-text > .selectable-text.copyable-text," +
           ".dark .translated-text > .selectable-text.copyable-text{border-top-color:#555}" +
           ".translated-text > .selectable-text.wa-translating-status{opacity:0.7}" +
-          /* WATransChat
+          /* Falo

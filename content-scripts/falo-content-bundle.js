@@ -101,7 +101,7 @@ ue : field.textContent;
     }, 1100);
   }
 
-  window.__whatsnowProfileProbe = Object.freeze({
+  window.__faloProfileProbe = Object.freeze({
     normalize: normalizeProfileName,
     fromRecord: profileNameFromRecord,
     selfIds: selfIdsFromLocalStorage,
@@ -269,7 +269,7 @@ ue : field.textContent;
     if (
       !document.querySelectorAll ||
       !document.createElement ||
-      document.getElementById("whatsnow-author-credit")
+      document.getElementById("falo-author-credit")
     ) {
       return;
     }
@@ -315,12 +315,12 @@ ue : field.textContent;
     if (!logout || !logout.parentElement) return;
 
     var card = document.createElement("div");
-    card.id = "whatsnow-author-credit";
+    card.id = "falo-author-credit";
     card.setAttribute("role", "note");
-    card.setAttribute("aria-label", "WATransChat author");
+    card.setAttribute("aria-label", "Falo author");
     card.innerHTML =
-      '<span class="whatsnow-credit-thanks">Thank you for choosing WATransChat.</span>' +
-      '<span class="whatsnow-credit-author">Crafted with care by <a href="https://github.com/benedictusrey" target="_blank" rel="noreferrer">@benedictusrey</a> · sole author &amp; maintainer</span>';
+      '<span class="falo-credit-thanks">Thank you for choosing Falo.</span>' +
+      '<span class="falo-credit-author">Crafted with care by <a href="https://github.com/benedictusrey" target="_blank" rel="noreferrer">@benedictusrey</a> · sole author &amp; maintainer</span>';
 
     // WhatsApp nests the clickable logout control inside a horizontal row.
     // Insert after that row, not inside it, so the note occupies its own line.
@@ -329,21 +329,21 @@ ue : field.textContent;
     if (!row || !parent) return;
     parent.insertBefore(card, row.nextSibling);
 
-    if (!document.getElementById("whatsnow-author-credit-style")) {
+    if (!document.getElementById("falo-author-credit-style")) {
       var style = document.createElement("style");
-      style.id = "whatsnow-author-credit-style";
+      style.id = "falo-author-credit-style";
       style.textContent =
-        "#whatsnow-author-credit{" +
+        "#falo-author-credit{" +
         "display:grid;grid-column:1/-1;align-self:stretch;flex:0 0 auto;" +
         "box-sizing:border-box;width:auto;gap:3px;margin:10px 12px 4px;padding:11px 13px;" +
         "border:1px solid color-mix(in srgb,var(--WDS-content-default,#54656f) 18%,transparent);" +
         "border-radius:12px;background:color-mix(in srgb,var(--WDS-background-wash-plain,#f0f2f5) 82%,transparent);" +
         "font:400 12px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif;" +
         "color:var(--WDS-content-secondary,#667781)}" +
-        "#whatsnow-author-credit .whatsnow-credit-thanks{color:var(--WDS-content-default,#111b21);font-weight:600}" +
-        "#whatsnow-author-credit .whatsnow-credit-author{font-size:11px}" +
-        "#whatsnow-author-credit a{color:var(--WDS-content-link,#008069);font-weight:700;text-decoration:none}" +
-        "#whatsnow-author-credit a:hover{text-decoration:underline}";
+        "#falo-author-credit .falo-credit-thanks{color:var(--WDS-content-default,#111b21);font-weight:600}" +
+        "#falo-author-credit .falo-credit-author{font-size:11px}" +
+        "#falo-author-credit a{color:var(--WDS-content-link,#008069);font-weight:700;text-decoration:none}" +
+        "#falo-author-credit a:hover{text-decoration:underline}";
       (document.head || document.documentElement).appendChild(style);
     }
   }
@@ -387,7 +387,7 @@ ue : field.textContent;
       installAuthorCredit();
     } catch (e) {}
   }
-  window.__whatsnowUnreadProbe = Object.freeze({
+  window.__faloUnreadProbe = Object.freeze({
     parse: parseUnreadNumber,
     collect: collectUnreadCount,
   });
@@ -400,7 +400,7 @@ ue : field.textContent;
   // 4) Drag-and-drop file injection.
   //    On macOS/Linux Tauri's drop handler consumes the OS file drop on the account
   //    child webview (`attach_account_file_drop_handler` in window.rs) and STREAMS
-  //    the file bytes here through `__whatsnowDropFeed` as begin/chunk/end/commit
+  //    the file bytes here through `__faloDropFeed` as begin/chunk/end/commit
   //    messages keyed by a drop id. (Windows uses native WebView2 drops instead.)
   //    Chunked transport (vs the old single giant eval) keeps peak memory at one
   //    ~5.6 MB base64 chunk per step and stays far below WebView2's cross-process
@@ -427,7 +427,7 @@ ue : field.textContent;
   try {
     var drop = {};
     drop.log = function (m) {
-      try { console.log("[WATransChat drop] " + m); } catch (e) {}
+      try { console.log("[Falo drop] " + m); } catch (e) {}
       try { invoke("dlog", { msg: String(m).slice(0, 280) }); } catch (e) {}
     };
     drop.b64ToBytes = function (b64) {
@@ -775,11 +775,11 @@ ue : field.textContent;
     // cannot flash before the confirmation composer. Do NOT match the footer
     // attach button (`data-testid^=attach-` is too broad and hid the control).
     drop.hideAttachUi = function () {
-      if (!document.createElement || document.getElementById("whatsnow-drop-menu-guard")) {
+      if (!document.createElement || document.getElementById("falo-drop-menu-guard")) {
         return function () {};
       }
       var style = document.createElement("style");
-      style.id = "whatsnow-drop-menu-guard";
+      style.id = "falo-drop-menu-guard";
       style.textContent =
         '[role="menu"],[data-animate-dropdown],div[data-testid="interaction-popup"]{opacity:0!important;pointer-events:none!important;transition:none!important;animation:none!important}';
       (document.head || document.documentElement).appendChild(style);
@@ -1004,7 +1004,7 @@ ue : field.textContent;
     // {op:"chunk",drop,file,b64}* -> {op:"end",drop,file} | {op:"abort",drop,file},
     // then one {op:"commit",drop,files}. Returns a string ack for commit (read by
     // eval_with_callback in Rust, proving the handler executed).
-    window.__whatsnowDropFeed = function (msg) {
+    window.__faloDropFeed = function (msg) {
       try {
         if (!msg || typeof msg.drop !== "number") return "BADMSG";
         var st = drop.state(msg.drop);
@@ -1080,7 +1080,7 @@ ue : field.textContent;
 
   // ---------------------------------------------------------------------------
   // Plan B — native translate.
-  // DOM scan / insert / same-lang skip copied from WATransChat
+  // DOM scan / insert / same-lang skip copied from Falo
   // content-translate-visible.js `$()`; Rust calls google_web (translateHtml).
   // ---------------------------------------------------------------------------
   (function setupNativeTranslate() {
@@ -1168,7 +1168,7 @@ ue : field.textContent;
     var RETRANSLATE_SVG =
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"></path></svg>';
     var scanTimer = null;
-    var STYLE_ID = "whatsnow-translate-style-v2";
+    var STYLE_ID = "falo-translate-style-v2";
     var started = false;
     var pendingCfg = null;
     var busyHosts = typeof WeakSet !== "undefined" ? new WeakSet() : null;
@@ -1299,7 +1299,7 @@ ue : field.textContent;
       return Math.min(28, Math.max(10, n));
     }
 
-    // WATransChat parity: user color/size win over dark-theme defaults.
+    // Falo parity: user color/size win over dark-theme defaults.
     // Apply to already-rendered nodes immediately when Settings change.
     function refreshTranslatedAppearance() {
       var color = normalizeTextColor(cfg.textColor);
@@ -1308,8 +1308,8 @@ ue : field.textContent;
       cfg.textColor = color;
       cfg.fontSize = size;
       try {
-        document.documentElement.style.setProperty("--whatsnow-tr-color", color);
-        document.documentElement.style.setProperty("--whatsnow-tr-font-size", sizeCss);
+        document.documentElement.style.setProperty("--falo-tr-color", color);
+        document.documentElement.style.setProperty("--falo-tr-font-size", sizeCss);
       } catch (_) {}
       try {
         document.querySelectorAll(".translated-text").forEach(function (el) {
@@ -1343,16 +1343,16 @@ ue : field.textContent;
         // Do NOT force a dark-mode color — that fought the user's translation color.
         s.textContent =
           ".translated-text{display:block;margin:4px 0 0 0;" +
-          "font-size:var(--whatsnow-tr-font-size,14px);line-height:1.5}" +
+          "font-size:var(--falo-tr-font-size,14px);line-height:1.5}" +
           ".translated-text > .selectable-text.copyable-text{" +
           "user-select:text;border-top:1px dashed #bbb;margin:4px 0 0 0;padding:4px 0 0 0;" +
-          "white-space:pre-wrap;color:var(--whatsnow-tr-color,#333333);" +
-          "font-size:var(--whatsnow-tr-font-size,14px);line-height:1.5;" +
+          "white-space:pre-wrap;color:var(--falo-tr-color,#333333);" +
+          "font-size:var(--falo-tr-font-size,14px);line-height:1.5;" +
           "min-width:100px;box-sizing:border-box}" +
           "body.dark .translated-text > .selectable-text.copyable-text," +
           ".dark .translated-text > .selectable-text.copyable-text{border-top-color:#555}" +
           ".translated-text > .selectable-text.wa-translating-status{opacity:0.7}" +
-          /* WATransChat styles.css .wa-retranslate-btn */
+          /* Falo styles.css .wa-retranslate-btn */
           ".wa-retranslate-btn{color:#555;border:none;border-radius:4px;cursor:pointer;opacity:0.8;" +
           "align-items:center;justify-content:center;background:transparent;padding:6px 8px;" +
           "min-width:28px;min-height:24px;box-sizing:border-box;line-height:0;display:inline-flex;" +
@@ -1366,7 +1366,7 @@ ue : field.textContent;
           "body.dark .translated-text > .selectable-text.wa-chat-translate-fail," +
           ".dark .translated-text > .selectable-text.wa-chat-translate-fail{color:#8696a0!important}" +
           ".wa-chat-switch-engine-btn{appearance:none;border:1px solid rgba(18,140,126,0.35);" +
-          "background:rgba(37,211,102,0.1);color:#128c7e;font:inherit;font-size:12px;line-height:1.2;" +
+          "background:rgba(37,211,102,0.1);color:#4f46e5;font:inherit;font-size:12px;line-height:1.2;" +
           "padding:2px 8px;border-radius:12px;cursor:pointer;flex:0 0 auto}" +
           ".wa-chat-switch-engine-btn:hover{background:rgba(37,211,102,0.18);border-color:rgba(18,140,126,0.5)}" +
           ".wa-chat-switch-engine-btn:disabled{opacity:0.55;cursor:default}" +
@@ -1383,10 +1383,10 @@ ue : field.textContent;
     }
 
     function canTranslate() {
-      // WATransChat parity: require core_translate (isValid + cap). Logout clears
+      // Falo parity: require core_translate (isValid + cap). Logout clears
       // caps → false. Never allow "offline demo" after sign-out.
       try {
-        return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+        return !!(window.__faloCan && window.__faloCan("core_translate"));
       } catch (_) {}
       return false;
     }
@@ -1438,13 +1438,13 @@ ue : field.textContent;
       // or zh-CN when sourceLang is auto.
       cfg.targetLang =
         cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : "zh-CN";
-      // WATransChat userSourceLang — destination / "my language" for same-lang skip.
+      // Falo userSourceLang — destination / "my language" for same-lang skip.
       try {
         window.userSourceLang =
           cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : cfg.targetLang || "zh-CN";
         window.userSourceLangSetting = cfg.sourceLang || "auto";
         window.defaultTargetLang = cfg.defaultCustomerLang || "auto";
-        window.__whatsnowTranslateCfg = cfg;
+        window.__faloTranslateCfg = cfg;
       } catch (_) {}
       invoke("dlog", {
         msg:
@@ -1468,17 +1468,17 @@ ue : field.textContent;
       updateComposeButton();
       scheduleScan(80);
       try {
-        window.dispatchEvent(new CustomEvent("whatsnow-translate-config", { detail: cfg }));
+        window.dispatchEvent(new CustomEvent("falo-translate-config", { detail: cfg }));
       } catch (_) {}
     }
 
-    window.__whatsnowApplyTranslateConfig = function (c) {
+    window.__faloApplyTranslateConfig = function (c) {
       pendingCfg = c || pendingCfg;
       if (!started) return;
       applyConfig(c);
     };
 
-    // WATransChat roots from `$()` / `c()` / `X()` — pick the one that actually
+    // Falo roots from `$()` / `c()` / `X()` — pick the one that actually
     // holds message text. A near-empty scrolltrace node must not beat panel-body.
     function waIoPanelRoot() {
       var candidates = [
@@ -1507,7 +1507,7 @@ ue : field.textContent;
       return best;
     }
 
-    // WATransChat H() — segment container
+    // Falo H() — segment container
     /**
      * 从气泡 DOM 还原真实换行（比 innerText 更准）。
      * WA 每行是 display:block 的 span，段内已有 \\n；innerText 又在块边界再插 \\n → 空行翻倍。
@@ -1586,7 +1586,7 @@ ue : field.textContent;
         .replace(/\n{3,}/g, "\n\n");
     }
 
-    // WATransChat content-translate-visible.js — IndexedDB + sync memory cache.
+    // Falo content-translate-visible.js — IndexedDB + sync memory cache.
     // Chrome rarely remounts the chat DOM on minimize; WebView2 often does.
     // Memory hits must re-attach .translated-text in the same turn as the
     // MutationObserver callback so restore does not look like a slow reload.
@@ -1844,7 +1844,7 @@ ue : field.textContent;
       } catch (_) {}
     }
 
-    /** Chat-history only — never falls back to compose `cfg.engine` (WATransChat). */
+    /** Chat-history only — never falls back to compose `cfg.engine` (Falo). */
     function historyCacheEngine() {
       var eng =
         typeof cfg.historyEngine === "string" && cfg.historyEngine.trim()
@@ -1957,7 +1957,7 @@ ue : field.textContent;
       return span && span.parentNode && span.parentNode.nodeType === 1 ? span.parentNode : row;
     }
 
-    // WATransChat At() — in viewport
+    // Falo At() — in viewport
     function isInViewport(el) {
       try {
         var e = el.getBoundingClientRect();
@@ -1969,7 +1969,7 @@ ue : field.textContent;
       }
     }
 
-    // WATransChat R() — language family
+    // Falo R() — language family
     function normalizeLangFamily(t) {
       var e = String(t || "")
         .trim()
@@ -1993,7 +1993,7 @@ ue : field.textContent;
       return e.split(/[-_]/)[0] || "";
     }
 
-    // WATransChat Ct() — rough detect
+    // Falo Ct() — rough detect
     function detectLang(t) {
       var e = String(t == null ? "" : t).trim();
       if (!e) return "auto";
@@ -2023,7 +2023,7 @@ ue : field.textContent;
       return "auto";
     }
 
-    // WATransChat Tt() — skip when already in user language
+    // Falo Tt() — skip when already in user language
     function isSameAsUserLang(text, userLang) {
       var n = normalizeLangFamily(userLang || cfg.targetLang || "zh-CN");
       if (!n) return false;
@@ -2033,7 +2033,7 @@ ue : field.textContent;
       return !!(u && u === n);
     }
 
-    // WATransChat t() — bubble from selectable-text span
+    // Falo t() — bubble from selectable-text span
     function findBubbleFromSpan(o) {
       if (!o) return null;
       // Voice STT transcriptions sit inside conv-msg / msg-container rows.
@@ -2105,7 +2105,7 @@ ue : field.textContent;
 
     function pageUiLang() {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.getUiLang) return i18n.getUiLang();
       } catch (_) {}
       try {
@@ -2115,14 +2115,14 @@ ue : field.textContent;
     }
     function tPage(key, fbZh) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.t) return i18n.t(pageUiLang(), key, fbZh);
       } catch (_) {}
       return fbZh;
     }
     function tPageFill(key, fbZh, vars) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.fill) return i18n.fill(pageUiLang(), key, fbZh, vars);
       } catch (_) {}
       var s = String(fbZh || "");
@@ -2137,7 +2137,7 @@ ue : field.textContent;
     function getEngineDisplayName(engineId, ui) {
       var id = String(engineId || "google_web");
       try {
-        var api = window.__whatsnowEngineList;
+        var api = window.__faloEngineList;
         if (api) {
           var map = api.nameMap ? api.nameMap(ui || "zh") : null;
           if (map && map[id]) return map[id];
@@ -2176,10 +2176,10 @@ ue : field.textContent;
 
     function canUseProRetranslateEngines() {
       try {
-        if (window.__whatsnowCan) {
-          if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+        if (window.__faloCan) {
+          if (window.__faloCan("pro_engines") || window.__faloCan("ai_proxy")) return true;
         }
-        var c = window.__whatsnowCaps;
+        var c = window.__faloCaps;
         if (c && (c.isPro || c.isPremium)) return true;
       } catch (_) {}
       return false;
@@ -2227,7 +2227,7 @@ ue : field.textContent;
       return safeIndex;
     }
 
-    // WATransChat mountRetranslateButton — before msg-meta time; AI buttons on the left
+    // Falo mountRetranslateButton — before msg-meta time; AI buttons on the left
     function mountRetranslateButton(msg, retranslateBtn, fallbackParent) {
       if (!retranslateBtn) return;
       try {
@@ -2264,7 +2264,7 @@ ue : field.textContent;
       }
     }
 
-    // WATransChat createTranslationWrapper — translation + retranslate icon button
+    // Falo createTranslationWrapper — translation + retranslate icon button
     function renderTranslation(row, span, translated, original, engineIndex) {
       if (!row || !translated) return;
       try {
@@ -2290,7 +2290,7 @@ ue : field.textContent;
         body.className = "selectable-text copyable-text _aupe";
         var trColor = normalizeTextColor(cfg.textColor);
         var trSize = normalizeFontSize(cfg.fontSize);
-        // Voice STT transcription (AudioToTextTranscription-*) — same padding as WATransChat.
+        // Voice STT transcription (AudioToTextTranscription-*) — same padding as Falo.
         var isAudioTx =
           span &&
           span.id &&
@@ -2365,8 +2365,8 @@ ue : field.textContent;
       if (CHAT_HISTORY_TRANSLATION_ENGINES.indexOf(next) < 0) next = "google_web";
       cfg.historyEngine = next;
       try {
-        if (window.__whatsnowTranslateCfg) window.__whatsnowTranslateCfg.historyEngine = next;
-        if (window.__whatsnowTranslateBoot) window.__whatsnowTranslateBoot.historyEngine = next;
+        if (window.__faloTranslateCfg) window.__faloTranslateCfg.historyEngine = next;
+        if (window.__faloTranslateBoot) window.__faloTranslateBoot.historyEngine = next;
       } catch (_) {}
       try {
         invokeChecked("set_chat_history_engine", { engine: next }).catch(function (err) {
@@ -2855,7 +2855,7 @@ ue : field.textContent;
         });
     }
 
-    /** WATransChat performChatMessageTranslation fallback chains for Google/Bing. */
+    /** Falo performChatMessageTranslation fallback chains for Google/Bing. */
     function historyFallbackEngines(preferred) {
       if (preferred === "bing") return ["google_web", "google", "google_chrome"];
       if (preferred === "google_web") return ["google", "google_chrome"];
@@ -2875,7 +2875,7 @@ ue : field.textContent;
 
     function collectHistoryTranslateContext(anchorEl, sourceText) {
       try {
-        var helpers = window.__whatsnowAiHelpers || {};
+        var helpers = window.__faloAiHelpers || {};
         if (typeof helpers.collectChatHistoryTranslateContext === "function") {
           return helpers.collectChatHistoryTranslateContext(anchorEl, sourceText) || [];
         }
@@ -2999,7 +2999,7 @@ ue : field.textContent;
       }
     }
 
-    // WATransChat `$()` — translate visible selectable-text spans
+    // Falo `$()` — translate visible selectable-text spans
     function translateVisibleMessages() {
       if (!cfg.enabled || !cfg.incoming || !canTranslate()) return;
       if (!ensureStyle()) return;
@@ -3084,7 +3084,7 @@ ue : field.textContent;
       }, typeof ms === "number" ? ms : 200);
     }
 
-    // WATransChat observer: IntersectionObserver on rows + MutationObserver on panel
+    // Falo observer: IntersectionObserver on rows + MutationObserver on panel
     function ensureIntersectionObserver() {
       if (rowIo || typeof IntersectionObserver !== "function") return rowIo;
       try {
@@ -3227,7 +3227,7 @@ ue : field.textContent;
     function findComposeInput(root) {
       // 优先走 send-hook 同源选框（已排除备注框、配文优先）
       try {
-        var h = window.__whatsnowTranslateHelpers || {};
+        var h = window.__faloTranslateHelpers || {};
         if (typeof h.getNativeComposerElement === "function") {
           var fromHook = h.getNativeComposerElement();
           if (fromHook) return fromHook;
@@ -3258,11 +3258,11 @@ ue : field.textContent;
       return null;
     }
 
-    // Compose toggle lives in watrans-ui.js (.wa-inline-translate-btn).
-    // Keep this as a legacy cleanup only — never recreate #whatsnow-tr-btn.
+    // Compose toggle lives in falo-ui.js (.wa-inline-translate-btn).
+    // Keep this as a legacy cleanup only — never recreate #falo-tr-btn.
     function updateComposeButton() {
       try {
-        var legacy = document.getElementById("whatsnow-tr-btn");
+        var legacy = document.getElementById("falo-tr-btn");
         if (legacy && legacy.parentNode) legacy.parentNode.removeChild(legacy);
       } catch (_) {}
     }
@@ -3323,7 +3323,7 @@ ue : field.textContent;
         }
       } catch (_) {}
       try {
-        var h = window.__whatsnowTranslateHelpers;
+        var h = window.__faloTranslateHelpers;
         if (h && typeof h.setComposerTextViaLexical === "function" && h.setComposerTextViaLexical(el, raw)) {
           try {
             el.dispatchEvent(new InputEvent("input", { bubbles: true, cancelable: true }));
@@ -3350,21 +3350,21 @@ ue : field.textContent;
       if (!input) return;
       var text = "";
       try {
-        var hRead = window.__whatsnowTranslateHelpers || {};
+        var hRead = window.__faloTranslateHelpers || {};
         if (typeof hRead.readComposerTextFromEl === "function") {
           text = String(hRead.readComposerTextFromEl(input) || "").trim();
         }
       } catch (_) {}
       if (!text) text = String(input.innerText || input.textContent || "").trim();
       if (!text) return;
-      var btn = document.getElementById("whatsnow-tr-btn");
+      var btn = document.getElementById("falo-tr-btn");
       if (btn) {
         btn.disabled = true;
         btn.classList.add("busy");
       }
       var dest = "en";
       try {
-        var h = window.__whatsnowTranslateHelpers || {};
+        var h = window.__faloTranslateHelpers || {};
         if (typeof h.loadSessionLanguageSettings === "function") {
           h.loadSessionLanguageSettings();
         }
@@ -3391,7 +3391,7 @@ ue : field.textContent;
       }
       var composeEngine = cfg.engine || "google_web";
       try {
-        var h2 = window.__whatsnowTranslateHelpers || {};
+        var h2 = window.__faloTranslateHelpers || {};
         var engPref =
           typeof h2.getCurrentEnginePref === "function" ? h2.getCurrentEnginePref() : "";
         if (engPref) composeEngine = engPref;
@@ -3423,7 +3423,7 @@ ue : field.textContent;
       if (!docRoot()) return;
       started = true;
       try {
-        var bus = window.__whatsnowDomMutationBus;
+        var bus = window.__faloDomMutationBus;
         if (bus && typeof bus.register === "function") {
           bus.register(function () {
             ensurePanelObservers();
@@ -3473,10 +3473,10 @@ ue : field.textContent;
       try {
         warmMemCacheFromDb();
       } catch (_) {}
-      var boot = pendingCfg || window.__whatsnowTranslateBoot;
+      var boot = pendingCfg || window.__faloTranslateBoot;
       if (boot) applyConfig(boot);
       else applyConfig({ enabled: true, incoming: true, compose: true, targetLang: "zh-CN" });
-      invoke("dlog", { msg: "translate: bridge ready (WATransChat $)" });
+      invoke("dlog", { msg: "translate: bridge ready (Falo $)" });
     }
 
     function tryStart() {
@@ -3496,7 +3496,7 @@ ue : field.textContent;
     setTimeout(tryStart, 1500);
 
     // Expose helpers for send-hook / customer-lang / Phase 2 modules.
-    window.__whatsnowTranslateHelpers = {
+    window.__faloTranslateHelpers = {
       getCfg: function () {
         return cfg;
       },
@@ -3523,22 +3523,22 @@ ue : field.textContent;
   })();
 
   // Send-hook (Enter / Send intercept, Lexical, dual-lock) lives in
-  // resources/watrans-send-hook.js — 1:1 from WATransChat content-send-hook.js.
+  // resources/falo-send-hook.js — 1:1 from Falo content-send-hook.js.
 
   // Customer-lang / remark / inline-译 / phrases toolbar:
-  // see resources/watrans-ui.js (WATransChat4.89 selectors + icons).
+  // see resources/falo-ui.js (Falo4.89 selectors + icons).
   // Follow-up todos removed by product decision.
 
   // ---------------------------------------------------------------------------
-  // Phase 2 helpers — device / badge (country + FX live in watrans-country-fx.js)
+  // Phase 2 helpers — device / badge (country + FX live in falo-country-fx.js)
   // ---------------------------------------------------------------------------
   (function setupHelperModules() {
     function cfg() {
-      return window.__whatsnowTranslateCfg || {};
+      return window.__faloTranslateCfg || {};
     }
     function canCore() {
       try {
-        return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+        return !!(window.__faloCan && window.__faloCan("core_translate"));
       } catch (_) {}
       return false;
     }
@@ -3546,13 +3546,13 @@ ue : field.textContent;
     // Strip legacy simplified bars if a hot reload left them behind.
     function scrubLegacyUi() {
       try {
-        ["whatsnow-phrases-bar", "whatsnow-tr-btn", "whatsnow-country-tip"].forEach(function (id) {
+        ["falo-phrases-bar", "falo-tr-btn", "falo-country-tip"].forEach(function (id) {
           var el = document.getElementById(id);
           if (el) el.remove();
         });
         document
           .querySelectorAll(
-            ".whatsnow-customer-lang-btn, .whatsnow-customer-lang-popup, .whatsnow-followup-btn"
+            ".falo-customer-lang-btn, .falo-customer-lang-popup, .falo-followup-btn"
           )
           .forEach(function (el) {
             try {
@@ -3575,14 +3575,14 @@ ue : field.textContent;
           var mark = document.createElement("span");
           var badge = "商";
           try {
-            var i18n = window.__whatsnowPageI18n;
+            var i18n = window.__faloPageI18n;
             if (i18n && i18n.t) {
               badge = i18n.t(i18n.getUiLang ? i18n.getUiLang() : "zh", "bizBadge", "商");
             }
           } catch (_) {}
           mark.textContent = badge;
           mark.style.cssText =
-            "margin-left:4px;font-size:10px;padding:0 4px;border-radius:4px;background:#25d366;color:#fff;";
+            "margin-left:4px;font-size:10px;padding:0 4px;border-radius:4px;background:#6366f1;color:#fff;";
           try {
             biz.appendChild(mark);
           } catch (_) {}
@@ -3599,7 +3599,7 @@ ue : field.textContent;
     }, 2500);
   })();
 
-  // Phase 3 AI/voice: 1:1 page modules (watrans-ai-suggest.js, watrans-voice-stt.js).
+  // Phase 3 AI/voice: 1:1 page modules (falo-ai-suggest.js, falo-voice-stt.js).
   // No header stub panel — that conflicted with the extension message-toolbar UX.
 
   // ---------------------------------------------------------------------------
@@ -3629,10 +3629,10 @@ ue : field.textContent;
 
   // ---------------------------------------------------------------------------
   // Phase 4 — debug-only visible-list export (formal backup is Settings → Backup
-  // via __whatsnowContactExportRpc / watrans-store-bridge).
+  // via __faloContactExportRpc / falo-store-bridge).
   // ---------------------------------------------------------------------------
   (function setupRestHooks() {
-    window.__whatsnowExportVisibleContacts = function () {
+    window.__faloExportVisibleContacts = function () {
       var rows = document.querySelectorAll('[data-testid="cell-frame-container"]');
       var out = [];
       rows.forEach(function (row) {
@@ -3646,7 +3646,7 @@ ue : field.textContent;
         var blob = new Blob([JSON.stringify(out, null, 2)], { type: "application/json" });
         var a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = "whatsnow-contacts-" + Date.now() + ".json";
+        a.download = "falo-contacts-" + Date.now() + ".json";
         a.click();
       } catch (e) {
         invoke("dlog", { msg: "contacts export fail: " + e });
@@ -3660,8 +3660,8 @@ ue : field.textContent;
 
    �j@   5
 // ===== run @0x6E1858 (13248 bytes) =====
-// WATransChat chat themes — authored and maintained solely by @benedictusrey.
-(function initWhatsNowChatTheme(root) {
+// Falo chat themes — authored and maintained solely by @benedictusrey.
+(function initFaloChatTheme(root) {
   "use strict";
 
   var THEMES = [
@@ -3850,76 +3850,76 @@ ue : field.textContent;
     }
     var wallpaperImage = palette.wallpaper || "none";
     return [
-      "html[data-whatsnow-theme] {",
-      "  --whatsnow-page: " + palette.page + ";",
-      "  --whatsnow-panel: " + palette.panel + ";",
-      "  --whatsnow-panel-soft: " + palette.panelSoft + ";",
-      "  --whatsnow-header: " + palette.header + ";",
-      "  --whatsnow-hover: " + palette.hover + ";",
-      "  --whatsnow-active: " + palette.active + ";",
-      "  --whatsnow-primary: " + palette.primary + ";",
-      "  --whatsnow-secondary: " + palette.secondary + ";",
-      "  --whatsnow-icon: " + palette.icon + ";",
-      "  --whatsnow-accent: " + palette.accent + ";",
-      "  --whatsnow-chat-wallpaper: " + wallpaperImage + ";",
+      "html[data-falo-theme] {",
+      "  --falo-page: " + palette.page + ";",
+      "  --falo-panel: " + palette.panel + ";",
+      "  --falo-panel-soft: " + palette.panelSoft + ";",
+      "  --falo-header: " + palette.header + ";",
+      "  --falo-hover: " + palette.hover + ";",
+      "  --falo-active: " + palette.active + ";",
+      "  --falo-primary: " + palette.primary + ";",
+      "  --falo-secondary: " + palette.secondary + ";",
+      "  --falo-icon: " + palette.icon + ";",
+      "  --falo-accent: " + palette.accent + ";",
+      "  --falo-chat-wallpaper: " + wallpaperImage + ";",
       "}",
-      "html[data-whatsnow-theme] #main,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-wrapper'],",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-body'],",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-messages'],",
-      "html[data-whatsnow-theme] [data-asset-chat-background],",
-      "html[data-whatsnow-theme] [data-asset-chat-background-dark],",
-      "html[data-whatsnow-theme] [data-asset-chat-background-light] {",
-      "  --conversation-panel-background: var(--whatsnow-page) !important;",
-      "  --wallpaper-background: var(--whatsnow-page) !important;",
-      "  --chat-background: var(--whatsnow-page) !important;",
-      "  --WDS-systems-chat-background-wallpaper: var(--whatsnow-page) !important;",
-      "  background-color: var(--whatsnow-page) !important;",
-      "  background-image: var(--whatsnow-chat-wallpaper) !important;",
+      "html[data-falo-theme] #main,",
+      "html[data-falo-theme] [data-testid='conversation-panel-wrapper'],",
+      "html[data-falo-theme] [data-testid='conversation-panel-body'],",
+      "html[data-falo-theme] [data-testid='conversation-panel-messages'],",
+      "html[data-falo-theme] [data-asset-chat-background],",
+      "html[data-falo-theme] [data-asset-chat-background-dark],",
+      "html[data-falo-theme] [data-asset-chat-background-light] {",
+      "  --conversation-panel-background: var(--falo-page) !important;",
+      "  --wallpaper-background: var(--falo-page) !important;",
+      "  --chat-background: var(--falo-page) !important;",
+      "  --WDS-systems-chat-background-wallpaper: var(--falo-page) !important;",
+      "  background-color: var(--falo-page) !important;",
+      "  background-image: var(--falo-chat-wallpaper) !important;",
       "}",
       // Media previews are NEVER wallpaper: image/video thumbnails render
       // as inline background-image: url(blob:…/data:…) divs — keep them.
-      "html[data-whatsnow-theme] #main > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']),",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-wrapper'] > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']),",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-body'] > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']) {",
-      "  background-image: var(--whatsnow-chat-wallpaper) !important;",
+      "html[data-falo-theme] #main > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']),",
+      "html[data-falo-theme] [data-testid='conversation-panel-wrapper'] > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']),",
+      "html[data-falo-theme] [data-testid='conversation-panel-body'] > div[style*='background']:not([style*='url(blob:']):not([style*='url(\"blob:']):not([style*='url(data:']):not([style*='url(\"data:']) {",
+      "  background-image: var(--falo-chat-wallpaper) !important;",
       "}",
-      "html[data-whatsnow-theme] #main::before,",
-      "html[data-whatsnow-theme] #main::after,",
-      "html[data-whatsnow-theme] #main > div::before,",
-      "html[data-whatsnow-theme] #main > div::after,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-wrapper']::before,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-wrapper']::after,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-body']::before,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-body']::after,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-messages']::before,",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-messages']::after,",
-      "html[data-whatsnow-theme] [data-asset-chat-background]::before,",
-      "html[data-whatsnow-theme] [data-asset-chat-background]::after {",
+      "html[data-falo-theme] #main::before,",
+      "html[data-falo-theme] #main::after,",
+      "html[data-falo-theme] #main > div::before,",
+      "html[data-falo-theme] #main > div::after,",
+      "html[data-falo-theme] [data-testid='conversation-panel-wrapper']::before,",
+      "html[data-falo-theme] [data-testid='conversation-panel-wrapper']::after,",
+      "html[data-falo-theme] [data-testid='conversation-panel-body']::before,",
+      "html[data-falo-theme] [data-testid='conversation-panel-body']::after,",
+      "html[data-falo-theme] [data-testid='conversation-panel-messages']::before,",
+      "html[data-falo-theme] [data-testid='conversation-panel-messages']::after,",
+      "html[data-falo-theme] [data-asset-chat-background]::before,",
+      "html[data-falo-theme] [data-asset-chat-background]::after {",
       "  background-image: none !important;",
       "}",
       // ---- conversation/Chat UI viewport only: header + composer; the side
       // navigation rail and the middle contact/list column stay original ----
-      "html[data-whatsnow-theme] #main > header {",
-      "  background-color: var(--whatsnow-header) !important;",
+      "html[data-falo-theme] #main > header {",
+      "  background-color: var(--falo-header) !important;",
       "}",
-      "html[data-whatsnow-theme] #main > header [title] {",
-      "  color: var(--whatsnow-primary) !important;",
+      "html[data-falo-theme] #main > header [title] {",
+      "  color: var(--falo-primary) !important;",
       "}",
-      "html[data-whatsnow-theme] [data-testid='conversation-compose-box-container'],",
-      "html[data-whatsnow-theme] [data-testid='compose-box'] {",
-      "  background-color: var(--whatsnow-panel) !important;",
+      "html[data-falo-theme] [data-testid='conversation-compose-box-container'],",
+      "html[data-falo-theme] [data-testid='compose-box'] {",
+      "  background-color: var(--falo-panel) !important;",
       "}",
       // WhatsApp owns the color scheme of every surface it renders (emoji
       // picker, popovers, native controls). The theme only restates a
       // color-scheme for the surfaces it restyles, so their native bits
       // (scrollbars, form controls) match the palette without ever
       // distorting the typing-area emoji surfaces.
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-wrapper'],",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-body'],",
-      "html[data-whatsnow-theme] [data-testid='conversation-panel-messages'],",
-      "html[data-whatsnow-theme] [data-testid='conversation-compose-box-container'],",
-      "html[data-whatsnow-theme] [data-testid='compose-box'] {",
+      "html[data-falo-theme] [data-testid='conversation-panel-wrapper'],",
+      "html[data-falo-theme] [data-testid='conversation-panel-body'],",
+      "html[data-falo-theme] [data-testid='conversation-panel-messages'],",
+      "html[data-falo-theme] [data-testid='conversation-compose-box-container'],",
+      "html[data-falo-theme] [data-testid='compose-box'] {",
       "  color-scheme: " + (LIGHT_PALETTES.indexOf(normalized) !== -1 ? "light" : "dark") + ";",
       "}",
     ].join("\n");
@@ -3941,11 +3941,11 @@ ue : field.textContent;
       var target = targets[index];
       if (!target) continue;
       if (normalized === "system") {
-        target.removeAttribute("data-whatsnow-theme");
+        target.removeAttribute("data-falo-theme");
         // A previously forced color-scheme must never linger on the document.
         if (target.style) target.style.removeProperty("color-scheme");
       } else {
-        target.setAttribute("data-whatsnow-theme", normalized);
+        target.setAttribute("data-falo-theme", normalized);
         // LOCKED BEHAVIOR (see AGENTS.md): the theme must NOT force its
         // color-scheme onto the whole document. WhatsApp owns the color
         // scheme of every surface it renders (emoji picker, composer input,
@@ -3960,10 +3960,10 @@ ue : field.textContent;
 
   function ensureThemeAttached() {
     if (!root.document || activeTheme === "system") return;
-    var style = root.document.getElementById("whatsnow-chat-theme");
+    var style = root.document.getElementById("falo-chat-theme");
     if (!style) {
       style = root.document.createElement("style");
-      style.id = "whatsnow-chat-theme";
+      style.id = "falo-chat-theme";
       style.textContent = buildCss(activeTheme);
       (root.document.head || root.document.documentElement).appendChild(style);
     }
@@ -3991,7 +3991,7 @@ ue : field.textContent;
       }
       return normalized;
     }
-    var style = root.document.getElementById("whatsnow-chat-theme");
+    var style = root.document.getElementById("falo-chat-theme");
     if (normalized === "system") {
       if (style) style.remove();
       markTheme(normalized);
@@ -4003,7 +4003,7 @@ ue : field.textContent;
     }
     if (!style) {
       style = root.document.createElement("style");
-      style.id = "whatsnow-chat-theme";
+      style.id = "falo-chat-theme";
       (root.document.head || root.document.documentElement).appendChild(style);
     }
     style.textContent = buildCss(normalized);
@@ -4018,19 +4018,19 @@ ue : field.textContent;
     return normalized;
   }
 
-  root.WhatsNowChatTheme = Object.freeze({
+  root.FaloChatTheme = Object.freeze({
     THEMES: Object.freeze(THEMES.slice()),
     normalize: normalize,
     buildCss: buildCss,
     apply: apply,
   });
-  root.__whatsnowApplyTheme = apply;
+  root.__faloApplyTheme = apply;
 })(typeof window === "undefined" ? globalThis : window);
 // ===== run @0x6E4C30 (6072 bytes) =====
-/*! WATransChat page UI i18n — EN pack for chat overlays (ZH is the call-site fallback). */
+/*! Falo page UI i18n — EN pack for chat overlays (ZH is the call-site fallback). */
 (function (global) {
   "use strict";
-  if (global.__whatsnowPageI18n) return;
+  if (global.__faloPageI18n) return;
 
   var EN = {
     // FX panel
@@ -4113,7 +4113,7 @@ ue : field.textContent;
     chatHistoryEngineSwitched: "Switched to {engine}, retrying…",
     bizBadge: "Biz",
 
-    // Membership header badge (WATransChat page_member* 1:1)
+    // Membership header badge (Falo page_member* 1:1)
     memberTrial: "Trial",
     memberActive: "Active",
     memberExpired:
@@ -4128,7 +4128,7 @@ ue : field.textContent;
     openRenewPage: "Open renew page",
     renewNow: "Renew Now",
 
-    // Open chat by phone / @username (WATransChat NumberTextInput 1:1)
+    // Open chat by phone / @username (Falo NumberTextInput 1:1)
     phonePlaceholder: "Number or @username, e.g. +1… / @name",
     startChat: "Chat",
     openChatByPhoneFailed: "Could not open chat. Confirm the number is on WhatsApp.",
@@ -4145,7 +4145,7 @@ ue : field.textContent;
 
   function getUiLang() {
     try {
-      var c = global.__whatsnowTranslateCfg || global.__whatsnowTranslateBoot || {};
+      var c = global.__faloTranslateCfg || global.__faloTranslateBoot || {};
       if (c && c.uiLang != null) return normalize(c.uiLang);
     } catch (_) {}
     return "zh";
@@ -4168,7 +4168,7 @@ ue : field.textContent;
     return s;
   }
 
-  global.__whatsnowPageI18n = {
+  global.__faloPageI18n = {
     EN: EN,
     normalize: normalize,
     getUiLang: getUiLang,
@@ -4182,12 +4182,12 @@ ue : field.textContent;
  * macOS WKWebView (Tauri/wry) ignores window.alert/confirm/prompt.
  */
 (function () {
-  if (window.__whatsnowNoticeInstalled) return;
-  window.__whatsnowNoticeInstalled = true;
+  if (window.__faloNoticeInstalled) return;
+  window.__faloNoticeInstalled = true;
 
-  var STYLE_ID = "whatsnow-notice-style";
-  var MODAL_ID = "whatsnow-alert-modal";
-  var TOAST_ID = "whatsnow-toast";
+  var STYLE_ID = "falo-notice-style";
+  var MODAL_ID = "falo-alert-modal";
+  var TOAST_ID = "falo-toast";
   var resolvePending = null;
 
   function ensureStyle() {
@@ -4236,8 +4236,8 @@ ue : field.textContent;
   function okLabel() {
     try {
       var lang =
-        (window.__whatsnowTranslateCfg && window.__whatsnowTranslateCfg.uiLang) ||
-        (window.__whatsnowTranslateBoot && window.__whatsnowTranslateBoot.uiLang) ||
+        (window.__faloTranslateCfg && window.__faloTranslateCfg.uiLang) ||
+        (window.__faloTranslateBoot && window.__faloTranslateBoot.uiLang) ||
         "";
       if (String(lang).toLowerCase().indexOf("en") === 0) return "OK";
     } catch (_) {}
@@ -4300,7 +4300,7 @@ ue : field.textContent;
    * @param {string} message
    * @returns {Promise<void>}
    */
-  window.__whatsnowAlert = function (message) {
+  window.__faloAlert = function (message) {
     try {
       var root = ensureModal();
       if (resolvePending) {
@@ -4334,7 +4334,7 @@ ue : field.textContent;
    * @param {string} message
    * @param {number} [ms]
    */
-  window.__whatsnowToast = function (message, ms) {
+  window.__faloToast = function (message, ms) {
     try {
       ensureStyle();
       var el = document.getElementById(TOAST_ID);
@@ -4352,15 +4352,15 @@ ue : field.textContent;
       }, typeof ms === "number" && ms > 0 ? ms : 2400);
     } catch (_) {
       try {
-        window.__whatsnowAlert(message);
+        window.__faloAlert(message);
       } catch (__) {}
     }
   };
 
   /** Prefer in-page alert; fall back to native (broken on macOS WKWebView). */
-  window.__whatsnowNotice = function (message) {
-    if (typeof window.__whatsnowAlert === "function") {
-      return window.__whatsnowAlert(message);
+  window.__faloNotice = function (message) {
+    if (typeof window.__faloAlert === "function") {
+      return window.__faloAlert(message);
     }
     try {
       window.alert(message);
@@ -4369,16 +4369,16 @@ ue : field.textContent;
   };
 
   // Alias used by voice-stt and older call sites.
-  window.__whatsnowShowNotice = window.__whatsnowNotice;
+  window.__faloShowNotice = window.__faloNotice;
 })();
     vn@   
 // ===== run @0x6E7CB0 (23217 bytes) =====
-/*! WATransChat translate language list — 1:1 from WATransChat i18n-data.js langNames.
- * Used by settings-ui (你的语言 / 默认客户语言) and watrans-ui (客户语言设置).
+/*! Falo translate language list — 1:1 from Falo i18n-data.js langNames.
+ * Used by settings-ui (你的语言 / 默认客户语言) and falo-ui (客户语言设置).
  */
 (function (global) {
   "use strict";
-  if (global.__whatsnowLangList) return;
+  if (global.__faloLangList) return;
 
   var LANG_NAMES = {"zh":{"ab":"阿布哈兹语","sq":"阿尔巴尼亚语","aa":"阿法尔语","ar":"阿拉伯语","alz":"阿卢尔语","am":"阿姆哈拉语","ach":"阿乔利语","as":"阿萨姆语","az":"阿塞拜疆语","awa":"阿瓦德语","av":"阿瓦尔语","ee":"埃维语","ay":"艾马拉语","ga":"爱尔兰语","et":"爱沙尼亚语","or":"奥迪亚语（奥利亚语）","oc":"奥克语","om":"奥罗莫语","os":"奥塞梯语","tpi":"巴布亚皮钦语","bew":"巴达维语","ban":"巴厘语","ba":"巴什基尔语","eu":"巴斯克语","btx":"巴塔克卡罗语","bbc":"巴塔克托巴语","bts":"巴塔克西马隆贡语","bci":"巴乌雷语","be":"白俄罗斯语","bm":"班巴拉语","pag":"邦阿西楠语","pam":"邦板牙语","bg":"保加利亚语","nso":"北索托语","bem":"奔巴语","bik":"比科尔语","bal":"俾路支语","is":"冰岛语","pl":"波兰语","bs":"波斯尼亚语","fa":"波斯语","bho":"博杰普尔语","bua":"布里亚特语","br":"布列塔尼语","bo":"藏语","chm":"草原马里语","ch":"查莫罗语","ce":"车臣语","chk":"楚克语","cv":"楚瓦什语","tn":"茨瓦纳语","ts":"聪加语","fa-AF":"达里语","tt":"鞑靼语","da":"丹麦语","shn":"掸语","tet":"德顿语","de":"德语","dv":"迪维希语","dyu":"迪尤拉语","tiv":"蒂夫语","din":"丁卡语","doi":"多格拉语","ru":"俄语","ndc-ZW":"恩道语","nr":"恩德贝莱语（南部）","dov":"恩敦贝语","bm-Nkoo":"恩科语","fo":"法罗语","fr":"法语","fr-CA":"法语（加拿大）","sa":"梵语","tl":"菲律宾语","fj":"斐济语","fi":"芬兰语","fon":"丰语","fy":"弗里西语","fur":"弗留利语","ff":"富拉尼语","kg":"刚果语","km":"高棉语","kl":"格陵兰语","ka":"格鲁吉亚语","gom":"贡根语","gu":"古吉拉特语","gn":"瓜拉尼语","cnh":"哈卡钦语","kk":"哈萨克语","ht":"海地克里奥尔语","ko":"韩语","ha":"豪萨语","nl":"荷兰语","hrx":"洪斯吕克语","ky":"吉尔吉斯语","ktu":"吉土巴语","gl":"加利西亚语","ca":"加泰罗尼亚语","gaa":"加语","cs":"捷克语","kac":"景颇语","kn":"卡纳达语","kr":"卡努里语","kha":"卡西语","kek":"凯克其语","kv":"科米语","xh":"科萨语","co":"科西嘉语","crh-Latn":"克里米亚鞑靼语（拉丁文）","crh":"克里米亚鞑靼语（西里尔文）","hr":"克罗地亚语","qu":"克丘亚语","ku":"库尔德语（库尔曼吉语）","ckb":"库尔德语（索拉尼）","trp":"廓克博若克语","la":"拉丁语","ltg":"拉特加莱语","lv":"拉脱维亚语","lo":"老挝语","lt":"立陶宛语","lij":"利古里亚语","li":"林堡语","ln":"林加拉语","rn":"隆迪语","luo":"卢奥语","lg":"卢干达语","lb":"卢森堡语","rw":"卢旺达语","lmo":"伦巴第语","ro":"罗马尼亚语","rom":"罗姆语","mad":"马都拉语","gv":"马恩岛语","mg":"马尔加什语","mwr":"马尔瓦迪语","mt":"马耳他语","mr":"马拉地语","ml":"马拉雅拉姆语","ms":"马来语","ms-Arab":"马来语（爪夷文）","mk":"马其顿语","mh":"马绍尔语","mam":"玛姆语","mai":"迈蒂利语","mfe":"毛里求斯克里奥尔语","mi":"毛利语","mni-Mtei":"梅泰语（曼尼普尔语）","mn":"蒙古语","bn":"孟加拉语","min":"米南语","lus":"米佐语","my":"缅甸语","hmn":"苗语","nhe":"纳瓦特尔语（东部瓦斯特卡）","af":"南非荷兰语","st":"南索托语","new":"尼泊尔巴萨语","ne":"尼泊尔语","nus":"努尔语","no":"挪威语","pap":"帕皮阿门托语","pa":"旁遮普语（果鲁穆奇文）","pa-Arab":"旁遮普语（沙木基文）","pt":"葡萄牙语（巴西）","pt-PT":"葡萄牙语（葡萄牙）","ps":"普什图语","ny":"齐切瓦语","cgg":"奇加语","lua":"奇卢伯语","ak":"契维语","ja":"日语","sv":"瑞典语","zap":"萨巴特克语","se":"萨米语（北部）","sm":"萨摩亚语","sr":"塞尔维亚语","kri":"塞拉利昂克里奥尔语","crs":"塞舌尔克里奥尔语","sg":"桑戈语","sat":"桑塔利语（奥尔奇基文）","sat-Latn":"桑塔利语（拉丁文）","si":"僧伽罗语","eo":"世界语","sk":"斯洛伐克语","sl":"斯洛文尼亚语","ss":"斯瓦特语","sw":"斯瓦希里语","gd":"苏格兰盖尔语","sus":"苏苏语","ceb":"宿务语","so":"索马里语","tg":"塔吉克语","ber-Latn":"塔马齐格特语","ber":"塔马齐格特语（提非纳文）","ty":"塔希提语","te":"泰卢固语","ta":"泰米尔语","th":"泰语","to":"汤加语","ti":"提格里尼亚语","tcy":"图鲁语","tum":"图姆布卡语","tyv":"图瓦语","tr":"土耳其语","tk":"土库曼语","war":"瓦瑞语","mak":"望加锡语","cy":"威尔士语","vec":"威尼斯语","ug":"维吾尔语","ve":"文达语","wo":"沃洛夫语","udm":"乌德穆尔特语","ur":"乌尔都语","uk":"乌克兰语","uz":"乌兹别克语","es":"西班牙语","szl":"西里西亚语","scn":"西西里语","iw":"希伯来语","el":"希腊语","hil":"希利盖农语","haw":"夏威夷语","sd":"信德语","hu":"匈牙利语","sn":"修纳语","su":"巽他语","jam":"牙买加土语","sah":"雅库特语","hy":"亚美尼亚语","ace":"亚齐语","iba":"伊班语","ig":"伊博语","ilo":"伊洛卡诺语","it":"意大利语","yi":"意第绪语","iu-Latn":"因纽特语（拉丁文）","iu":"因纽特语（音节文字）","hi":"印地语","id":"印尼语","en":"英语","yua":"尤卡坦玛雅语","yo":"约鲁巴语","yue":"粤语","vi":"越南语","jw":"爪哇语","zh-TW":"中文（繁体）","zh-CN":"中文（简体）","dz":"宗卡语","zu":"祖鲁语"},"en":{"ab":"Abkhaz","ace":"Acehnese","ach":"Acholi","aa":"Afar","af":"Afrikaans","sq":"Albanian","alz":"Alur","am":"Amharic","ar":"Arabic","hy":"Armenian","as":"Assamese","av":"Avar","awa":"Awadhi","ay":"Aymara","az":"Azerbaijani","ban":"Balinese","bal":"Baluchi","bm":"Bambara","bci":"Baoulé","ba":"Bashkir","eu":"Basque","btx":"Batak Karo","bts":"Batak Simalungun","bbc":"Batak Toba","be":"Belarusian","bem":"Bemba","bn":"Bengali","bew":"Betawi","bho":"Bhojpuri","bik":"Bikol","bs":"Bosnian","br":"Breton","bg":"Bulgarian","bua":"Buryat","yue":"Cantonese","ca":"Catalan","ceb":"Cebuano","ch":"Chamorro","ce":"Chechen","ny":"Chichewa","zh-CN":"Chinese (Simplified)","zh-TW":"Chinese (Traditional)","chk":"Chuukese","cv":"Chuvash","co":"Corsican","crh":"Crimean Tatar (Cyrillic)","crh-Latn":"Crimean Tatar (Latin)","hr":"Croatian","cs":"Czech","da":"Danish","fa-AF":"Dari","dv":"Dhivehi","din":"Dinka","doi":"Dogri","dov":"Dombe","nl":"Dutch","dyu":"Dyula","dz":"Dzongkha","en":"English","eo":"Esperanto","et":"Estonian","ee":"Ewe","fo":"Faroese","fj":"Fijian","tl":"Filipino","fi":"Finnish","fon":"Fon","fr":"French","fr-CA":"French (Canada)","fy":"Frisian","fur":"Friulian","ff":"Fulani","gaa":"Ga","gl":"Galician","ka":"Georgian","de":"German","el":"Greek","gn":"Guarani","gu":"Gujarati","ht":"Haitian Creole","cnh":"Hakha Chin","ha":"Hausa","haw":"Hawaiian","iw":"Hebrew","hil":"Hiligaynon","hi":"Hindi","hmn":"Hmong","hu":"Hungarian","hrx":"Hunsrik","iba":"Iban","is":"Icelandic","ig":"Igbo","ilo":"Ilocano","id":"Indonesian","iu-Latn":"Inuktut (Latin)","iu":"Inuktut (Syllabics)","ga":"Irish","it":"Italian","jam":"Jamaican Patois","ja":"Japanese","jw":"Javanese","kac":"Jingpo","kl":"Kalaallisut","kn":"Kannada","kr":"Kanuri","pam":"Kapampangan","kk":"Kazakh","kha":"Khasi","km":"Khmer","cgg":"Kiga","kg":"Kikongo","rw":"Kinyarwanda","ktu":"Kituba","trp":"Kokborok","kv":"Komi","gom":"Konkani","ko":"Korean","kri":"Krio","ku":"Kurdish (Kurmanji)","ckb":"Kurdish (Sorani)","ky":"Kyrgyz","lo":"Lao","ltg":"Latgalian","la":"Latin","lv":"Latvian","lij":"Ligurian","li":"Limburgish","ln":"Lingala","lt":"Lithuanian","lmo":"Lombard","lg":"Luganda","luo":"Luo","lb":"Luxembourgish","mk":"Macedonian","mad":"Madurese","mai":"Maithili","mak":"Makassar","mg":"Malagasy","ms":"Malay","ms-Arab":"Malay (Jawi)","ml":"Malayalam","mt":"Maltese","mam":"Mam","gv":"Manx","mi":"Maori","mr":"Marathi","mh":"Marshallese","mwr":"Marwadi","mfe":"Mauritian Creole","chm":"Meadow Mari","mni-Mtei":"Meiteilon (Manipuri)","min":"Minang","lus":"Mizo","mn":"Mongolian","my":"Myanmar (Burmese)","nhe":"Nahuatl (Eastern Huasteca)","ndc-ZW":"Ndau","nr":"Ndebele (South)","new":"Nepalbhasa (Newari)","ne":"Nepali","bm-Nkoo":"NKo","no":"Norwegian","nus":"Nuer","oc":"Occitan","or":"Odia (Oriya)","om":"Oromo","os":"Ossetian","pag":"Pangasinan","pap":"Papiamento","ps":"Pashto","fa":"Persian","pl":"Polish","pt":"Portuguese (Brazil)","pt-PT":"Portuguese (Portugal)","pa":"Punjabi (Gurmukhi)","pa-Arab":"Punjabi (Shahmukhi)","qu":"Quechua","kek":"Qʼeqchiʼ","rom":"Romani","ro":"Romanian","rn":"Rundi","ru":"Russian","se":"Sami (North)","sm":"Samoan","sg":"Sango","sa":"Sanskrit","sat-Latn":"Santali (Latin)","sat":"Santali (Ol Chiki)","gd":"Scots Gaelic","nso":"Sepedi","sr":"Serbian","st":"Sesotho","crs":"Seychellois Creole","shn":"Shan","sn":"Shona","scn":"Sicilian","szl":"Silesian","sd":"Sindhi","si":"Sinhala","sk":"Slovak","sl":"Slovenian","so":"Somali","es":"Spanish","su":"Sundanese","sus":"Susu","sw":"Swahili","ss":"Swati","sv":"Swedish","ty":"Tahitian","tg":"Tajik","ber-Latn":"Tamazight","ber":"Tamazight (Tifinagh)","ta":"Tamil","tt":"Tatar","te":"Telugu","tet":"Tetum","th":"Thai","bo":"Tibetan","ti":"Tigrinya","tiv":"Tiv","tpi":"Tok Pisin","to":"Tongan","lua":"Tshiluba","ts":"Tsonga","tn":"Tswana","tcy":"Tulu","tum":"Tumbuka","tr":"Turkish","tk":"Turkmen","tyv":"Tuvan","ak":"Twi","udm":"Udmurt","uk":"Ukrainian","ur":"Urdu","ug":"Uyghur","uz":"Uzbek","ve":"Venda","vec":"Venetian","vi":"Vietnamese","war":"Waray","cy":"Welsh","wo":"Wolof","xh":"Xhosa","sah":"Yakut","yi":"Yiddish","yo":"Yoruba","yua":"Yucatec Maya","zap":"Zapotec","zu":"Zulu"}};
 
@@ -4400,7 +4400,7 @@ ue : field.textContent;
   }
 
   /**
-   * 常用语言置顶顺序（与 WATransChat i18n-runtime.js 一致）：
+   * 常用语言置顶顺序（与 Falo i18n-runtime.js 一致）：
    * 英语、西班牙语、法语、德语、阿拉伯语、俄语、葡萄牙语、日语、韩语、印地语、
    * 土耳其语、泰语、意大利语、荷兰语、越南语、印尼语/马来语、波兰语、孟加拉语、乌尔都语。
    */
@@ -4409,7 +4409,7 @@ ue : field.textContent;
     "tr", "th", "it", "nl", "vi", "id", "ms", "ms-Arab", "pl", "bn", "ur"
   ];
 
-  /** Same contract as WATransChatI18n.listTranslateLanguages */
+  /** Same contract as FaloI18n.listTranslateLanguages */
   function listTranslateLanguages(uiLang, extras) {
     extras = extras || {};
     var ui = normalizeUi(uiLang);
@@ -4501,11 +4501,11 @@ ue : field.textContent;
   /** Minimal CSS for WhatsApp page popup (settings-ui has its own style.css). */
   function ensureLangSearchStyles() {
     if (typeof document === "undefined") return;
-    if (document.getElementById("whatsnow-lang-search-styles")) return;
+    if (document.getElementById("falo-lang-search-styles")) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement("style");
-    s.id = "whatsnow-lang-search-styles";
+    s.id = "falo-lang-search-styles";
     s.textContent =
       "select.lang-search-select-native{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0;pointer-events:none}" +
       ".lang-search-select{position:relative;width:100%}" +
@@ -4518,7 +4518,7 @@ ue : field.textContent;
     parent.appendChild(s);
   }
 
-  /** WATransChat options.js ensureLangSearchSelect — searchable language picker */
+  /** Falo options.js ensureLangSearchSelect — searchable language picker */
   function syncSearchInput(wrap) {
     if (!wrap) return;
     var select = wrap.querySelector("select");
@@ -4612,8 +4612,8 @@ ue : field.textContent;
   }
 
   function ensureOutsideClose() {
-    if (global.__whatsnowLangSearchOutsideBound) return;
-    global.__whatsnowLangSearchOutsideBound = true;
+    if (global.__faloLangSearchOutsideBound) return;
+    global.__faloLangSearchOutsideBound = true;
     document.addEventListener(
       "pointerdown",
       function (ev) {
@@ -4716,7 +4716,7 @@ ue : field.textContent;
     return wrap;
   }
 
-  global.__whatsnowLangList = {
+  global.__faloLangList = {
     langNames: LANG_NAMES,
     listTranslateLanguages: listTranslateLanguages,
     formatLanguageDisplayName: formatLanguageDisplayName,
@@ -4728,10 +4728,10 @@ ue : field.textContent;
 })(typeof window !== "undefined" ? window : globalThis);
  ��n@   �
 // ===== run @0x6ED768 (10617 bytes) =====
-/*! WATransChat translation engines — 1:1 from WATransChat options.js / content-customer-lang.js */
+/*! Falo translation engines — 1:1 from Falo options.js / content-customer-lang.js */
 (function (global) {
   "use strict";
-  if (global.__whatsnowEngineList) return;
+  if (global.__faloEngineList) return;
 
   // options.js GLOBAL_INPUT_ENGINES (客户语言 / 全局输入框)
   var GLOBAL_INPUT_ENGINES = [
@@ -4830,10 +4830,10 @@ ue : field.textContent;
 
   function isProMember() {
     try {
-      if (window.__whatsnowCan) {
-        if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+      if (window.__faloCan) {
+        if (window.__faloCan("pro_engines") || window.__faloCan("ai_proxy")) return true;
       }
-      var c = window.__whatsnowCaps;
+      var c = window.__faloCaps;
       if (c && (c.isPro || c.isPremium)) return true;
     } catch (_) {}
     return false;
@@ -4880,10 +4880,10 @@ ue : field.textContent;
     try {
       if (typeof opts.uiLang === "function") return String(opts.uiLang() || "zh");
       if (opts.uiLang) return String(opts.uiLang);
-      var i18n = global.__whatsnowPageI18n;
+      var i18n = global.__faloPageI18n;
       if (i18n && i18n.getUiLang) return String(i18n.getUiLang() || "zh");
-      if (global.WhatsNowI18n && global.WhatsNowI18n.getLang) {
-        return String(global.WhatsNowI18n.getLang() || "zh");
+      if (global.FaloI18n && global.FaloI18n.getLang) {
+        return String(global.FaloI18n.getLang() || "zh");
       }
     } catch (_) {}
     return "zh";
@@ -4895,7 +4895,7 @@ ue : field.textContent;
 
   function readDefaultKeyConfig() {
     try {
-      var cfg = global.__whatsnowTranslateCfg || global.__whatsnowTranslateBoot || {};
+      var cfg = global.__faloTranslateCfg || global.__faloTranslateBoot || {};
       return {
         deeplApiKey: cfg.deeplApiKey || "",
         chatgptApiKey: cfg.chatgptApiKey || "",
@@ -4921,7 +4921,7 @@ ue : field.textContent;
 
   function pageT(uiLang, key, zhFb, enFb) {
     try {
-      var i18n = global.__whatsnowPageI18n;
+      var i18n = global.__faloPageI18n;
       if (i18n && i18n.t) {
         var fb = String(uiLang || "zh").toLowerCase().indexOf("en") === 0 ? enFb : zhFb;
         return i18n.t(uiLang, key, fb);
@@ -4930,7 +4930,7 @@ ue : field.textContent;
     return String(uiLang || "zh").toLowerCase().indexOf("en") === 0 ? enFb : zhFb;
   }
 
-  /** WATransChat / AI Suggest parity: block keyed engines until API fields are filled. */
+  /** Falo / AI Suggest parity: block keyed engines until API fields are filled. */
   function checkKeyedEngineReady(engine, keyCfg, uiLang) {
     var id = String(engine || "");
     var cfg = keyCfg || {};
@@ -5020,7 +5020,7 @@ ue : field.textContent;
                 "This engine requires Pro membership. Please upgrade."
               );
             }
-            try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (typeof window.appAlert === "function") window.appAlert(msg); else alert(msg); } catch (_) {}
+            try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (typeof window.appAlert === "function") window.appAlert(msg); else alert(msg); } catch (_) {}
             var fallback = previous;
             if (isProEngine(fallback, kind) && !pro) fallback = "google_web";
             selectEl.value = fallback;
@@ -5030,8 +5030,8 @@ ue : field.textContent;
           if (!keyReady.ok) {
             try {
               var keyMsg = keyReady.error || "Please configure API Key in settings.";
-              if (window.__whatsnowNotice) window.__whatsnowNotice(keyMsg);
-              else if (window.__whatsnowAlert) window.__whatsnowAlert(keyMsg);
+              if (window.__faloNotice) window.__faloNotice(keyMsg);
+              else if (window.__faloAlert) window.__faloAlert(keyMsg);
               else if (typeof window.appAlert === "function") window.appAlert(keyMsg);
               else alert(keyMsg);
             } catch (_) {}
@@ -5052,7 +5052,7 @@ ue : field.textContent;
     });
   }
 
-  global.__whatsnowEngineList = {
+  global.__faloEngineList = {
     GLOBAL_INPUT_ENGINES: GLOBAL_INPUT_ENGINES,
     CHAT_HISTORY_ENGINES: CHAT_HISTORY_ENGINES,
     PRO_ENGINES_GLOBAL: PRO_ENGINES_GLOBAL,
@@ -5069,22 +5069,22 @@ ue : field.textContent;
 })(typeof window !== "undefined" ? window : globalThis);
   h�n@   n
 // ===== run @0x6F00E8 (132960 bytes) =====
-/*! WATransChat WATransChat UI parity — customer-lang / remark / inline-译 / phrases.
- * Selectors + icons aligned with WATransChat4.89 content-*.js (no chrome.*).
+/*! Falo Falo UI parity — customer-lang / remark / inline-译 / phrases.
+ * Selectors + icons aligned with Falo4.89 content-*.js (no chrome.*).
  */
 (function () {
-  if (window.__whatsnowWaUiInstalled) return;
-  window.__whatsnowWaUiInstalled = true;
+  if (window.__faloWaUiInstalled) return;
+  window.__faloWaUiInstalled = true;
 
   var CUSTOMER_LANG_SVG = "<svg class=\"icon\" viewBox=\"0 0 1024 1024\" version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" width=\"25\" height=\"25\" aria-hidden=\"true\">\n        <path d=\"M677.379 646.415c-13.623 2.215-25.594 11.016-31.983 23.246-16.051 30.722 7.067 65.506 39.454 65.506 25.138 0 44.687-20.944 44.687-44.68 0-26.046-23.535-48.731-52.158-44.072z\" fill=\"currentColor\"></path>\n        <path d=\"M858.553 101.413H165.447c-35.295 0-63.907 28.612-63.907 63.907v693.36c0 35.295 28.612 63.907 63.907 63.907h693.106c35.295 0 63.907-28.612 63.907-63.907V165.32c0-35.295-28.612-63.907-63.907-63.907zM568.926 695.828l-29.348 18.867 6.123 10.33H231.884c-0.103-1.462-0.206-2.607-0.206-3.752 0-8.231-0.107-16.462 0-24.693 0-1.876 0.414-3.855 1.041-5.521 3.542-9.272 9.272-17.187 16.149-24.273 8.544-8.754 18.545-15.731 29.172-21.775 18.124-10.21 37.403-17.293 57.299-22.92 23.024-6.565 46.362-11.148 70.113-13.858 9.899-1.144 18.024-10.21 18.338-20.627 0.207-4.69-0.938-9.272-2.5-13.648-2.086-5.731-5.107-11.041-8.441-16.145-1.145-1.775-3.021-3.027-3.125-5.417 0-0.417-0.731-0.834-1.251-1.251-21.248-17.19-36.148-39.176-47.296-63.758-1.876-4.272-3.541-8.547-5.417-12.92-0.313-1.045-0.731-2.082-1.251-3.544-7.918 4.9-13.752 4.586-20.628-1.148-2.19-1.87-4.272-3.956-5.835-6.246-10.209-15.003-13.748-31.568-10-49.382 0.731-3.651 2.497-7.293 4.482-10.417 3.328-5.21 8.225-7.816 14.686-6.565 0.311 0.104 0.728 0 1.042 0 0.104 0 0.207-0.104 0.625-0.104v-2.71c-0.728-12.5-1.042-25.003-0.104-37.506 1.355-18.645 4.69-36.879 11.772-54.279 14.482-35.63 40.32-58.965 76.885-70.53 14.275-4.583 28.965-6.773 43.968-7.293 19.793-0.624 39.379 0.731 58.547 5.835 20.11 5.314 38.13 14.379 52.82 29.272 13.442 13.544 22.089 29.799 27.814 47.719 4.693 14.793 7.293 29.897 7.923 45.32 0.521 11.458 0.207 22.917 0.308 34.273v1.982c0.941 0 1.776 0.104 2.503 0 5.211-0.627 9.269 1.352 12.604 5.311 2.713 3.23 4.485 7.086 5.314 11.254 3.855 18.334 0.42 35.314-10.414 50.631-2.192 3.021-5.21 5.624-8.338 7.711-4.065 2.917-8.748 3.541-13.645 1.458-0.418-0.21-0.938-0.314-1.672-0.52a135.578 135.578 0 0 0-1.662 4.686c-7.503 21.151-17.714 40.947-31.776 58.551-5.834 7.293-12.296 13.961-19.381 20.107-2.287 1.979-4.683 3.752-6.039 6.668-1.876 3.959-4.793 7.396-6.879 11.252-3.018 5.314-4.997 11.045-5.831 17.189-1.355 10.207 3.959 19.69 13.441 23.751 1.873 0.834 4.166 0.938 6.246 1.148a587.05 587.05 0 0 1 17.666 2.55l-31.932 53.883 30.863 18.51c1.433 0.86 1.75 1.051 2.34 1.961 1.741 3.902 0.443 8.18-3.296 10.583z m208.086 15.602c4.188 6.979 9.774 12.565 15.358 13.962l-22.337 37.701c-20.947-11.17-47.478-5.587-58.648 15.361-4.191 6.982-5.583 13.962-5.583 20.944h-43.29c0-22.34-18.146-41.888-41.888-41.888-6.98 0-15.358 1.396-20.944 5.587l-22.343-37.704c19.548-12.566 26.531-37.698 15.361-58.645-4.188-6.982-8.379-11.173-15.361-15.36l22.343-37.698c20.944 11.17 47.475 5.583 58.648-15.361 4.185-5.587 5.583-13.964 5.583-20.947h43.284c0 23.739 18.153 43.288 41.891 43.288 6.983 0 15.361-1.396 20.947-5.587l22.337 37.704c-19.549 12.564-26.528 37.696-15.358 58.643z\" fill=\"currentColor\"></path>\n      </svg>";
   var PHRASES_GEAR_SVG = "<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path fill=\"currentColor\" d=\"M10.82 22c-.45 0-.83-.15-1.16-.45a1.9 1.9 0 0 1-.59-1.1l-.22-1.65a3.79 3.79 0 0 1-.61-.3c-.2-.12-.38-.24-.57-.38l-1.55.65c-.41.19-.83.2-1.25.05a1.84 1.84 0 0 1-.97-.8l-1.18-2.04c-.23-.39-.3-.8-.2-1.23.1-.43.33-.8.68-1.07l1.32-1a2.39 2.39 0 0 1-.02-.34v-.68c0-.1 0-.22.02-.34l-1.32-1a1.9 1.9 0 0 1-.68-1.07c-.1-.43-.03-.84.2-1.22L3.9 5.98c.23-.39.56-.66.97-.8.42-.15.84-.14 1.25.04l1.55.66a6.82 6.82 0 0 1 1.18-.68l.22-1.65c.07-.43.27-.8.6-1.1.32-.3.7-.45 1.15-.45h2.36c.45 0 .83.15 1.16.45.32.3.52.67.59 1.1l.22 1.65a5.5 5.5 0 0 1 1.17.68l1.55-.66c.42-.18.84-.2 1.25-.04.42.15.75.41.98.8l1.17 2.04c.24.39.3.8.2 1.23-.1.43-.32.8-.67 1.07l-1.32 1 .02.34v.68c0 .1-.02.22-.05.34l1.32 1c.36.28.58.64.68 1.07.1.43.03.84-.2 1.22l-1.2 2.05c-.23.39-.56.66-.98.8-.41.16-.83.14-1.25-.05l-1.5-.64a6.84 6.84 0 0 1-1.17.67l-.22 1.65c-.07.43-.27.8-.6 1.1-.32.3-.7.45-1.15.45h-2.36Zm.18-2h1.97l.35-2.65a5.6 5.6 0 0 0 2.65-1.53l2.48 1.03.98-1.7-2.16-1.63c.09-.23.15-.47.18-.73a6.15 6.15 0 0 0 0-1.58c-.03-.26-.1-.5-.18-.74l2.16-1.62-.98-1.7-2.47 1.05a5.56 5.56 0 0 0-2.66-1.55L13 4h-1.97l-.35 2.65a5.6 5.6 0 0 0-2.66 1.53L5.55 7.15l-.98 1.7 2.15 1.6a6.06 6.06 0 0 0 0 3.08l-2.15 1.62.98 1.7 2.47-1.05a5.55 5.55 0 0 0 2.66 1.55L11 20Z\"/><path fill=\"currentColor\" fill-rule=\"evenodd\" d=\"M12 13.5c.44 0 .75-.13 1.06-.44.3-.3.44-.62.44-1.06 0-.44-.13-.75-.44-1.06-.3-.3-.62-.44-1.06-.44-.46 0-.78.14-1.06.43-.3.3-.44.63-.44 1.07 0 .44.13.76.44 1.07.28.3.6.43 1.06.43Zm2.47.97A3.37 3.37 0 0 1 12 15.5c-.98 0-1.81-.34-2.49-1.03A3.4 3.4 0 0 1 8.5 12c0-.97.34-1.8 1.01-2.47A3.36 3.36 0 0 1 12 8.5c.97 0 1.8.34 2.47 1.03.69.68 1.03 1.5 1.03 2.47 0 .97-.34 1.8-1.03 2.47Z\" clip-rule=\"evenodd\"/></svg>";
 
   function cfg() {
-    return window.__whatsnowTranslateCfg || {};
+    return window.__faloTranslateCfg || {};
   }
   function getUiLang() {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.getUiLang) return i18n.getUiLang();
     } catch (_) {}
     try {
@@ -5097,15 +5097,15 @@ ue : field.textContent;
   }
   function tUi(key, fbZh) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.t) return i18n.t(getUiLang(), key, fbZh);
     } catch (_) {}
     return fbZh;
   }
   function canCore() {
-    // WATransChat parity: logout / expired → no core features.
+    // Falo parity: logout / expired → no core features.
     try {
-      return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+      return !!(window.__faloCan && window.__faloCan("core_translate"));
     } catch (_) {}
     return false;
   }
@@ -5174,7 +5174,7 @@ ue : field.textContent;
   // ---------- Customer language (content-customer-lang; per-chat map, no sticky global) ----------
   function helpers() {
     try {
-      return window.__whatsnowTranslateHelpers || {};
+      return window.__faloTranslateHelpers || {};
     } catch (_) {
       return {};
     }
@@ -5215,9 +5215,9 @@ ue : field.textContent;
       ";color:" +
       m.inputFg +
       ";box-sizing:border-box;";
-    // 1:1 WATransChat listTranslateLanguages({ includeAuto: true })
+    // 1:1 Falo listTranslateLanguages({ includeAuto: true })
     (function fillCustomerLangOptions() {
-      var api = window.__whatsnowLangList;
+      var api = window.__faloLangList;
       var ui = getUiLang();
       var opts = [];
       if (api && typeof api.listTranslateLanguages === "function") {
@@ -5288,8 +5288,8 @@ ue : field.textContent;
         }
       } catch (_) {}
       try {
-        if (typeof window.__whatsnowRefreshComposerHint === "function") {
-          window.__whatsnowRefreshComposerHint();
+        if (typeof window.__faloRefreshComposerHint === "function") {
+          window.__faloRefreshComposerHint();
         }
       } catch (_) {}
     }
@@ -5297,7 +5297,7 @@ ue : field.textContent;
     var engSel = document.createElement("select");
     engSel.id = "translationEngineSelect";
     engSel.style.cssText = langSel.style.cssText;
-    var engineApi = window.__whatsnowEngineList;
+    var engineApi = window.__faloEngineList;
     var savedEngine = loadSessionEnginePref();
     var effectiveEngine = savedEngine;
     if (engineApi && typeof engineApi.fillEngineSelect === "function") {
@@ -5361,14 +5361,14 @@ ue : field.textContent;
         ];
         if (
           proOnly.indexOf(next) >= 0 &&
-          window.__whatsnowCan &&
-          !window.__whatsnowCan("pro_engines") &&
-          !window.__whatsnowCan("ai_proxy")
+          window.__faloCan &&
+          !window.__faloCan("pro_engines") &&
+          !window.__faloCan("ai_proxy")
         ) {
           try {
             var proMsg = tUi("proEngineOnly", "此接口功能仅专业版会员可用，请升级到专业版会员。");
-            if (window.__whatsnowNotice) window.__whatsnowNotice(proMsg);
-            else if (window.__whatsnowAlert) window.__whatsnowAlert(proMsg);
+            if (window.__faloNotice) window.__faloNotice(proMsg);
+            else if (window.__faloAlert) window.__faloAlert(proMsg);
             else alert(proMsg);
           } catch (_) {}
           engSel.value = effectiveEngine || "google_web";
@@ -5381,7 +5381,7 @@ ue : field.textContent;
     s.appendChild(langSel);
     // Searchable language picker (content-customer-lang / options lang-search).
     try {
-      var langApi = window.__whatsnowLangList;
+      var langApi = window.__faloLangList;
       if (langApi && typeof langApi.enhanceSelect === "function") {
         langApi.enhanceSelect(langSel, {
           uiLang: getUiLang(),
@@ -5438,7 +5438,7 @@ ue : field.textContent;
         return false;
       }
       if (cfg().showFollowup === false) return false;
-      if (window.__whatsnowCan && !window.__whatsnowCan("followup_todos") && !window.__whatsnowCan("core_translate")) {
+      if (window.__faloCan && !window.__faloCan("followup_todos") && !window.__faloCan("core_translate")) {
         return false;
       }
       return true;
@@ -5450,7 +5450,7 @@ ue : field.textContent;
   function followupToolbarLabel() {
     var label = "客户待办";
     try {
-      var api = globalThis.WATransChatI18n;
+      var api = globalThis.FaloI18n;
       if (api && typeof api.pickPack === "function") {
         var code = getUiLang() === "en" ? "en" : "zh";
         var pack = api.pickPack("followup", code) || {};
@@ -5518,7 +5518,7 @@ ue : field.textContent;
       // Scrub follow-up chrome only when the feature is off.
       if (!wantFollowup) {
         try {
-          e.querySelectorAll(".wa-followup-todo-item, .wa-followup-todo-btn, .whatsnow-followup-btn").forEach(function (n) {
+          e.querySelectorAll(".wa-followup-todo-item, .wa-followup-todo-btn, .falo-followup-btn").forEach(function (n) {
             try {
               var host = n.closest && n.closest(".wa-followup-todo-item");
               (host || n).remove();
@@ -5728,7 +5728,7 @@ ue : field.textContent;
 
   function isTranslateButtonSettingOn() {
     var c = cfg();
-    // Extension enableTranslateButton ≡ inlineBtn; compose is WATransChat's
+    // Extension enableTranslateButton ≡ inlineBtn; compose is Falo's
     // "输入框翻译按钮" label — treat either as show-switch.
     return !!(c.inlineBtn || c.compose);
   }
@@ -5831,8 +5831,8 @@ ue : field.textContent;
     document.querySelectorAll(".wa-inline-translate-btn").forEach(updateInlineTranslateButtonVisual);
     // Extension: 开/关 only sets the flag — NOT autoSendInputTranslation.
     try {
-      if (typeof window.__whatsnowRefreshComposerHint === "function") {
-        window.__whatsnowRefreshComposerHint();
+      if (typeof window.__faloRefreshComposerHint === "function") {
+        window.__faloRefreshComposerHint();
       }
     } catch (_) {}
   }
@@ -5912,17 +5912,17 @@ ue : field.textContent;
       localStorage.removeItem(INLINE_LS_KEY);
     } catch (_) {}
     try {
-      if (typeof window.__whatsnowRefreshComposerHint === "function") {
-        window.__whatsnowRefreshComposerHint();
+      if (typeof window.__faloRefreshComposerHint === "function") {
+        window.__faloRefreshComposerHint();
       }
     } catch (_) {}
   }
 
   function createInlineTranslateButtonForInput() {
     try {
-      // Remove legacy absolute 译 button from older WATransChat builds
+      // Remove legacy absolute 译 button from older Falo builds
       try {
-        var legacy = document.getElementById("whatsnow-tr-btn");
+        var legacy = document.getElementById("falo-tr-btn");
         if (legacy) legacy.remove();
       } catch (_) {}
 
@@ -5993,9 +5993,9 @@ ue : field.textContent;
     }
     tryAddButton();
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       if (translateButtonObserver) {
         try {
@@ -6054,9 +6054,9 @@ ue : field.textContent;
   }
 
   try {
-    window.__whatsnowSetInlineTranslateDisabled = setInlineTranslateDisabled;
-    window.__whatsnowTranslateHelpers = Object.assign(
-      window.__whatsnowTranslateHelpers || {},
+    window.__faloSetInlineTranslateDisabled = setInlineTranslateDisabled;
+    window.__faloTranslateHelpers = Object.assign(
+      window.__faloTranslateHelpers || {},
       {
         setInlineTranslateDisabled: setInlineTranslateDisabled,
         createInlineTranslateButtonForInput: createInlineTranslateButtonForInput,
@@ -6069,7 +6069,7 @@ ue : field.textContent;
   // ---------- Quick remark (content-quick-remark.js 1:1) ----------
   /**
    * Locked header stack: title → country → remark → subtitle.
-   * Shared with watrans-country-fx so same-frame inserts never leave remark above country.
+   * Shared with falo-country-fx so same-frame inserts never leave remark above country.
    */
   function stabilizeConversationHeaderStack(infoHeader) {
     if (!infoHeader) return;
@@ -6095,7 +6095,7 @@ ue : field.textContent;
     } catch (_) {}
   }
   try {
-    window.__whatsnowStabilizeHeaderStack = stabilizeConversationHeaderStack;
+    window.__faloStabilizeHeaderStack = stabilizeConversationHeaderStack;
   } catch (_) {}
 
   var STORAGE_KEY = "chatQuickRemarks";
@@ -6135,11 +6135,11 @@ ue : field.textContent;
   }
 
   function ensureRemarkStyles() {
-    if (document.getElementById("whatsnow-remark-styles")) return;
+    if (document.getElementById("falo-remark-styles")) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement("style");
-    s.id = "whatsnow-remark-styles";
+    s.id = "falo-remark-styles";
     s.textContent =
       "/* ========================= Quick Remark (Look World \u540c\u6b3e\uff1a\u540d\u5b57\u4e0b\u65b9\u53e0\u5c42) ========================= */\n.wa-quick-remark-list {\n  position: relative;\n  display: block;\n  box-sizing: border-box;\n  width: 100%;\n  height: 40px;\n  font-size: 16px;\n  white-space: nowrap;\n  overflow: visible;\n  pointer-events: none;\n  z-index: 2;\n}\n\n.wa-quick-remark-text {\n  position: absolute;\n  top: 24px;\n  left: 0;\n  right: 0;\n  z-index: 2;\n  box-sizing: border-box;\n  display: block;\n  width: 100%;\n  max-width: 100%;\n  height: 14px;\n  margin: 0;\n  padding: 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 400;\n  color: #008069;\n  pointer-events: none;\n}\n\nheader[data-testid=\"conversation-header\"]:has(.wa-quick-remark-header),\nheader[data-testid=\"conversation-header\"]:has(.wa-native-note-row) {\n  height: auto !important;\n  min-height: var(--x20strc, auto);\n  overflow: visible;\n}\n\n.wa-native-note-row {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  margin-top: 2px;\n  pointer-events: none;\n}\n\n.wa-native-note-label {\n  flex: 0 0 auto;\n  font-size: 12px;\n  line-height: 18px;\n  color: #667781;\n  opacity: 0.9;\n}\n\n.wa-native-note-text {\n  flex: 1 1 auto;\n  min-width: 0;\n  max-width: 360px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-size: 12px;\n  line-height: 18px;\n  font-weight: 500;\n  color: #008069;\n}\n\n.dark .wa-native-note-label,\nbody.dark .wa-native-note-label,\nhtml[data-color-mode=\"dark\"] .wa-native-note-label {\n  color: #8696a0;\n}\n\n.dark .wa-native-note-text,\nbody.dark .wa-native-note-text,\nhtml[data-color-mode=\"dark\"] .wa-native-note-text {\n  color: #00a884;\n}\n\n.wa-quick-remark-header {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  margin-top: 4px;\n  pointer-events: auto;\n}\n\n.wa-quick-remark-ipt {\n  position: absolute;\n  top: 24px;\n  left: 0;\n  right: 0;\n  z-index: 2;\n  box-sizing: border-box;\n  display: block;\n  width: 100%;\n  max-width: 100%;\n  height: 14px;\n  margin: 0;\n  padding: 0;\n  border: none;\n  border-radius: 0;\n  outline: none;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 400;\n  color: #008069;\n  background: transparent;\n}\n\n.wa-quick-remark-ipt--header {\n  position: static;\n  top: auto;\n  left: auto;\n  right: auto;\n  z-index: auto;\n  width: 100%;\n  max-width: 320px;\n  height: 18px;\n  font-size: 12px;\n  line-height: 18px;\n  color: #008069;\n  background: transparent;\n}\n\n.wa-quick-remark-ipt:hover,\n.wa-quick-remark-ipt:focus {\n  background: transparent;\n  border: none;\n  color: #008069;\n}\n\n.wa-quick-remark-ipt::placeholder {\n  opacity: 0.55;\n}\n\n.dark .wa-quick-remark-text,\nbody.dark .wa-quick-remark-text,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-text {\n  color: #00a884;\n}\n\n.dark .wa-quick-remark-ipt,\n.dark .wa-quick-remark-ipt--header,\n.dark .wa-quick-remark-ipt:hover,\n.dark .wa-quick-remark-ipt:focus,\nbody.dark .wa-quick-remark-ipt,\nbody.dark .wa-quick-remark-ipt--header,\nbody.dark .wa-quick-remark-ipt:hover,\nbody.dark .wa-quick-remark-ipt:focus,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt--header,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt:hover,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt:focus {\n  color: #00a884;\n}\n\n.dark .wa-quick-remark-ipt::placeholder,\nbody.dark .wa-quick-remark-ipt::placeholder,\nhtml[data-color-mode=\"dark\"] .wa-quick-remark-ipt::placeholder {\n  color: #8696a0;\n  opacity: 1;\n}\n/* ========================= End Quick Remark ========================= */";
     parent.appendChild(s);
@@ -6184,7 +6184,7 @@ ue : field.textContent;
   function callRemarkStore(action, payload, timeoutMs) {
     var ms = timeoutMs || 8000;
     try {
-      var api = window.__whatsnowStorePhone;
+      var api = window.__faloStorePhone;
       if (api) {
         if (action === "GET_ACTIVE_NOTE" && typeof api.getActiveContactNote === "function") {
           return Promise.resolve(api.getActiveContactNote())
@@ -6254,7 +6254,7 @@ ue : field.textContent;
         try {
           if (event.source !== window) return;
           var data = event.data;
-          if (!data || data.source !== "whatsnow" || data.dir !== "p2c") return;
+          if (!data || data.source !== "falo" || data.dir !== "p2c") return;
           if (String(data.type) !== "WAContactExport:result") return;
           var detail = data.payload;
           if (!detail || String(detail.reqId) !== reqId) return;
@@ -6265,7 +6265,7 @@ ue : field.textContent;
       try {
         window.postMessage(
           {
-            source: "whatsnow",
+            source: "falo",
             dir: "c2p",
             type: "WAContactExport:cmd",
             requestId: reqId,
@@ -6536,7 +6536,7 @@ ue : field.textContent;
       var val = input.value || "";
       if (val.length > MAX_LEN) {
         input.value = val.slice(0, MAX_LEN);
-        try { if (window.__whatsnowNotice) window.__whatsnowNotice(tooLongText()); else if (window.__whatsnowAlert) window.__whatsnowAlert(tooLongText()); else if (window.appAlert) window.appAlert(tooLongText()); else alert(tooLongText()); } catch (_) {}
+        try { if (window.__faloNotice) window.__faloNotice(tooLongText()); else if (window.__faloAlert) window.__faloAlert(tooLongText()); else if (window.appAlert) window.appAlert(tooLongText()); else alert(tooLongText()); } catch (_) {}
       }
       input.title = input.value || placeholderText();
       clearTimeout(saveTimer);
@@ -7075,7 +7075,7 @@ ue : field.textContent;
   }
 
   function setRemarkEnabled(next) {
-    // WhatsNow: driven by cfg().showRemark + canCore via isRemarkEnabled();
+    // Falo: driven by cfg().showRemark + canCore via isRemarkEnabled();
     // force refresh when settings event fires.
     if (!next) removeAllRemarkUi();
     else {
@@ -7175,19 +7175,19 @@ ue : field.textContent;
         if (event.source !== window) return;
         var data = event.data;
         if (!data || data.dir !== "p2c") return;
-        if (data.source !== "whatsnow" && data.source !== "wa-transchat") return;
+        if (data.source !== "falo" && data.source !== "wa-transchat") return;
         if (data.type === "WAContactExport:noteChanged") onNativeNoteChanged(data.payload);
       } catch (_) {}
     });
   } catch (_) {}
 
   try {
-    window.__whatsnowRefreshQuickRemarks = function () {
+    window.__faloRefreshQuickRemarks = function () {
       refreshActive();
       scheduleScan();
       if (preferNative !== false) refreshWaListLookup();
     };
-    window.__whatsnowGetChatQuickRemarksMap = function () {
+    window.__faloGetChatQuickRemarksMap = function () {
       return Object.assign({}, remarkMap);
     };
   } catch (_) {}
@@ -7264,9 +7264,9 @@ ue : field.textContent;
 
   function isPhraseLoggedIn() {
     try {
-      var caps = window.__whatsnowCaps;
+      var caps = window.__faloCaps;
       if (caps && caps.loggedIn === true) return true;
-      var m = window.__whatsnowMembership;
+      var m = window.__faloMembership;
       if (m && m.loggedIn === true) return true;
     } catch (_) {}
     return false;
@@ -7282,11 +7282,11 @@ ue : field.textContent;
   }
 
   function ensurePhraseStyles() {
-    if (document.getElementById("whatsnow-waqp-styles")) return;
+    if (document.getElementById("falo-waqp-styles")) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement("style");
-    s.id = "whatsnow-waqp-styles";
+    s.id = "falo-waqp-styles";
     s.textContent = "/* WA Quick Phrases */\n.waqp-phrase-bar {\n  position: relative;\n  padding: 2px 8px 0;\n  margin: 0;\n  border: none;\n}\n\n.waqp-phrase-bar--empty {\n  min-height: 28px;\n}\n\n.waqp-phrase-settings {\n  position: absolute;\n  top: 2px;\n  right: 22px;\n  z-index: 2;\n  width: 22px;\n  height: 22px;\n  padding: 0;\n  border: none;\n  border-radius: 6px;\n  background: transparent;\n  color: #54656f;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  opacity: 0.72;\n}\n\n.waqp-phrase-settings:hover {\n  opacity: 1;\n  background: rgba(11, 20, 26, 0.06);\n  color: #111b21;\n}\n\n.waqp-phrase-settings svg {\n  width: 15px;\n  height: 15px;\n  display: block;\n}\n\n.waqp-phrase-list {\n  margin: 0;\n  padding-left: 18px;\n  padding-right: 28px;\n  max-height: 160px;\n  overflow-y: auto;\n}\n\n.waqp-phrase-item {\n  font-size: 13px;\n  line-height: 1.45;\n  cursor: pointer;\n  white-space: nowrap;\n  text-overflow: ellipsis;\n  overflow: hidden;\n  width: 100%;\n  max-width: 100%;\n  display: block;\n}\n\n.waqp-phrase-item:hover {\n  background-color: rgba(69, 222, 69, 0.16);\n}\n\nbody.dark .waqp-phrase-settings,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-settings {\n  color: #aebac1;\n}\n\nbody.dark .waqp-phrase-settings:hover,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-settings:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\nbody.dark .waqp-phrase-item:hover,\nhtml[data-color-mode=\"dark\"] .waqp-phrase-item:hover {\n  background-color: rgba(69, 222, 69, 0.22);\n}\n\n/* WA Quick Phrases manage modal\uff1a\u6cbf\u7528\u539f\u5e03\u5c40\uff0c\u914d\u8272\u5bf9\u9f50 options \u5e38\u7528\u77ed\u8bed */\n.waqp-modal-overlay {\n  --wc-primary: #1c7ed6;\n  --wc-primary-hover: #1864ab;\n  --wc-danger: #c92a2a;\n  --wc-danger-border: #ffc9c9;\n  --wc-radius-sm: 8px;\n  --wc-btn-height: 34px;\n  --wc-text: #343a40;\n  --wc-muted: #868e96;\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(17, 24, 39, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.waqp-modal {\n  width: min(480px, 94vw);\n  max-height: min(82vh, 720px);\n  overflow: hidden;\n  background: #fff;\n  color: #333;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  box-sizing: border-box;\n}\n\n.waqp-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  flex-shrink: 0;\n}\n\n.waqp-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 600;\n  line-height: 1.3;\n  color: #555;\n}\n\n.waqp-modal-close {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  border: none;\n  border-radius: var(--wc-radius-sm);\n  background: transparent;\n  color: #868e96;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.waqp-modal-close:hover {\n  background: #f1f3f5;\n  color: #343a40;\n}\n\n.waqp-modal-toggle {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  margin: 0 16px 8px;\n  padding: 8px 10px;\n  border-radius: var(--wc-radius-sm);\n  background: #f8f9fa;\n  cursor: pointer;\n  user-select: none;\n  flex-shrink: 0;\n}\n\n.waqp-modal-toggle-input {\n  width: 16px;\n  height: 16px;\n  margin: 0;\n  flex-shrink: 0;\n  accent-color: var(--wc-primary);\n  cursor: pointer;\n}\n\n.waqp-modal-toggle-label {\n  font-size: 13px;\n  line-height: 1.35;\n  color: #333;\n}\n\n.waqp-modal-body {\n  flex: 1 1 auto;\n  overflow-y: auto;\n  padding: 4px 16px 8px;\n  min-height: 80px;\n}\n\n.waqp-modal-empty {\n  font-size: 13px;\n  color: var(--wc-muted);\n  padding: 12px 0;\n}\n\n.waqp-modal-item {\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  padding: 10px 0;\n  border-bottom: 1px solid #e9ecef;\n}\n\n.waqp-modal-item:last-child {\n  border-bottom: none;\n}\n\n.waqp-modal-item-text {\n  width: 100%;\n  min-height: 56px;\n  resize: vertical;\n  box-sizing: border-box;\n  padding: 8px 10px;\n  border: 1px solid #dee2e6;\n  border-radius: var(--wc-radius-sm);\n  font: inherit;\n  font-size: 14px;\n  line-height: 1.45;\n  color: #333;\n  background: #fff;\n}\n\n.waqp-modal-item-text:focus {\n  outline: none;\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.12);\n}\n\n.waqp-modal-item-actions {\n  display: flex;\n  align-items: center;\n  gap: 6px;\n  flex-wrap: wrap;\n}\n\n.waqp-modal-compose {\n  flex-shrink: 0;\n  padding: 10px 16px 16px;\n  border-top: 1px solid #e9ecef;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  background: #fafbfc;\n}\n\n.waqp-modal-new {\n  width: 100%;\n  min-height: 72px;\n  resize: vertical;\n  box-sizing: border-box;\n  padding: 12px;\n  border: 1px solid #dee2e6;\n  border-radius: var(--wc-radius-sm);\n  font: inherit;\n  font-size: 14px;\n  line-height: 1.45;\n  color: #333;\n  background: #fff;\n}\n\n.waqp-modal-new:focus {\n  outline: none;\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.12);\n}\n\n.waqp-modal-compose-actions {\n  display: flex;\n  justify-content: flex-end;\n}\n\n.waqp-modal .wc-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 6px;\n  height: var(--wc-btn-height);\n  padding: 0 14px;\n  margin: 0;\n  width: auto;\n  min-width: 0;\n  border-radius: var(--wc-radius-sm);\n  font-size: 13px;\n  font-weight: 500;\n  line-height: 1;\n  cursor: pointer;\n  border: 1px solid transparent;\n  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;\n  box-shadow: none;\n  transform: none;\n  box-sizing: border-box;\n}\n\n.waqp-modal .wc-btn:active:not(:disabled) {\n  transform: translateY(1px);\n}\n\n.waqp-modal .wc-btn:disabled {\n  opacity: 0.45;\n  cursor: not-allowed;\n}\n\n.waqp-modal .wc-btn svg {\n  flex-shrink: 0;\n}\n\n.waqp-modal .wc-btn-icon {\n  width: var(--wc-btn-height);\n  min-width: var(--wc-btn-height);\n  padding: 0;\n}\n\n.waqp-modal .wc-btn-secondary {\n  background: #fff;\n  color: var(--wc-text);\n  border-color: #ced4da;\n}\n\n.waqp-modal .wc-btn-secondary:hover:not(:disabled) {\n  background: #f8f9fa;\n  border-color: #adb5bd;\n}\n\n.waqp-modal .wc-btn-danger {\n  background: #fff;\n  color: var(--wc-danger);\n  border-color: var(--wc-danger-border);\n}\n\n.waqp-modal .wc-btn-danger:hover:not(:disabled) {\n  background: #fff5f5;\n  border-color: #ffa8a8;\n}\n\n.waqp-modal-overlay.dark .waqp-modal,\nbody.dark .waqp-modal-overlay .waqp-modal,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal {\n  background: #1b242b;\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-title,\nbody.dark .waqp-modal-overlay .waqp-modal-title,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-title {\n  color: #c5cdd3;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-close,\nbody.dark .waqp-modal-overlay .waqp-modal-close,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-close {\n  color: #8a99a6;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-close:hover,\nbody.dark .waqp-modal-overlay .waqp-modal-close:hover,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-toggle,\nbody.dark .waqp-modal-overlay .waqp-modal-toggle,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-toggle {\n  background: #121a20;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-toggle-label,\nbody.dark .waqp-modal-overlay .waqp-modal-toggle-label,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-toggle-label {\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-empty,\nbody.dark .waqp-modal-overlay .waqp-modal-empty,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-empty {\n  color: #8a99a6;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item,\nbody.dark .waqp-modal-overlay .waqp-modal-item,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item {\n  border-bottom-color: #2a3640;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item-text,\n.waqp-modal-overlay.dark .waqp-modal-new,\nbody.dark .waqp-modal-overlay .waqp-modal-item-text,\nbody.dark .waqp-modal-overlay .waqp-modal-new,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item-text,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-new {\n  background: #121a20;\n  border-color: #3b4a54;\n  color: #e6e9ec;\n}\n\n.waqp-modal-overlay.dark .waqp-modal-item-text:focus,\n.waqp-modal-overlay.dark .waqp-modal-new:focus,\nbody.dark .waqp-modal-overlay .waqp-modal-item-text:focus,\nbody.dark .waqp-modal-overlay .waqp-modal-new:focus,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-item-text:focus,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-new:focus {\n  border-color: var(--wc-primary);\n  box-shadow: 0 0 0 3px rgba(28, 126, 214, 0.25);\n}\n\n.waqp-modal-overlay.dark .waqp-modal-compose,\nbody.dark .waqp-modal-overlay .waqp-modal-compose,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal-compose {\n  background: #121a20;\n  border-top-color: #2a3640;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-secondary,\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-secondary,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-secondary {\n  background: #1b242b;\n  color: #e6e9ec;\n  border-color: #3b4a54;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-secondary:hover:not(:disabled),\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-secondary:hover:not(:disabled),\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-secondary:hover:not(:disabled) {\n  background: #243039;\n  border-color: #4a5a66;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-danger,\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-danger,\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-danger {\n  background: #1b242b;\n  color: #ff8787;\n  border-color: #862e2e;\n}\n\n.waqp-modal-overlay.dark .waqp-modal .wc-btn-danger:hover:not(:disabled),\nbody.dark .waqp-modal-overlay .waqp-modal .wc-btn-danger:hover:not(:disabled),\nhtml[data-color-mode=\"dark\"] .waqp-modal-overlay .waqp-modal .wc-btn-danger:hover:not(:disabled) {\n  background: #2b1d1d;\n  border-color: #a61e4d;\n}";
     parent.appendChild(s);
   }
@@ -7410,10 +7410,10 @@ ue : field.textContent;
   }
 
   function phrasesCacheGet() {
-    if (!window.__whatsnowPhrasesCache) {
-      window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+    if (!window.__faloPhrasesCache) {
+      window.__faloPhrasesCache = readFullPhrasesFromCfg();
     }
-    return window.__whatsnowPhrasesCache;
+    return window.__faloPhrasesCache;
   }
 
   function markPhrasesDirty(ids) {
@@ -7436,14 +7436,14 @@ ue : field.textContent;
   }
 
   function seedPhrasesOnce() {
-    if (window.__whatsnowPhrasesSeeded) return;
-    window.__whatsnowPhrasesSeeded = true;
+    if (window.__faloPhrasesSeeded) return;
+    window.__faloPhrasesSeeded = true;
     readSyncMetaFromCfg();
-    window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+    window.__faloPhrasesCache = readFullPhrasesFromCfg();
   }
 
   function findComposer() {
-    var helpers = window.__whatsnowTranslateHelpers;
+    var helpers = window.__faloTranslateHelpers;
     try {
       if (helpers && typeof helpers.getNativeComposerElement === "function") {
         var ed = helpers.getNativeComposerElement();
@@ -7465,7 +7465,7 @@ ue : field.textContent;
   }
 
   function pastePhrase(text) {
-    var helpers = window.__whatsnowTranslateHelpers;
+    var helpers = window.__faloTranslateHelpers;
     var input = findComposer();
     if (!input) return;
     var wrote = false;
@@ -7510,13 +7510,13 @@ ue : field.textContent;
   function persistPhrases(list, showPhrases, opts) {
     opts = opts || {};
     var full = normalizePhraseList(list);
-    window.__whatsnowPhrasesCache = full;
+    window.__faloPhrasesCache = full;
     var json = JSON.stringify(full);
     var metaJson = JSON.stringify(syncMetaPayload());
     var c = cfg();
     var show = typeof showPhrases === "boolean" ? showPhrases : c.showPhrases !== false;
-    if (window.__whatsnowApplyTranslateConfig) {
-      window.__whatsnowApplyTranslateConfig(
+    if (window.__faloApplyTranslateConfig) {
+      window.__faloApplyTranslateConfig(
         Object.assign({}, c, {
           quickPhrasesJson: json,
           quickPhrasesSyncMetaJson: metaJson,
@@ -7543,7 +7543,7 @@ ue : field.textContent;
   function clearLocalPhraseCloudState() {
     phraseLastSyncAt = 0;
     phraseDirtyIds = {};
-    window.__whatsnowPhrasesCache = [];
+    window.__faloPhrasesCache = [];
     persistPhrases([], undefined, { skipCloudPush: true });
   }
 
@@ -7601,7 +7601,7 @@ ue : field.textContent;
         var merged = forceFull
           ? normalizePhraseList(res.common_phrases)
           : mergePhraseLists(phrasesCacheGet(), res.common_phrases);
-        window.__whatsnowPhrasesCache = merged;
+        window.__faloPhrasesCache = merged;
         bumpPhraseLastSyncAt(res.revision || res.server_time);
         persistPhrases(merged, undefined, { skipCloudPush: true });
         try {
@@ -7660,7 +7660,7 @@ ue : field.textContent;
     }
   }
 
-  window.__whatsnowOnPhraseMembershipUpdate = onPhraseMembershipUpdate;
+  window.__faloOnPhraseMembershipUpdate = onPhraseMembershipUpdate;
 
   function removePhraseBar() {
     try {
@@ -7824,8 +7824,8 @@ ue : field.textContent;
   function setShowPhrasesEnabled(enabled) {
     var next = !!enabled;
     var c = cfg();
-    if (window.__whatsnowApplyTranslateConfig) {
-      window.__whatsnowApplyTranslateConfig(Object.assign({}, c, { showPhrases: next }));
+    if (window.__faloApplyTranslateConfig) {
+      window.__faloApplyTranslateConfig(Object.assign({}, c, { showPhrases: next }));
     }
     persistPhrases(phrasesCacheGet(), next);
     if (!next) {
@@ -8047,11 +8047,11 @@ ue : field.textContent;
     }
   }
 
-  // WATransChat content-quick-phrases 1:1: storage/config → immediate re-paint
-  window.addEventListener("whatsnow-translate-config", function () {
+  // Falo content-quick-phrases 1:1: storage/config → immediate re-paint
+  window.addEventListener("falo-translate-config", function () {
     try {
       readSyncMetaFromCfg();
-      window.__whatsnowPhrasesCache = readFullPhrasesFromCfg();
+      window.__faloPhrasesCache = readFullPhrasesFromCfg();
     } catch (_) {}
     try {
       if (!canCore()) {
@@ -8068,7 +8068,7 @@ ue : field.textContent;
     } catch (_) {}
   });
 
-  // WATransChat content-quick-phrases 1:1: dedicated undebounced MO.
+  // Falo content-quick-phrases 1:1: dedicated undebounced MO.
   // Do NOT use shared domMutationBus (400ms debounce) — chat switch rebuilds
   // footer and the extension re-mounts the bar on the same mutation tick.
   try {
@@ -8195,9 +8195,9 @@ ue : field.textContent;
       } catch (_) {}
     }
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       bus.register(uiTickOnDom, { id: "ui-tick" });
     } else {
@@ -8206,7 +8206,7 @@ ue : field.textContent;
       if (t) mo.observe(t, { childList: true, subtree: true });
     }
   } catch (_) {}
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     scheduleTick(40);
     try {
       refreshAllRemarkUiTexts();
@@ -8225,7 +8225,7 @@ ue : field.textContent;
     });
   } catch (_) {}
 
-  // ---------- Open chat by phone / @username (WATransChat NumberTextInput 1:1) ----------
+  // ---------- Open chat by phone / @username (Falo NumberTextInput 1:1) ----------
   var PHONE_INPUT_STYLE_ID = "wa-phone-input-styles";
   var PHONE_INPUT_CSS =
     "#NumberTextInput::selection{background-color:#007bff;color:#fff}" +
@@ -8267,8 +8267,8 @@ ue : field.textContent;
   }
 
   function openChatByQuery(query) {
-    if (typeof window.__whatsnowOpenChatByQuery === "function") {
-      return window.__whatsnowOpenChatByQuery(query);
+    if (typeof window.__faloOpenChatByQuery === "function") {
+      return window.__faloOpenChatByQuery(query);
     }
     return Promise.resolve({ ok: false, error: "store_unavailable" });
   }
@@ -8285,7 +8285,7 @@ ue : field.textContent;
       var side = document.querySelector("#side");
       if (!side || !side.parentNode) return false;
 
-      // Prefer inserting before #side (WATransChat 1:1). If parent is weird, still try.
+      // Prefer inserting before #side (Falo 1:1). If parent is weird, still try.
       ensurePhoneInputStyles();
 
       var inputElement = document.createElement("input");
@@ -8331,7 +8331,7 @@ ue : field.textContent;
             var msg = isUsername
               ? tUi("openChatByUsernameFailed", "无法打开聊天，请确认该 @账号 有效")
               : tUi("openChatByPhoneFailed", "无法打开聊天，请确认号码已在 WhatsApp 注册");
-            try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
+            try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
           })
           .catch(function () {
             if (!isUsername) {
@@ -8430,7 +8430,7 @@ ue : field.textContent;
       } catch (_) {}
     }
   }, 1000);
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     try {
       refreshPhoneInputUiLang();
     } catch (_) {}
@@ -8438,11 +8438,11 @@ ue : field.textContent;
       ensurePhoneInputBar();
     } catch (_) {}
   });
-  window.__whatsnowEnsurePhoneInputBar = ensurePhoneInputBar;
+  window.__faloEnsurePhoneInputBar = ensurePhoneInputBar;
 
   try {
     if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke) {
-      window.__TAURI__.core.invoke("dlog", { msg: "watrans-ui: customer-lang/remark/inline/phrases ready" });
+      window.__TAURI__.core.invoke("dlog", { msg: "falo-ui: customer-lang/remark/inline/phrases ready" });
     }
   } catch (_) {}
 })();
@@ -8455,13 +8455,13 @@ ue : field.textContent;
 (() => {
   'use strict';
 
-  if (window.__WhatsNowStoreBridgeInstalled) return;
-  window.__WhatsNowStoreBridgeInstalled = true;
+  if (window.__FaloStoreBridgeInstalled) return;
+  window.__FaloStoreBridgeInstalled = true;
 
   const EVENT_CMD = 'WAContactExport:cmd';
   const EVENT_RESULT = 'WAContactExport:result';
   const EVENT_PROGRESS = 'WAContactExport:progress';
-  const BRIDGE_SOURCE = 'whatsnow';
+  const BRIDGE_SOURCE = 'falo';
 
   let stopCollect = false;
   let storeCache = null;
@@ -8555,7 +8555,7 @@ ue : field.textContent;
     let webpackRequire = null;
     try {
       window[chunkName].push([
-        ['WhatsNowStoreBridge' + Date.now()],
+        ['FaloStoreBridge' + Date.now()],
         {},
         (req) => {
           webpackRequire = req;
@@ -10792,7 +10792,7 @@ ue : field.textContent;
     };
   }
 
-  /** WATransChat 1:1 — Store API 无刷新开聊（JID / 号码 / @账号 / 会话标题） */
+  /** Falo 1:1 — Store API 无刷新开聊（JID / 号码 / @账号 / 会话标题） */
   async function openChatByQueryInMain(rawQuery) {
     const WidFactory = tryPageRequire('WAWebWidFactory');
     const FindChat = tryPageRequire('WAWebFindChatAction');
@@ -11072,7 +11072,7 @@ ue : field.textContent;
 
   // 自检：暴露调试钩子
   try {
-    window.__whatsnowStorePhone = {
+    window.__faloStorePhone = {
       isReady: isStoreReady,
       discoverStore,
       getActiveChat,
@@ -11084,11 +11084,11 @@ ue : field.textContent;
       buildNotesLookup,
       buildPhoneLookup
     };
-    window.__whatsnowOpenChatByQuery = openChatByQueryInMain;
-    window.__whatsnowOpenChatByPhoneStore = function (phone) {
+    window.__faloOpenChatByQuery = openChatByQueryInMain;
+    window.__faloOpenChatByPhoneStore = function (phone) {
       return openChatByQueryInMain(phone);
     };
-    // WATransChat extension parity: followup-todos / NumberTextInput use __waext.*
+    // Falo extension parity: followup-todos / NumberTextInput use __waext.*
     try {
       const waext = window.__waext || (window.__waext = {});
       waext.openChatByQueryMain = openChatByQueryInMain;
@@ -11096,7 +11096,7 @@ ue : field.textContent;
       window.__waextOpenChatByQueryMain = openChatByQueryInMain;
       window.__waextOpenChatByPhoneMain = openChatByQueryInMain;
     } catch (_) {}
-    window.__whatsnowContactExportRpc = contactExportRpc;
+    window.__faloContactExportRpc = contactExportRpc;
   } catch (_) {}
 
   // Aggressive warm-up: WhatsApp webpack modules appear after login/hydration.
@@ -11116,29 +11116,29 @@ ue : field.textContent;
 })();
  Pq@   �
 // ===== run @0x726060 (73720 bytes) =====
-/*! WATransChat FX — 1:1 from WATransChat content-fx.js + styles.css */
+/*! Falo FX — 1:1 from Falo content-fx.js + styles.css */
 (function () {
   "use strict";
-  if (window.__whatsnowFxInstalled) return;
-  window.__whatsnowFxInstalled = true;
+  if (window.__faloFxInstalled) return;
+  window.__faloFxInstalled = true;
 
   function normalizeUiLang(x) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.normalize) return i18n.normalize(x);
     } catch (_) {}
     return String(x || 'zh').toLowerCase().indexOf('en') === 0 ? 'en' : 'zh';
   }
   function tPage(l, k, fb) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.t) return i18n.t(l, k, fb);
     } catch (_) {}
     return fb;
   }
   function tPageFill(l, k, fb, vars) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.fill) return i18n.fill(l, k, fb, vars);
     } catch (_) {}
     var s = String(fb || '');
@@ -11159,26 +11159,26 @@ ue : field.textContent;
   var currentUiLang = 'zh';
   function getNativeComposerElement() {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.getNativeComposerElement) return h.getNativeComposerElement();
     } catch (_) {}
     return document.querySelector('footer [contenteditable="true"]') || null;
   }
   async function pasteReplaceText(el, text) {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.pasteReplaceText) return await h.pasteReplaceText(el, text);
     } catch (_) {}
   }
 
-  var STYLE_ID = 'whatsnow-fx-style';
+  var STYLE_ID = 'falo-fx-style';
   function ensureFxStyles() {
     if (document.getElementById(STYLE_ID)) return;
     var parent = document.head || document.documentElement;
     if (!parent) return;
     var s = document.createElement('style');
     s.id = STYLE_ID;
-    s.textContent = ".wa-currency-fx-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 auto;\n  width: auto;\n  height: auto;\n  padding: 0;\n  margin: 0;\n  border: none;\n  border-radius: 0;\n  background: transparent;\n  color: #111b21;\n  cursor: pointer;\n  user-select: none;\n  box-sizing: border-box;\n  line-height: 0;\n  opacity: 0.85;\n}\n\n.wa-currency-fx-btn svg {\n  display: block;\n  width: 15px;\n  height: 15px;\n  pointer-events: none;\n}\n\n.wa-currency-fx-btn:hover {\n  opacity: 1;\n}\n\n.wa-currency-fx-btn:active {\n  opacity: 0.7;\n}\n\n.dark .wa-currency-fx-btn {\n  color: #e9edef;\n  background: transparent;\n  border: none;\n}\n\n.dark .wa-currency-fx-btn:hover {\n  opacity: 1;\n  background: transparent;\n}\n\n/* \u6c47\u7387\u8f6c\u6362\u6d6e\u52a8\u9762\u677f\uff1a\u4e0d\u906e\u7f69\u9875\u9762\uff0c\u53ef\u62d6\u52a8\uff0c\u53ef\u8fb9\u804a\u8fb9\u7528 */\n.wa-fx-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: transparent;\n  pointer-events: none;\n  display: block;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal {\n  position: fixed;\n  left: auto;\n  top: 72px;\n  right: 20px;\n  width: min(400px, calc(100vw - 24px));\n  max-height: min(86vh, 680px);\n  overflow: auto;\n  background: #fff;\n  color: #111b21;\n  border-radius: 16px;\n  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  pointer-events: auto;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 16px 16px 8px;\n  flex-shrink: 0;\n  cursor: move;\n  user-select: none;\n  touch-action: none;\n}\n\n.wa-fx-modal-head.is-dragging {\n  cursor: grabbing;\n}\n\n.wa-fx-modal-title-wrap {\n  min-width: 0;\n}\n\n.wa-fx-modal-title {\n  font-size: 17px;\n  font-weight: 650;\n  line-height: 1.3;\n  color: #111b21;\n}\n\n.wa-fx-modal-subtitle {\n  margin-top: 4px;\n  font-size: 12px;\n  color: #667781;\n  line-height: 1.35;\n}\n\n.wa-fx-modal-close {\n  flex: 0 0 auto;\n  width: 32px;\n  height: 32px;\n  border: none;\n  border-radius: 50%;\n  background: rgba(11, 20, 26, 0.06);\n  color: #54656f;\n  font-size: 22px;\n  line-height: 1;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  user-select: none;\n}\n\n.wa-fx-modal-close:hover {\n  background: rgba(11, 20, 26, 0.12);\n  color: #111b21;\n}\n\n.wa-fx-modal-body {\n  padding: 8px 16px 16px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  min-height: 0;\n}\n\n.wa-fx-card {\n  background: #f0f2f5;\n  border-radius: 12px;\n  padding: 12px 14px;\n}\n\n.wa-fx-card-result {\n  background: rgba(18, 140, 126, 0.1);\n  border: 1px solid rgba(18, 140, 126, 0.18);\n  cursor: pointer;\n  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;\n  user-select: none;\n}\n\n.wa-fx-card-result:hover {\n  background: rgba(18, 140, 126, 0.16);\n  border-color: rgba(18, 140, 126, 0.32);\n}\n\n.wa-fx-card-result:active,\n.wa-fx-card-result.is-copied {\n  background: rgba(18, 140, 126, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(18, 140, 126, 0.28);\n}\n\n.wa-fx-card-label {\n  font-size: 12px;\n  color: #667781;\n  margin-bottom: 8px;\n}\n\n.wa-fx-input-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.wa-fx-amount-group {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 4px;\n  flex: 0 0 auto;\n  min-width: 0;\n  max-width: 70%;\n}\n\n.wa-fx-amount-input {\n  flex: 0 0 auto;\n  min-width: 1ch;\n  width: auto;\n  max-width: 100%;\n  border: none;\n  background: transparent;\n  font-size: 28px;\n  font-weight: 600;\n  color: #111b21;\n  outline: none;\n  padding: 0;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  field-sizing: content;\n}\n\n.wa-fx-code-badge {\n  flex: 0 0 auto;\n  display: inline-flex;\n  align-items: baseline;\n  margin: 0;\n  padding: 0;\n  background: transparent;\n  color: #54656f;\n  font-size: 15px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  user-select: text;\n}\n\n.wa-fx-code-badge-target {\n  background: transparent;\n  color: #128c7e;\n}\n\n.wa-fx-currency-picker {\n  position: relative;\n  flex: 0 0 auto;\n  margin-left: auto;\n  max-width: 70%;\n}\n\n.wa-fx-currency-select {\n  display: inline-flex;\n  align-items: center;\n  justify-content: flex-start;\n  flex: 0 0 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n  margin-left: 0;\n  box-sizing: border-box;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 20px;\n  background: #fff;\n  color: #111b21;\n  font-size: 13px;\n  font-weight: 600;\n  padding: 6px 28px 6px 10px;\n  cursor: pointer;\n  outline: none;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  position: relative;\n}\n\n.wa-fx-currency-select::after {\n  content: '';\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border-left: 4px solid transparent;\n  border-right: 4px solid transparent;\n  border-top: 5px solid currentColor;\n  transform: translateY(-40%);\n  opacity: 0.55;\n  pointer-events: none;\n}\n\n.wa-fx-currency-picker.is-open .wa-fx-currency-select {\n  border-color: rgba(18, 140, 126, 0.45);\n}\n\n.wa-fx-currency-dropdown {\n  position: absolute;\n  right: 0;\n  top: calc(100% + 6px);\n  z-index: 20;\n  width: min(280px, 78vw);\n  max-height: 260px;\n  display: flex;\n  flex-direction: column;\n  background: #fff;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 12px;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);\n  overflow: hidden;\n}\n\n.wa-fx-currency-dropdown[hidden] {\n  display: none !important;\n}\n\n.wa-fx-currency-search {\n  flex: 0 0 auto;\n  width: 100%;\n  box-sizing: border-box;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  padding: 10px 12px;\n  font-size: 13px;\n  outline: none;\n  color: #111b21;\n  background: #f7f8fa;\n}\n\n.wa-fx-currency-options {\n  flex: 1 1 auto;\n  overflow: auto;\n  max-height: 210px;\n  padding: 4px;\n}\n\n.wa-fx-currency-section {\n  padding: 8px 10px 4px;\n  font-size: 11px;\n  font-weight: 700;\n  letter-spacing: 0.04em;\n  color: #8696a0;\n  text-transform: none;\n}\n\n.wa-fx-currency-sep {\n  height: 1px;\n  margin: 6px 8px;\n  background: rgba(0, 0, 0, 0.08);\n}\n\n.wa-fx-currency-option {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  border: none;\n  background: transparent;\n  text-align: left;\n  padding: 8px 8px 8px 10px;\n  border-radius: 8px;\n  cursor: pointer;\n  color: #111b21;\n  font-size: 13px;\n}\n\n.wa-fx-currency-option:hover,\n.wa-fx-currency-option.is-active {\n  background: rgba(18, 140, 126, 0.1);\n}\n\n.wa-fx-currency-option.is-pinned {\n  background: rgba(18, 140, 126, 0.06);\n}\n\n.wa-fx-currency-option-code {\n  flex: 0 0 auto;\n  min-width: 36px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-currency-option-name {\n  flex: 1 1 auto;\n  min-width: 0;\n  color: #667781;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.wa-fx-currency-pin {\n  flex: 0 0 auto;\n  width: 26px;\n  height: 26px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  border-radius: 50%;\n  background: transparent;\n  color: #8696a0;\n  cursor: pointer;\n  padding: 0;\n  line-height: 0;\n}\n\n.wa-fx-currency-pin:hover {\n  background: rgba(11, 20, 26, 0.06);\n  color: #128c7e;\n}\n\n.wa-fx-currency-pin.is-on {\n  color: #128c7e;\n}\n\n.wa-fx-currency-pin svg {\n  display: block;\n}\n\n.wa-fx-currency-empty {\n  padding: 14px 10px;\n  text-align: center;\n  color: #8696a0;\n  font-size: 12px;\n}\n\n.wa-fx-currency-select option {\n  white-space: normal;\n  font-weight: 500;\n}\n\n.wa-fx-arrow {\n  text-align: center;\n  color: #8696a0;\n  font-size: 16px;\n  line-height: 1;\n  user-select: none;\n}\n\n.wa-fx-result-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 8px;\n  width: 100%;\n  max-width: 100%;\n}\n\n.wa-fx-result-amount {\n  flex: 0 1 auto;\n  min-width: 0;\n  max-width: 100%;\n  font-size: 28px;\n  font-weight: 700;\n  color: #075e54;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  word-break: break-all;\n  cursor: pointer;\n  border-radius: 6px;\n  padding: 0;\n}\n\n.wa-fx-result-amount:hover,\n.wa-fx-result-amount.is-copied {\n  background: rgba(18, 140, 126, 0.12);\n}\n\n.wa-fx-target-select {\n  flex: 0 0 auto;\n}\n\n.wa-fx-result-code {\n  flex: 0 0 auto;\n  font-size: 14px;\n  font-weight: 700;\n  color: #128c7e;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-rate-hint {\n  margin-top: 8px;\n  font-size: 12px;\n  color: #667781;\n}\n\n.wa-fx-list-head {\n  margin-top: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  color: #111b21;\n}\n\n.wa-fx-rate-list {\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  max-height: 240px;\n  overflow: auto;\n  border: 1px solid rgba(0, 0, 0, 0.06);\n  border-radius: 12px;\n  background: #fff;\n}\n\n.wa-fx-rate-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  padding: 10px 12px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.04);\n}\n\n.wa-fx-rate-item:last-child {\n  border-bottom: none;\n}\n\n.wa-fx-rate-item.is-local {\n  background: rgba(18, 140, 126, 0.08);\n}\n\n.wa-fx-rate-left {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n}\n\n.wa-fx-rate-code {\n  font-size: 13px;\n  font-weight: 700;\n  color: #111b21;\n  min-width: 36px;\n}\n\n.wa-fx-rate-name {\n  font-size: 12px;\n  color: #667781;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.wa-fx-local-badge {\n  flex: 0 0 auto;\n  font-size: 10px;\n  font-weight: 650;\n  color: #075e54;\n  background: rgba(18, 140, 126, 0.16);\n  border-radius: 999px;\n  padding: 2px 6px;\n}\n\n.wa-fx-rate-right {\n  flex: 0 0 auto;\n  font-size: 12px;\n  font-weight: 600;\n  color: #111b21;\n  font-variant-numeric: tabular-nums;\n  white-space: nowrap;\n}\n\n.wa-fx-foot {\n  font-size: 11px;\n  color: #8696a0;\n  text-align: center;\n  margin-top: 2px;\n}\n\n.dark .wa-fx-modal,\n.wa-fx-overlay.dark .wa-fx-modal {\n  background: #1f2c34;\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-title,\n.wa-fx-overlay.dark .wa-fx-modal-title {\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-subtitle,\n.dark .wa-fx-card-label,\n.dark .wa-fx-rate-hint,\n.dark .wa-fx-rate-name,\n.dark .wa-fx-foot,\n.wa-fx-overlay.dark .wa-fx-modal-subtitle,\n.wa-fx-overlay.dark .wa-fx-card-label,\n.wa-fx-overlay.dark .wa-fx-rate-hint,\n.wa-fx-overlay.dark .wa-fx-rate-name,\n.wa-fx-overlay.dark .wa-fx-foot {\n  color: #8696a0;\n}\n\n.dark .wa-fx-modal-close,\n.wa-fx-overlay.dark .wa-fx-modal-close {\n  background: rgba(233, 237, 239, 0.08);\n  color: #aebac1;\n}\n\n.dark .wa-fx-modal-close:hover,\n.wa-fx-overlay.dark .wa-fx-modal-close:hover {\n  background: rgba(233, 237, 239, 0.14);\n  color: #e9edef;\n}\n\n.dark .wa-fx-card,\n.wa-fx-overlay.dark .wa-fx-card {\n  background: #111b21;\n}\n\n.dark .wa-fx-card-result,\n.wa-fx-overlay.dark .wa-fx-card-result {\n  background: rgba(37, 211, 102, 0.1);\n  border-color: rgba(37, 211, 102, 0.22);\n}\n\n.dark .wa-fx-card-result:hover,\n.wa-fx-overlay.dark .wa-fx-card-result:hover {\n  background: rgba(37, 211, 102, 0.16);\n  border-color: rgba(37, 211, 102, 0.35);\n}\n\n.dark .wa-fx-card-result:active,\n.dark .wa-fx-card-result.is-copied,\n.wa-fx-overlay.dark .wa-fx-card-result:active,\n.wa-fx-overlay.dark .wa-fx-card-result.is-copied {\n  background: rgba(37, 211, 102, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(37, 211, 102, 0.3);\n}\n\n.dark .wa-fx-amount-input,\n.dark .wa-fx-list-head,\n.dark .wa-fx-rate-code,\n.dark .wa-fx-rate-right,\n.wa-fx-overlay.dark .wa-fx-amount-input,\n.wa-fx-overlay.dark .wa-fx-list-head,\n.wa-fx-overlay.dark .wa-fx-rate-code,\n.wa-fx-overlay.dark .wa-fx-rate-right {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-select,\n.wa-fx-overlay.dark .wa-fx-currency-select {\n  background: #233138;\n  border-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-dropdown,\n.wa-fx-overlay.dark .wa-fx-currency-dropdown {\n  background: #1f2c34;\n  border-color: #3b4a54;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);\n}\n\n.dark .wa-fx-currency-search,\n.wa-fx-overlay.dark .wa-fx-currency-search {\n  background: #111b21;\n  border-bottom-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option,\n.wa-fx-overlay.dark .wa-fx-currency-option {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option:hover,\n.dark .wa-fx-currency-option.is-active,\n.wa-fx-overlay.dark .wa-fx-currency-option:hover,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-active {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-currency-option-name,\n.wa-fx-overlay.dark .wa-fx-currency-option-name,\n.dark .wa-fx-currency-empty,\n.wa-fx-overlay.dark .wa-fx-currency-empty,\n.dark .wa-fx-currency-section,\n.wa-fx-overlay.dark .wa-fx-currency-section {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-sep,\n.wa-fx-overlay.dark .wa-fx-currency-sep {\n  background: rgba(233, 237, 239, 0.1);\n}\n\n.dark .wa-fx-currency-option.is-pinned,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-pinned {\n  background: rgba(37, 211, 102, 0.08);\n}\n\n.dark .wa-fx-currency-pin,\n.wa-fx-overlay.dark .wa-fx-currency-pin {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.dark .wa-fx-currency-pin.is-on,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin.is-on {\n  color: #25d366;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover {\n  background: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-code-badge,\n.wa-fx-overlay.dark .wa-fx-code-badge {\n  background: transparent;\n  color: #aebac1;\n}\n\n.dark .wa-fx-code-badge-target,\n.wa-fx-overlay.dark .wa-fx-code-badge-target {\n  background: transparent;\n  color: #25d366;\n}\n\n.dark .wa-fx-result-amount,\n.wa-fx-overlay.dark .wa-fx-result-amount {\n  color: #25d366;\n}\n\n.dark .wa-fx-result-amount:hover,\n.dark .wa-fx-result-amount.is-copied,\n.wa-fx-overlay.dark .wa-fx-result-amount:hover,\n.wa-fx-overlay.dark .wa-fx-result-amount.is-copied {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-result-code,\n.wa-fx-overlay.dark .wa-fx-result-code {\n  color: #25d366;\n}\n\n.dark .wa-fx-rate-list,\n.wa-fx-overlay.dark .wa-fx-rate-list {\n  background: #111b21;\n  border-color: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-rate-item,\n.wa-fx-overlay.dark .wa-fx-rate-item {\n  border-bottom-color: rgba(233, 237, 239, 0.06);\n}\n\n.dark .wa-fx-rate-item.is-local,\n.wa-fx-overlay.dark .wa-fx-rate-item.is-local {\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.dark .wa-fx-local-badge,\n.wa-fx-overlay.dark .wa-fx-local-badge {\n  color: #25d366;\n  background: rgba(37, 211, 102, 0.18);\n}";
+    s.textContent = ".wa-currency-fx-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 auto;\n  width: auto;\n  height: auto;\n  padding: 0;\n  margin: 0;\n  border: none;\n  border-radius: 0;\n  background: transparent;\n  color: #111b21;\n  cursor: pointer;\n  user-select: none;\n  box-sizing: border-box;\n  line-height: 0;\n  opacity: 0.85;\n}\n\n.wa-currency-fx-btn svg {\n  display: block;\n  width: 15px;\n  height: 15px;\n  pointer-events: none;\n}\n\n.wa-currency-fx-btn:hover {\n  opacity: 1;\n}\n\n.wa-currency-fx-btn:active {\n  opacity: 0.7;\n}\n\n.dark .wa-currency-fx-btn {\n  color: #e9edef;\n  background: transparent;\n  border: none;\n}\n\n.dark .wa-currency-fx-btn:hover {\n  opacity: 1;\n  background: transparent;\n}\n\n/* \u6c47\u7387\u8f6c\u6362\u6d6e\u52a8\u9762\u677f\uff1a\u4e0d\u906e\u7f69\u9875\u9762\uff0c\u53ef\u62d6\u52a8\uff0c\u53ef\u8fb9\u804a\u8fb9\u7528 */\n.wa-fx-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: transparent;\n  pointer-events: none;\n  display: block;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal {\n  position: fixed;\n  left: auto;\n  top: 72px;\n  right: 20px;\n  width: min(400px, calc(100vw - 24px));\n  max-height: min(86vh, 680px);\n  overflow: auto;\n  background: #fff;\n  color: #111b21;\n  border-radius: 16px;\n  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  pointer-events: auto;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 16px 16px 8px;\n  flex-shrink: 0;\n  cursor: move;\n  user-select: none;\n  touch-action: none;\n}\n\n.wa-fx-modal-head.is-dragging {\n  cursor: grabbing;\n}\n\n.wa-fx-modal-title-wrap {\n  min-width: 0;\n}\n\n.wa-fx-modal-title {\n  font-size: 17px;\n  font-weight: 650;\n  line-height: 1.3;\n  color: #111b21;\n}\n\n.wa-fx-modal-subtitle {\n  margin-top: 4px;\n  font-size: 12px;\n  color: #667781;\n  line-height: 1.35;\n}\n\n.wa-fx-modal-close {\n  flex: 0 0 auto;\n  width: 32px;\n  height: 32px;\n  border: none;\n  border-radius: 50%;\n  background: rgba(11, 20, 26, 0.06);\n  color: #54656f;\n  font-size: 22px;\n  line-height: 1;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  user-select: none;\n}\n\n.wa-fx-modal-close:hover {\n  background: rgba(11, 20, 26, 0.12);\n  color: #111b21;\n}\n\n.wa-fx-modal-body {\n  padding: 8px 16px 16px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  min-height: 0;\n}\n\n.wa-fx-card {\n  background: #f0f2f5;\n  border-radius: 12px;\n  padding: 12px 14px;\n}\n\n.wa-fx-card-result {\n  background: rgba(18, 140, 126, 0.1);\n  border: 1px solid rgba(18, 140, 126, 0.18);\n  cursor: pointer;\n  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;\n  user-select: none;\n}\n\n.wa-fx-card-result:hover {\n  background: rgba(18, 140, 126, 0.16);\n  border-color: rgba(18, 140, 126, 0.32);\n}\n\n.wa-fx-card-result:active,\n.wa-fx-card-result.is-copied {\n  background: rgba(18, 140, 126, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(18, 140, 126, 0.28);\n}\n\n.wa-fx-card-label {\n  font-size: 12px;\n  color: #667781;\n  margin-bottom: 8px;\n}\n\n.wa-fx-input-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.wa-fx-amount-group {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 4px;\n  flex: 0 0 auto;\n  min-width: 0;\n  max-width: 70%;\n}\n\n.wa-fx-amount-input {\n  flex: 0 0 auto;\n  min-width: 1ch;\n  width: auto;\n  max-width: 100%;\n  border: none;\n  background: transparent;\n  font-size: 28px;\n  font-weight: 600;\n  color: #111b21;\n  outline: none;\n  padding: 0;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  field-sizing: content;\n}\n\n.wa-fx-code-badge {\n  flex: 0 0 auto;\n  display: inline-flex;\n  align-items: baseline;\n  margin: 0;\n  padding: 0;\n  background: transparent;\n  color: #54656f;\n  font-size: 15px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  user-select: text;\n}\n\n.wa-fx-code-badge-target {\n  background: transparent;\n  color: #4f46e5;\n}\n\n.wa-fx-currency-picker {\n  position: relative;\n  flex: 0 0 auto;\n  margin-left: auto;\n  max-width: 70%;\n}\n\n.wa-fx-currency-select {\n  display: inline-flex;\n  align-items: center;\n  justify-content: flex-start;\n  flex: 0 0 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n  margin-left: 0;\n  box-sizing: border-box;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 20px;\n  background: #fff;\n  color: #111b21;\n  font-size: 13px;\n  font-weight: 600;\n  padding: 6px 28px 6px 10px;\n  cursor: pointer;\n  outline: none;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  position: relative;\n}\n\n.wa-fx-currency-select::after {\n  content: '';\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border-left: 4px solid transparent;\n  border-right: 4px solid transparent;\n  border-top: 5px solid currentColor;\n  transform: translateY(-40%);\n  opacity: 0.55;\n  pointer-events: none;\n}\n\n.wa-fx-currency-picker.is-open .wa-fx-currency-select {\n  border-color: rgba(18, 140, 126, 0.45);\n}\n\n.wa-fx-currency-dropdown {\n  position: absolute;\n  right: 0;\n  top: calc(100% + 6px);\n  z-index: 20;\n  width: min(280px, 78vw);\n  max-height: 260px;\n  display: flex;\n  flex-direction: column;\n  background: #fff;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 12px;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);\n  overflow: hidden;\n}\n\n.wa-fx-currency-dropdown[hidden] {\n  display: none !important;\n}\n\n.wa-fx-currency-search {\n  flex: 0 0 auto;\n  width: 100%;\n  box-sizing: border-box;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  padding: 10px 12px;\n  font-size: 13px;\n  outline: none;\n  color: #111b21;\n  background: #f7f8fa;\n}\n\n.wa-fx-currency-options {\n  flex: 1 1 auto;\n  overflow: auto;\n  max-height: 210px;\n  padding: 4px;\n}\n\n.wa-fx-currency-section {\n  padding: 8px 10px 4px;\n  font-size: 11px;\n  font-weight: 700;\n  letter-spacing: 0.04em;\n  color: #8696a0;\n  text-transform: none;\n}\n\n.wa-fx-currency-sep {\n  height: 1px;\n  margin: 6px 8px;\n  background: rgba(0, 0, 0, 0.08);\n}\n\n.wa-fx-currency-option {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  border: none;\n  background: transparent;\n  text-align: left;\n  padding: 8px 8px 8px 10px;\n  border-radius: 8px;\n  cursor: pointer;\n  color: #111b21;\n  font-size: 13px;\n}\n\n.wa-fx-currency-option:hover,\n.wa-fx-currency-option.is-active {\n  background: rgba(18, 140, 126, 0.1);\n}\n\n.wa-fx-currency-option.is-pinned {\n  background: rgba(18, 140, 126, 0.06);\n}\n\n.wa-fx-currency-option-code {\n  flex: 0 0 auto;\n  min-width: 36px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-currency-option-name {\n  flex: 1 1 auto;\n  min-width: 0;\n  color: #667781;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.wa-fx-currency-pin {\n  flex: 0 0 auto;\n  width: 26px;\n  height: 26px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  border-radius: 50%;\n  background: transparent;\n  color: #8696a0;\n  cursor: pointer;\n  padding: 0;\n  line-height: 0;\n}\n\n.wa-fx-currency-pin:hover {\n  background: rgba(11, 20, 26, 0.06);\n  color: #4f46e5;\n}\n\n.wa-fx-currency-pin.is-on {\n  color: #4f46e5;\n}\n\n.wa-fx-currency-pin svg {\n  display: block;\n}\n\n.wa-fx-currency-empty {\n  padding: 14px 10px;\n  text-align: center;\n  color: #8696a0;\n  font-size: 12px;\n}\n\n.wa-fx-currency-select option {\n  white-space: normal;\n  font-weight: 500;\n}\n\n.wa-fx-arrow {\n  text-align: center;\n  color: #8696a0;\n  font-size: 16px;\n  line-height: 1;\n  user-select: none;\n}\n\n.wa-fx-result-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 8px;\n  width: 100%;\n  max-width: 100%;\n}\n\n.wa-fx-result-amount {\n  flex: 0 1 auto;\n  min-width: 0;\n  max-width: 100%;\n  font-size: 28px;\n  font-weight: 700;\n  color: #312e81;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  word-break: break-all;\n  cursor: pointer;\n  border-radius: 6px;\n  padding: 0;\n}\n\n.wa-fx-result-amount:hover,\n.wa-fx-result-amount.is-copied {\n  background: rgba(18, 140, 126, 0.12);\n}\n\n.wa-fx-target-select {\n  flex: 0 0 auto;\n}\n\n.wa-fx-result-code {\n  flex: 0 0 auto;\n  font-size: 14px;\n  font-weight: 700;\n  color: #4f46e5;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-rate-hint {\n  margin-top: 8px;\n  font-size: 12px;\n  color: #667781;\n}\n\n.wa-fx-list-head {\n  margin-top: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  color: #111b21;\n}\n\n.wa-fx-rate-list {\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  max-height: 240px;\n  overflow: auto;\n  border: 1px solid rgba(0, 0, 0, 0.06);\n  border-radius: 12px;\n  background: #fff;\n}\n\n.wa-fx-rate-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  padding: 10px 12px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.04);\n}\n\n.wa-fx-rate-item:last-child {\n  border-bottom: none;\n}\n\n.wa-fx-rate-item.is-local {\n  background: rgba(18, 140, 126, 0.08);\n}\n\n.wa-fx-rate-left {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n}\n\n.wa-fx-rate-code {\n  font-size: 13px;\n  font-weight: 700;\n  color: #111b21;\n  min-width: 36px;\n}\n\n.wa-fx-rate-name {\n  font-size: 12px;\n  color: #667781;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.wa-fx-local-badge {\n  flex: 0 0 auto;\n  font-size: 10px;\n  font-weight: 650;\n  color: #312e81;\n  background: rgba(18, 140, 126, 0.16);\n  border-radius: 999px;\n  padding: 2px 6px;\n}\n\n.wa-fx-rate-right {\n  flex: 0 0 auto;\n  font-size: 12px;\n  font-weight: 600;\n  color: #111b21;\n  font-variant-numeric: tabular-nums;\n  white-space: nowrap;\n}\n\n.wa-fx-foot {\n  font-size: 11px;\n  color: #8696a0;\n  text-align: center;\n  margin-top: 2px;\n}\n\n.dark .wa-fx-modal,\n.wa-fx-overlay.dark .wa-fx-modal {\n  background: #1f2c34;\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-title,\n.wa-fx-overlay.dark .wa-fx-modal-title {\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-subtitle,\n.dark .wa-fx-card-label,\n.dark .wa-fx-rate-hint,\n.dark .wa-fx-rate-name,\n.dark .wa-fx-foot,\n.wa-fx-overlay.dark .wa-fx-modal-subtitle,\n.wa-fx-overlay.dark .wa-fx-card-label,\n.wa-fx-overlay.dark .wa-fx-rate-hint,\n.wa-fx-overlay.dark .wa-fx-rate-name,\n.wa-fx-overlay.dark .wa-fx-foot {\n  color: #8696a0;\n}\n\n.dark .wa-fx-modal-close,\n.wa-fx-overlay.dark .wa-fx-modal-close {\n  background: rgba(233, 237, 239, 0.08);\n  color: #aebac1;\n}\n\n.dark .wa-fx-modal-close:hover,\n.wa-fx-overlay.dark .wa-fx-modal-close:hover {\n  background: rgba(233, 237, 239, 0.14);\n  color: #e9edef;\n}\n\n.dark .wa-fx-card,\n.wa-fx-overlay.dark .wa-fx-card {\n  background: #111b21;\n}\n\n.dark .wa-fx-card-result,\n.wa-fx-overlay.dark .wa-fx-card-result {\n  background: rgba(37, 211, 102, 0.1);\n  border-color: rgba(37, 211, 102, 0.22);\n}\n\n.dark .wa-fx-card-result:hover,\n.wa-fx-overlay.dark .wa-fx-card-result:hover {\n  background: rgba(37, 211, 102, 0.16);\n  border-color: rgba(37, 211, 102, 0.35);\n}\n\n.dark .wa-fx-card-result:active,\n.dark .wa-fx-card-result.is-copied,\n.wa-fx-overlay.dark .wa-fx-card-result:active,\n.wa-fx-overlay.dark .wa-fx-card-result.is-copied {\n  background: rgba(37, 211, 102, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(37, 211, 102, 0.3);\n}\n\n.dark .wa-fx-amount-input,\n.dark .wa-fx-list-head,\n.dark .wa-fx-rate-code,\n.dark .wa-fx-rate-right,\n.wa-fx-overlay.dark .wa-fx-amount-input,\n.wa-fx-overlay.dark .wa-fx-list-head,\n.wa-fx-overlay.dark .wa-fx-rate-code,\n.wa-fx-overlay.dark .wa-fx-rate-right {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-select,\n.wa-fx-overlay.dark .wa-fx-currency-select {\n  background: #233138;\n  border-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-dropdown,\n.wa-fx-overlay.dark .wa-fx-currency-dropdown {\n  background: #1f2c34;\n  border-color: #3b4a54;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);\n}\n\n.dark .wa-fx-currency-search,\n.wa-fx-overlay.dark .wa-fx-currency-search {\n  background: #111b21;\n  border-bottom-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option,\n.wa-fx-overlay.dark .wa-fx-currency-option {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option:hover,\n.dark .wa-fx-currency-option.is-active,\n.wa-fx-overlay.dark .wa-fx-currency-option:hover,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-active {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-currency-option-name,\n.wa-fx-overlay.dark .wa-fx-currency-option-name,\n.dark .wa-fx-currency-empty,\n.wa-fx-overlay.dark .wa-fx-currency-empty,\n.dark .wa-fx-currency-section,\n.wa-fx-overlay.dark .wa-fx-currency-section {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-sep,\n.wa-fx-overlay.dark .wa-fx-currency-sep {\n  background: rgba(233, 237, 239, 0.1);\n}\n\n.dark .wa-fx-currency-option.is-pinned,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-pinned {\n  background: rgba(37, 211, 102, 0.08);\n}\n\n.dark .wa-fx-currency-pin,\n.wa-fx-overlay.dark .wa-fx-currency-pin {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.dark .wa-fx-currency-pin.is-on,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin.is-on {\n  color: #6366f1;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover {\n  background: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-code-badge,\n.wa-fx-overlay.dark .wa-fx-code-badge {\n  background: transparent;\n  color: #aebac1;\n}\n\n.dark .wa-fx-code-badge-target,\n.wa-fx-overlay.dark .wa-fx-code-badge-target {\n  background: transparent;\n  color: #6366f1;\n}\n\n.dark .wa-fx-result-amount,\n.wa-fx-overlay.dark .wa-fx-result-amount {\n  color: #6366f1;\n}\n\n.dark .wa-fx-result-amount:hover,\n.dark .wa-fx-result-amount.is-copied,\n.wa-fx-overlay.dark .wa-fx-result-amount:hover,\n.wa-fx-overlay.dark .wa-fx-result-amount.is-copied {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-result-code,\n.wa-fx-overlay.dark .wa-fx-result-code {\n  color: #6366f1;\n}\n\n.dark .wa-fx-rate-list,\n.wa-fx-overlay.dark .wa-fx-rate-list {\n  background: #111b21;\n  border-color: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-rate-item,\n.wa-fx-overlay.dark .wa-fx-rate-item {\n  border-bottom-color: rgba(233, 237, 239, 0.06);\n}\n\n.dark .wa-fx-rate-item.is-local,\n.wa-fx-overlay.dark .wa-fx-rate-item.is-local {\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.dark .wa-fx-local-badge,\n.wa-fx-overlay.dark .wa-fx-local-badge {\n  color: #6366f1;\n  background: rgba(37, 211, 102, 0.18);\n}";
     parent.appendChild(s);
   }
 
@@ -12477,7 +12477,7 @@ function showCurrencyConverterPopup(opts) {
     try {
       var cfgUi = 'zh';
       try {
-        var tc = window.__whatsnowTranslateCfg;
+        var tc = window.__faloTranslateCfg;
         if (tc && typeof tc.uiLang === 'string' && tc.uiLang.trim()) cfgUi = tc.uiLang;
       } catch (_) {}
       var res = {
@@ -12526,21 +12526,21 @@ function showCurrencyConverterPopup(opts) {
 }
 
   try {
-    window.__whatsnowShowFxPopup = showCurrencyConverterPopup;
-    window.__whatsnowTranslateHelpers = Object.assign(window.__whatsnowTranslateHelpers || {}, {
+    window.__faloShowFxPopup = showCurrencyConverterPopup;
+    window.__faloTranslateHelpers = Object.assign(window.__faloTranslateHelpers || {}, {
       showCurrencyConverterPopup: showCurrencyConverterPopup
     });
   } catch (_) {}
 })();
  `rr@   
 // ===== run @0x738060 (88400 bytes) =====
-/*! WATransChat country / local-time / FX — WATransChat 1:1 (+ Store phone via watrans-store-bridge). */
+/*! Falo country / local-time / FX — Falo 1:1 (+ Store phone via falo-store-bridge). */
 
 (function () {
 
-  if (window.__whatsnowCountryFxInstalled) return;
+  if (window.__faloCountryFxInstalled) return;
 
-  window.__whatsnowCountryFxInstalled = true;
+  window.__faloCountryFxInstalled = true;
 
 
 
@@ -13002,13 +13002,13 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   var FX_BTN_SVG = "<svg class=\"icon\" viewBox=\"0 0 1024 1024\" xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M912.36096 542.976a18.56 18.56 0 0 1-8.512-1.728 31.808 31.808 0 0 1-25.6-34.048c0-11.904-3.392-299.776-306.624-362.88a356.48 356.48 0 0 0-226.56 23.872c-29.184 16-57.152 34.176-83.456 54.528a375.808 375.808 0 0 0-126.08 187.392 33.92 33.92 0 0 1-64.704-20.48 445.824 445.824 0 0 1 148.16-221.44c30.08-23.552 61.952-44.608 95.36-63.04a414.144 414.144 0 0 1 270.912-30.656c228.224 47.744 311.68 207.872 342.4 318.592l17.024-34.112a34.304 34.304 0 0 1 61.312 30.72l-63.04 131.2a32.768 32.768 0 0 1-30.656 22.08z m-395.2 425.856c-30.976 0-61.824-3.456-91.968-10.24-228.288-47.68-311.744-207.808-342.4-318.528l-17.088 34.048a34.304 34.304 0 1 1-61.248-30.592l62.976-131.2a35.456 35.456 0 0 1 39.232-18.752c16 3.136 27.008 17.856 25.6 34.112 0 11.904 3.392 299.776 306.56 362.816a356.416 356.416 0 0 0 226.56-23.872 636.8 636.8 0 0 0 83.52-54.528 375.808 375.808 0 0 0 126.08-187.392 33.92 33.92 0 1 1 64.64 20.48 445.824 445.824 0 0 1-148.16 221.44 616.32 616.32 0 0 1-95.36 62.976c-56.192 25.664-117.12 39.04-178.88 39.232H517.22496z\" fill=\"currentColor\"></path><path d=\"M495.01696 824.064a34.176 34.176 0 0 1-34.048-34.048V244.8a34.048 34.048 0 1 1 68.096 0v545.152a34.176 34.176 0 0 1-34.048 34.048z\" fill=\"currentColor\"></path><path d=\"M661.92896 428.8H578.47296a83.456 83.456 0 0 0-30.72-47.68 119.744 119.744 0 0 0-66.368-15.296 115.584 115.584 0 0 0-59.648 11.904 39.296 39.296 0 0 0-22.144 37.504c0 15.36 11.968 27.2 34.112 37.44 27.648 10.88 56.128 19.392 85.12 25.6 37.696 8 73.92 21.76 107.328 40.896 32.192 17.728 51.84 51.84 51.136 88.576 0 88.576-63.04 134.592-187.392 134.592-115.84 0-178.88-49.408-187.392-148.224h85.12c2.304 23.552 13.248 45.44 30.72 61.312 21.12 12.48 45.44 18.432 69.824 17.088 66.432 0 102.208-20.48 102.208-57.92a53.376 53.376 0 0 0-37.44-47.744 369.152 369.152 0 0 0-85.12-23.808c-49.472-11.968-85.248-23.872-103.936-37.504-30.72-17.28-49.6-49.92-49.408-85.12a101.888 101.888 0 0 1 47.68-90.368A214.272 214.272 0 0 1 486.50496 297.728c105.6-1.728 166.912 42.56 175.488 131.2V428.8z\" fill=\"currentColor\"></path></svg>";
 
-  var STYLE_CSS = ".country-info {\n  margin-top: 0;\n  font-size: 14px;\n  display: block;\n  box-sizing: border-box;\n  flex: 0 1 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n}\n\n.wa-country-info-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 4px;\n  margin-top: 4px;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  align-self: stretch;\n}\n\n.wa-country-info-row--compact {\n  flex-wrap: nowrap;\n  gap: 6px;\n  margin-top: 0;\n  overflow: hidden;\n}\n\n.wa-country-info-row--compact .country-info {\n  font-size: 12px;\n  line-height: 16px;\n  max-width: 58%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n[data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact {\n  flex: 0 0 auto;\n  align-self: stretch;\n  width: 100%;\n  max-width: 100%;\n  padding: 6px 16px;\n  margin: 0;\n  background: #fff;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  z-index: 1;\n  position: relative;\n}\n\n.dark [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact,\nbody.dark [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact,\nhtml[data-color-mode=\"dark\"] [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact {\n  background: #202c33;\n  border-bottom-color: rgba(255, 255, 255, 0.08);\n}\n\n.wa-country-info-row > .wa-quick-remark-header {\n  flex: 1 1 auto;\n  width: auto;\n  min-width: 48px;\n  max-width: none;\n  margin-top: 0;\n  padding: 0;\n  background: transparent;\n  border: none;\n}\n\n.wa-country-info-row > .wa-quick-remark-header .wa-quick-remark-ipt--header {\n  max-width: none;\n  width: 100%;\n}\n\n.wa-country-info-row--compact > .wa-quick-remark-header .wa-quick-remark-ipt--header {\n  height: 16px;\n  font-size: 12px;\n  line-height: 16px;\n}\n\n.wa-country-info-row--compact .wa-currency-fx-btn svg {\n  width: 13px;\n  height: 13px;\n}\n\n.wa-currency-fx-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 auto;\n  width: auto;\n  height: auto;\n  padding: 0;\n  margin: 0;\n  border: none;\n  border-radius: 0;\n  background: transparent;\n  color: #111b21;\n  cursor: pointer;\n  user-select: none;\n  box-sizing: border-box;\n  line-height: 0;\n  opacity: 0.85;\n}\n\n.wa-currency-fx-btn svg {\n  display: block;\n  width: 15px;\n  height: 15px;\n  pointer-events: none;\n}\n\n.wa-currency-fx-btn:hover {\n  opacity: 1;\n}\n\n.wa-currency-fx-btn:active {\n  opacity: 0.7;\n}\n\n.dark .wa-currency-fx-btn {\n  color: #e9edef;\n  background: transparent;\n  border: none;\n}\n\n.dark .wa-currency-fx-btn:hover {\n  opacity: 1;\n  background: transparent;\n}\n\n/* \u6c47\u7387\u8f6c\u6362\u6d6e\u52a8\u9762\u677f\uff1a\u4e0d\u906e\u7f69\u9875\u9762\uff0c\u53ef\u62d6\u52a8\uff0c\u53ef\u8fb9\u804a\u8fb9\u7528 */\n.wa-fx-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: transparent;\n  pointer-events: none;\n  display: block;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal {\n  position: fixed;\n  left: auto;\n  top: 72px;\n  right: 20px;\n  width: min(400px, calc(100vw - 24px));\n  max-height: min(86vh, 680px);\n  overflow: auto;\n  background: #fff;\n  color: #111b21;\n  border-radius: 16px;\n  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  pointer-events: auto;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 16px 16px 8px;\n  flex-shrink: 0;\n  cursor: move;\n  user-select: none;\n  touch-action: none;\n}\n\n.wa-fx-modal-head.is-dragging {\n  cursor: grabbing;\n}\n\n.wa-fx-modal-title-wrap {\n  min-width: 0;\n}\n\n.wa-fx-modal-title {\n  font-size: 17px;\n  font-weight: 650;\n  line-height: 1.3;\n  color: #111b21;\n}\n\n.wa-fx-modal-subtitle {\n  margin-top: 4px;\n  font-size: 12px;\n  color: #667781;\n  line-height: 1.35;\n}\n\n.wa-fx-modal-close {\n  flex: 0 0 auto;\n  width: 32px;\n  height: 32px;\n  border: none;\n  border-radius: 50%;\n  background: rgba(11, 20, 26, 0.06);\n  color: #54656f;\n  font-size: 22px;\n  line-height: 1;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  user-select: none;\n}\n\n.wa-fx-modal-close:hover {\n  background: rgba(11, 20, 26, 0.12);\n  color: #111b21;\n}\n\n.wa-fx-modal-body {\n  padding: 8px 16px 16px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  min-height: 0;\n}\n\n.wa-fx-card {\n  background: #f0f2f5;\n  border-radius: 12px;\n  padding: 12px 14px;\n}\n\n.wa-fx-card-result {\n  background: rgba(18, 140, 126, 0.1);\n  border: 1px solid rgba(18, 140, 126, 0.18);\n  cursor: pointer;\n  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;\n  user-select: none;\n}\n\n.wa-fx-card-result:hover {\n  background: rgba(18, 140, 126, 0.16);\n  border-color: rgba(18, 140, 126, 0.32);\n}\n\n.wa-fx-card-result:active,\n.wa-fx-card-result.is-copied {\n  background: rgba(18, 140, 126, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(18, 140, 126, 0.28);\n}\n\n.wa-fx-card-label {\n  font-size: 12px;\n  color: #667781;\n  margin-bottom: 8px;\n}\n\n.wa-fx-input-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.wa-fx-amount-group {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 4px;\n  flex: 0 0 auto;\n  min-width: 0;\n  max-width: 70%;\n}\n\n.wa-fx-amount-input {\n  flex: 0 0 auto;\n  min-width: 1ch;\n  width: auto;\n  max-width: 100%;\n  border: none;\n  background: transparent;\n  font-size: 28px;\n  font-weight: 600;\n  color: #111b21;\n  outline: none;\n  padding: 0;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  field-sizing: content;\n}\n\n.wa-fx-code-badge {\n  flex: 0 0 auto;\n  display: inline-flex;\n  align-items: baseline;\n  margin: 0;\n  padding: 0;\n  background: transparent;\n  color: #54656f;\n  font-size: 15px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  user-select: text;\n}\n\n.wa-fx-code-badge-target {\n  background: transparent;\n  color: #128c7e;\n}\n\n.wa-fx-currency-picker {\n  position: relative;\n  flex: 0 0 auto;\n  margin-left: auto;\n  max-width: 70%;\n}\n\n.wa-fx-currency-select {\n  display: inline-flex;\n  align-items: center;\n  justify-content: flex-start;\n  flex: 0 0 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n  margin-left: 0;\n  box-sizing: border-box;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 20px;\n  background: #fff;\n  color: #111b21;\n  font-size: 13px;\n  font-weight: 600;\n  padding: 6px 28px 6px 10px;\n  cursor: pointer;\n  outline: none;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  position: relative;\n}\n\n.wa-fx-currency-select::after {\n  content: '';\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border-left: 4px solid transparent;\n  border-right: 4px solid transparent;\n  border-top: 5px solid currentColor;\n  transform: translateY(-40%);\n  opacity: 0.55;\n  pointer-events: none;\n}\n\n.wa-fx-currency-picker.is-open .wa-fx-currency-select {\n  border-color: rgba(18, 140, 126, 0.45);\n}\n\n.wa-fx-currency-dropdown {\n  position: absolute;\n  right: 0;\n  top: calc(100% + 6px);\n  z-index: 20;\n  width: min(280px, 78vw);\n  max-height: 260px;\n  display: flex;\n  flex-direction: column;\n  background: #fff;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 12px;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);\n  overflow: hidden;\n}\n\n.wa-fx-currency-dropdown[hidden] {\n  display: none !important;\n}\n\n.wa-fx-currency-search {\n  flex: 0 0 auto;\n  width: 100%;\n  box-sizing: border-box;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  padding: 10px 12px;\n  font-size: 13px;\n  outline: none;\n  color: #111b21;\n  background: #f7f8fa;\n}\n\n.wa-fx-currency-options {\n  flex: 1 1 auto;\n  overflow: auto;\n  max-height: 210px;\n  padding: 4px;\n}\n\n.wa-fx-currency-section {\n  padding: 8px 10px 4px;\n  font-size: 11px;\n  font-weight: 700;\n  letter-spacing: 0.04em;\n  color: #8696a0;\n  text-transform: none;\n}\n\n.wa-fx-currency-sep {\n  height: 1px;\n  margin: 6px 8px;\n  background: rgba(0, 0, 0, 0.08);\n}\n\n.wa-fx-currency-option {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  border: none;\n  background: transparent;\n  text-align: left;\n  padding: 8px 8px 8px 10px;\n  border-radius: 8px;\n  cursor: pointer;\n  color: #111b21;\n  font-size: 13px;\n}\n\n.wa-fx-currency-option:hover,\n.wa-fx-currency-option.is-active {\n  background: rgba(18, 140, 126, 0.1);\n}\n\n.wa-fx-currency-option.is-pinned {\n  background: rgba(18, 140, 126, 0.06);\n}\n\n.wa-fx-currency-option-code {\n  flex: 0 0 auto;\n  min-width: 36px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-currency-option-name {\n  flex: 1 1 auto;\n  min-width: 0;\n  color: #667781;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.wa-fx-currency-pin {\n  flex: 0 0 auto;\n  width: 26px;\n  height: 26px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  border-radius: 50%;\n  background: transparent;\n  color: #8696a0;\n  cursor: pointer;\n  padding: 0;\n  line-height: 0;\n}\n\n.wa-fx-currency-pin:hover {\n  background: rgba(11, 20, 26, 0.06);\n  color: #128c7e;\n}\n\n.wa-fx-currency-pin.is-on {\n  color: #128c7e;\n}\n\n.wa-fx-currency-pin svg {\n  display: block;\n}\n\n.wa-fx-currency-empty {\n  padding: 14px 10px;\n  text-align: center;\n  color: #8696a0;\n  font-size: 12px;\n}\n\n.wa-fx-currency-select option {\n  white-space: normal;\n  font-weight: 500;\n}\n\n.wa-fx-arrow {\n  text-align: center;\n  color: #8696a0;\n  font-size: 16px;\n  line-height: 1;\n  user-select: none;\n}\n\n.wa-fx-result-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 8px;\n  width: 100%;\n  max-width: 100%;\n}\n\n.wa-fx-result-amount {\n  flex: 0 1 auto;\n  min-width: 0;\n  max-width: 100%;\n  font-size: 28px;\n  font-weight: 700;\n  color: #075e54;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  word-break: break-all;\n  cursor: pointer;\n  border-radius: 6px;\n  padding: 0;\n}\n\n.wa-fx-result-amount:hover,\n.wa-fx-result-amount.is-copied {\n  background: rgba(18, 140, 126, 0.12);\n}\n\n.wa-fx-target-select {\n  flex: 0 0 auto;\n}\n\n.wa-fx-result-code {\n  flex: 0 0 auto;\n  font-size: 14px;\n  font-weight: 700;\n  color: #128c7e;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-rate-hint {\n  margin-top: 8px;\n  font-size: 12px;\n  color: #667781;\n}\n\n.wa-fx-list-head {\n  margin-top: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  color: #111b21;\n}\n\n.wa-fx-rate-list {\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  max-height: 240px;\n  overflow: auto;\n  border: 1px solid rgba(0, 0, 0, 0.06);\n  border-radius: 12px;\n  background: #fff;\n}\n\n.wa-fx-rate-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  padding: 10px 12px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.04);\n}\n\n.wa-fx-rate-item:last-child {\n  border-bottom: none;\n}\n\n.wa-fx-rate-item.is-local {\n  background: rgba(18, 140, 126, 0.08);\n}\n\n.wa-fx-rate-left {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n}\n\n.wa-fx-rate-code {\n  font-size: 13px;\n  font-weight: 700;\n  color: #111b21;\n  min-width: 36px;\n}\n\n.wa-fx-rate-name {\n  font-size: 12px;\n  color: #667781;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.wa-fx-local-badge {\n  flex: 0 0 auto;\n  font-size: 10px;\n  font-weight: 650;\n  color: #075e54;\n  background: rgba(18, 140, 126, 0.16);\n  border-radius: 999px;\n  padding: 2px 6px;\n}\n\n.wa-fx-rate-right {\n  flex: 0 0 auto;\n  font-size: 12px;\n  font-weight: 600;\n  color: #111b21;\n  font-variant-numeric: tabular-nums;\n  white-space: nowrap;\n}\n\n.wa-fx-foot {\n  font-size: 11px;\n  color: #8696a0;\n  text-align: center;\n  margin-top: 2px;\n}\n\n.dark .wa-fx-modal,\n.wa-fx-overlay.dark .wa-fx-modal {\n  background: #1f2c34;\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-title,\n.wa-fx-overlay.dark .wa-fx-modal-title {\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-subtitle,\n.dark .wa-fx-card-label,\n.dark .wa-fx-rate-hint,\n.dark .wa-fx-rate-name,\n.dark .wa-fx-foot,\n.wa-fx-overlay.dark .wa-fx-modal-subtitle,\n.wa-fx-overlay.dark .wa-fx-card-label,\n.wa-fx-overlay.dark .wa-fx-rate-hint,\n.wa-fx-overlay.dark .wa-fx-rate-name,\n.wa-fx-overlay.dark .wa-fx-foot {\n  color: #8696a0;\n}\n\n.dark .wa-fx-modal-close,\n.wa-fx-overlay.dark .wa-fx-modal-close {\n  background: rgba(233, 237, 239, 0.08);\n  color: #aebac1;\n}\n\n.dark .wa-fx-modal-close:hover,\n.wa-fx-overlay.dark .wa-fx-modal-close:hover {\n  background: rgba(233, 237, 239, 0.14);\n  color: #e9edef;\n}\n\n.dark .wa-fx-card,\n.wa-fx-overlay.dark .wa-fx-card {\n  background: #111b21;\n}\n\n.dark .wa-fx-card-result,\n.wa-fx-overlay.dark .wa-fx-card-result {\n  background: rgba(37, 211, 102, 0.1);\n  border-color: rgba(37, 211, 102, 0.22);\n}\n\n.dark .wa-fx-card-result:hover,\n.wa-fx-overlay.dark .wa-fx-card-result:hover {\n  background: rgba(37, 211, 102, 0.16);\n  border-color: rgba(37, 211, 102, 0.35);\n}\n\n.dark .wa-fx-card-result:active,\n.dark .wa-fx-card-result.is-copied,\n.wa-fx-overlay.dark .wa-fx-card-result:active,\n.wa-fx-overlay.dark .wa-fx-card-result.is-copied {\n  background: rgba(37, 211, 102, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(37, 211, 102, 0.3);\n}\n\n.dark .wa-fx-amount-input,\n.dark .wa-fx-list-head,\n.dark .wa-fx-rate-code,\n.dark .wa-fx-rate-right,\n.wa-fx-overlay.dark .wa-fx-amount-input,\n.wa-fx-overlay.dark .wa-fx-list-head,\n.wa-fx-overlay.dark .wa-fx-rate-code,\n.wa-fx-overlay.dark .wa-fx-rate-right {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-select,\n.wa-fx-overlay.dark .wa-fx-currency-select {\n  background: #233138;\n  border-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-dropdown,\n.wa-fx-overlay.dark .wa-fx-currency-dropdown {\n  background: #1f2c34;\n  border-color: #3b4a54;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);\n}\n\n.dark .wa-fx-currency-search,\n.wa-fx-overlay.dark .wa-fx-currency-search {\n  background: #111b21;\n  border-bottom-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option,\n.wa-fx-overlay.dark .wa-fx-currency-option {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option:hover,\n.dark .wa-fx-currency-option.is-active,\n.wa-fx-overlay.dark .wa-fx-currency-option:hover,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-active {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-currency-option-name,\n.wa-fx-overlay.dark .wa-fx-currency-option-name,\n.dark .wa-fx-currency-empty,\n.wa-fx-overlay.dark .wa-fx-currency-empty,\n.dark .wa-fx-currency-section,\n.wa-fx-overlay.dark .wa-fx-currency-section {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-sep,\n.wa-fx-overlay.dark .wa-fx-currency-sep {\n  background: rgba(233, 237, 239, 0.1);\n}\n\n.dark .wa-fx-currency-option.is-pinned,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-pinned {\n  background: rgba(37, 211, 102, 0.08);\n}\n\n.dark .wa-fx-currency-pin,\n.wa-fx-overlay.dark .wa-fx-currency-pin {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.dark .wa-fx-currency-pin.is-on,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin.is-on {\n  color: #25d366;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover {\n  background: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-code-badge,\n.wa-fx-overlay.dark .wa-fx-code-badge {\n  background: transparent;\n  color: #aebac1;\n}\n\n.dark .wa-fx-code-badge-target,\n.wa-fx-overlay.dark .wa-fx-code-badge-target {\n  background: transparent;\n  color: #25d366;\n}\n\n.dark .wa-fx-result-amount,\n.wa-fx-overlay.dark .wa-fx-result-amount {\n  color: #25d366;\n}\n\n.dark .wa-fx-result-amount:hover,\n.dark .wa-fx-result-amount.is-copied,\n.wa-fx-overlay.dark .wa-fx-result-amount:hover,\n.wa-fx-overlay.dark .wa-fx-result-amount.is-copied {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-result-code,\n.wa-fx-overlay.dark .wa-fx-result-code {\n  color: #25d366;\n}\n\n.dark .wa-fx-rate-list,\n.wa-fx-overlay.dark .wa-fx-rate-list {\n  background: #111b21;\n  border-color: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-rate-item,\n.wa-fx-overlay.dark .wa-fx-rate-item {\n  border-bottom-color: rgba(233, 237, 239, 0.06);\n}\n\n.dark .wa-fx-rate-item.is-local,\n.wa-fx-overlay.dark .wa-fx-rate-item.is-local {\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.dark .wa-fx-local-badge,\n.wa-fx-overlay.dark .wa-fx-local-badge {\n  color: #25d366;\n  background: rgba(37, 211, 102, 0.18);\n}\n\n.wa-country-info {\n  margin-left: 8px !important;\n  font-size: 14px !important;\n  color: #667781 !important;\n  font-weight: normal !important;\n  display: inline !important;\n}\n\n.dark .wa-country-info {\n  color: #8696a0 !important; /* --text-muted */\n}";
+  var STYLE_CSS = ".country-info {\n  margin-top: 0;\n  font-size: 14px;\n  display: block;\n  box-sizing: border-box;\n  flex: 0 1 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n}\n\n.wa-country-info-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 4px;\n  margin-top: 4px;\n  box-sizing: border-box;\n  width: 100%;\n  min-width: 0;\n  max-width: 100%;\n  align-self: stretch;\n}\n\n.wa-country-info-row--compact {\n  flex-wrap: nowrap;\n  gap: 6px;\n  margin-top: 0;\n  overflow: hidden;\n}\n\n.wa-country-info-row--compact .country-info {\n  font-size: 12px;\n  line-height: 16px;\n  max-width: 58%;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n[data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact {\n  flex: 0 0 auto;\n  align-self: stretch;\n  width: 100%;\n  max-width: 100%;\n  padding: 6px 16px;\n  margin: 0;\n  background: #fff;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  z-index: 1;\n  position: relative;\n}\n\n.dark [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact,\nbody.dark [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact,\nhtml[data-color-mode=\"dark\"] [data-testid=\"conversation-panel-wrapper\"] > .wa-country-info-row--compact {\n  background: #202c33;\n  border-bottom-color: rgba(255, 255, 255, 0.08);\n}\n\n.wa-country-info-row > .wa-quick-remark-header {\n  flex: 1 1 auto;\n  width: auto;\n  min-width: 48px;\n  max-width: none;\n  margin-top: 0;\n  padding: 0;\n  background: transparent;\n  border: none;\n}\n\n.wa-country-info-row > .wa-quick-remark-header .wa-quick-remark-ipt--header {\n  max-width: none;\n  width: 100%;\n}\n\n.wa-country-info-row--compact > .wa-quick-remark-header .wa-quick-remark-ipt--header {\n  height: 16px;\n  font-size: 12px;\n  line-height: 16px;\n}\n\n.wa-country-info-row--compact .wa-currency-fx-btn svg {\n  width: 13px;\n  height: 13px;\n}\n\n.wa-currency-fx-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex: 0 0 auto;\n  width: auto;\n  height: auto;\n  padding: 0;\n  margin: 0;\n  border: none;\n  border-radius: 0;\n  background: transparent;\n  color: #111b21;\n  cursor: pointer;\n  user-select: none;\n  box-sizing: border-box;\n  line-height: 0;\n  opacity: 0.85;\n}\n\n.wa-currency-fx-btn svg {\n  display: block;\n  width: 15px;\n  height: 15px;\n  pointer-events: none;\n}\n\n.wa-currency-fx-btn:hover {\n  opacity: 1;\n}\n\n.wa-currency-fx-btn:active {\n  opacity: 0.7;\n}\n\n.dark .wa-currency-fx-btn {\n  color: #e9edef;\n  background: transparent;\n  border: none;\n}\n\n.dark .wa-currency-fx-btn:hover {\n  opacity: 1;\n  background: transparent;\n}\n\n/* \u6c47\u7387\u8f6c\u6362\u6d6e\u52a8\u9762\u677f\uff1a\u4e0d\u906e\u7f69\u9875\u9762\uff0c\u53ef\u62d6\u52a8\uff0c\u53ef\u8fb9\u804a\u8fb9\u7528 */\n.wa-fx-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: transparent;\n  pointer-events: none;\n  display: block;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal {\n  position: fixed;\n  left: auto;\n  top: 72px;\n  right: 20px;\n  width: min(400px, calc(100vw - 24px));\n  max-height: min(86vh, 680px);\n  overflow: auto;\n  background: #fff;\n  color: #111b21;\n  border-radius: 16px;\n  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n  pointer-events: auto;\n  box-sizing: border-box;\n}\n\n.wa-fx-modal-head {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 16px 16px 8px;\n  flex-shrink: 0;\n  cursor: move;\n  user-select: none;\n  touch-action: none;\n}\n\n.wa-fx-modal-head.is-dragging {\n  cursor: grabbing;\n}\n\n.wa-fx-modal-title-wrap {\n  min-width: 0;\n}\n\n.wa-fx-modal-title {\n  font-size: 17px;\n  font-weight: 650;\n  line-height: 1.3;\n  color: #111b21;\n}\n\n.wa-fx-modal-subtitle {\n  margin-top: 4px;\n  font-size: 12px;\n  color: #667781;\n  line-height: 1.35;\n}\n\n.wa-fx-modal-close {\n  flex: 0 0 auto;\n  width: 32px;\n  height: 32px;\n  border: none;\n  border-radius: 50%;\n  background: rgba(11, 20, 26, 0.06);\n  color: #54656f;\n  font-size: 22px;\n  line-height: 1;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  user-select: none;\n}\n\n.wa-fx-modal-close:hover {\n  background: rgba(11, 20, 26, 0.12);\n  color: #111b21;\n}\n\n.wa-fx-modal-body {\n  padding: 8px 16px 16px;\n  display: flex;\n  flex-direction: column;\n  gap: 10px;\n  min-height: 0;\n}\n\n.wa-fx-card {\n  background: #f0f2f5;\n  border-radius: 12px;\n  padding: 12px 14px;\n}\n\n.wa-fx-card-result {\n  background: rgba(18, 140, 126, 0.1);\n  border: 1px solid rgba(18, 140, 126, 0.18);\n  cursor: pointer;\n  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;\n  user-select: none;\n}\n\n.wa-fx-card-result:hover {\n  background: rgba(18, 140, 126, 0.16);\n  border-color: rgba(18, 140, 126, 0.32);\n}\n\n.wa-fx-card-result:active,\n.wa-fx-card-result.is-copied {\n  background: rgba(18, 140, 126, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(18, 140, 126, 0.28);\n}\n\n.wa-fx-card-label {\n  font-size: 12px;\n  color: #667781;\n  margin-bottom: 8px;\n}\n\n.wa-fx-input-row {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n\n.wa-fx-amount-group {\n  display: inline-flex;\n  align-items: baseline;\n  gap: 4px;\n  flex: 0 0 auto;\n  min-width: 0;\n  max-width: 70%;\n}\n\n.wa-fx-amount-input {\n  flex: 0 0 auto;\n  min-width: 1ch;\n  width: auto;\n  max-width: 100%;\n  border: none;\n  background: transparent;\n  font-size: 28px;\n  font-weight: 600;\n  color: #111b21;\n  outline: none;\n  padding: 0;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  field-sizing: content;\n}\n\n.wa-fx-code-badge {\n  flex: 0 0 auto;\n  display: inline-flex;\n  align-items: baseline;\n  margin: 0;\n  padding: 0;\n  background: transparent;\n  color: #54656f;\n  font-size: 15px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  user-select: text;\n}\n\n.wa-fx-code-badge-target {\n  background: transparent;\n  color: #4f46e5;\n}\n\n.wa-fx-currency-picker {\n  position: relative;\n  flex: 0 0 auto;\n  margin-left: auto;\n  max-width: 70%;\n}\n\n.wa-fx-currency-select {\n  display: inline-flex;\n  align-items: center;\n  justify-content: flex-start;\n  flex: 0 0 auto;\n  width: auto;\n  min-width: 0;\n  max-width: 100%;\n  margin-left: 0;\n  box-sizing: border-box;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 20px;\n  background: #fff;\n  color: #111b21;\n  font-size: 13px;\n  font-weight: 600;\n  padding: 6px 28px 6px 10px;\n  cursor: pointer;\n  outline: none;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  position: relative;\n}\n\n.wa-fx-currency-select::after {\n  content: '';\n  position: absolute;\n  right: 10px;\n  top: 50%;\n  width: 0;\n  height: 0;\n  border-left: 4px solid transparent;\n  border-right: 4px solid transparent;\n  border-top: 5px solid currentColor;\n  transform: translateY(-40%);\n  opacity: 0.55;\n  pointer-events: none;\n}\n\n.wa-fx-currency-picker.is-open .wa-fx-currency-select {\n  border-color: rgba(18, 140, 126, 0.45);\n}\n\n.wa-fx-currency-dropdown {\n  position: absolute;\n  right: 0;\n  top: calc(100% + 6px);\n  z-index: 20;\n  width: min(280px, 78vw);\n  max-height: 260px;\n  display: flex;\n  flex-direction: column;\n  background: #fff;\n  border: 1px solid rgba(0, 0, 0, 0.1);\n  border-radius: 12px;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);\n  overflow: hidden;\n}\n\n.wa-fx-currency-dropdown[hidden] {\n  display: none !important;\n}\n\n.wa-fx-currency-search {\n  flex: 0 0 auto;\n  width: 100%;\n  box-sizing: border-box;\n  border: none;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.08);\n  padding: 10px 12px;\n  font-size: 13px;\n  outline: none;\n  color: #111b21;\n  background: #f7f8fa;\n}\n\n.wa-fx-currency-options {\n  flex: 1 1 auto;\n  overflow: auto;\n  max-height: 210px;\n  padding: 4px;\n}\n\n.wa-fx-currency-section {\n  padding: 8px 10px 4px;\n  font-size: 11px;\n  font-weight: 700;\n  letter-spacing: 0.04em;\n  color: #8696a0;\n  text-transform: none;\n}\n\n.wa-fx-currency-sep {\n  height: 1px;\n  margin: 6px 8px;\n  background: rgba(0, 0, 0, 0.08);\n}\n\n.wa-fx-currency-option {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  width: 100%;\n  border: none;\n  background: transparent;\n  text-align: left;\n  padding: 8px 8px 8px 10px;\n  border-radius: 8px;\n  cursor: pointer;\n  color: #111b21;\n  font-size: 13px;\n}\n\n.wa-fx-currency-option:hover,\n.wa-fx-currency-option.is-active {\n  background: rgba(18, 140, 126, 0.1);\n}\n\n.wa-fx-currency-option.is-pinned {\n  background: rgba(18, 140, 126, 0.06);\n}\n\n.wa-fx-currency-option-code {\n  flex: 0 0 auto;\n  min-width: 36px;\n  font-weight: 700;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-currency-option-name {\n  flex: 1 1 auto;\n  min-width: 0;\n  color: #667781;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.wa-fx-currency-pin {\n  flex: 0 0 auto;\n  width: 26px;\n  height: 26px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: none;\n  border-radius: 50%;\n  background: transparent;\n  color: #8696a0;\n  cursor: pointer;\n  padding: 0;\n  line-height: 0;\n}\n\n.wa-fx-currency-pin:hover {\n  background: rgba(11, 20, 26, 0.06);\n  color: #4f46e5;\n}\n\n.wa-fx-currency-pin.is-on {\n  color: #4f46e5;\n}\n\n.wa-fx-currency-pin svg {\n  display: block;\n}\n\n.wa-fx-currency-empty {\n  padding: 14px 10px;\n  text-align: center;\n  color: #8696a0;\n  font-size: 12px;\n}\n\n.wa-fx-currency-select option {\n  white-space: normal;\n  font-weight: 500;\n}\n\n.wa-fx-arrow {\n  text-align: center;\n  color: #8696a0;\n  font-size: 16px;\n  line-height: 1;\n  user-select: none;\n}\n\n.wa-fx-result-row {\n  display: flex;\n  align-items: center;\n  justify-content: flex-start;\n  gap: 8px;\n  width: 100%;\n  max-width: 100%;\n}\n\n.wa-fx-result-amount {\n  flex: 0 1 auto;\n  min-width: 0;\n  max-width: 100%;\n  font-size: 28px;\n  font-weight: 700;\n  color: #312e81;\n  line-height: 1.2;\n  font-variant-numeric: tabular-nums;\n  word-break: break-all;\n  cursor: pointer;\n  border-radius: 6px;\n  padding: 0;\n}\n\n.wa-fx-result-amount:hover,\n.wa-fx-result-amount.is-copied {\n  background: rgba(18, 140, 126, 0.12);\n}\n\n.wa-fx-target-select {\n  flex: 0 0 auto;\n}\n\n.wa-fx-result-code {\n  flex: 0 0 auto;\n  font-size: 14px;\n  font-weight: 700;\n  color: #4f46e5;\n  letter-spacing: 0.02em;\n}\n\n.wa-fx-rate-hint {\n  margin-top: 8px;\n  font-size: 12px;\n  color: #667781;\n}\n\n.wa-fx-list-head {\n  margin-top: 4px;\n  font-size: 13px;\n  font-weight: 600;\n  color: #111b21;\n}\n\n.wa-fx-rate-list {\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n  max-height: 240px;\n  overflow: auto;\n  border: 1px solid rgba(0, 0, 0, 0.06);\n  border-radius: 12px;\n  background: #fff;\n}\n\n.wa-fx-rate-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 10px;\n  padding: 10px 12px;\n  border-bottom: 1px solid rgba(0, 0, 0, 0.04);\n}\n\n.wa-fx-rate-item:last-child {\n  border-bottom: none;\n}\n\n.wa-fx-rate-item.is-local {\n  background: rgba(18, 140, 126, 0.08);\n}\n\n.wa-fx-rate-left {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n  min-width: 0;\n}\n\n.wa-fx-rate-code {\n  font-size: 13px;\n  font-weight: 700;\n  color: #111b21;\n  min-width: 36px;\n}\n\n.wa-fx-rate-name {\n  font-size: 12px;\n  color: #667781;\n  white-space: nowrap;\n  overflow: hidden;\n  text-overflow: ellipsis;\n}\n\n.wa-fx-local-badge {\n  flex: 0 0 auto;\n  font-size: 10px;\n  font-weight: 650;\n  color: #312e81;\n  background: rgba(18, 140, 126, 0.16);\n  border-radius: 999px;\n  padding: 2px 6px;\n}\n\n.wa-fx-rate-right {\n  flex: 0 0 auto;\n  font-size: 12px;\n  font-weight: 600;\n  color: #111b21;\n  font-variant-numeric: tabular-nums;\n  white-space: nowrap;\n}\n\n.wa-fx-foot {\n  font-size: 11px;\n  color: #8696a0;\n  text-align: center;\n  margin-top: 2px;\n}\n\n.dark .wa-fx-modal,\n.wa-fx-overlay.dark .wa-fx-modal {\n  background: #1f2c34;\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-title,\n.wa-fx-overlay.dark .wa-fx-modal-title {\n  color: #e9edef;\n}\n\n.dark .wa-fx-modal-subtitle,\n.dark .wa-fx-card-label,\n.dark .wa-fx-rate-hint,\n.dark .wa-fx-rate-name,\n.dark .wa-fx-foot,\n.wa-fx-overlay.dark .wa-fx-modal-subtitle,\n.wa-fx-overlay.dark .wa-fx-card-label,\n.wa-fx-overlay.dark .wa-fx-rate-hint,\n.wa-fx-overlay.dark .wa-fx-rate-name,\n.wa-fx-overlay.dark .wa-fx-foot {\n  color: #8696a0;\n}\n\n.dark .wa-fx-modal-close,\n.wa-fx-overlay.dark .wa-fx-modal-close {\n  background: rgba(233, 237, 239, 0.08);\n  color: #aebac1;\n}\n\n.dark .wa-fx-modal-close:hover,\n.wa-fx-overlay.dark .wa-fx-modal-close:hover {\n  background: rgba(233, 237, 239, 0.14);\n  color: #e9edef;\n}\n\n.dark .wa-fx-card,\n.wa-fx-overlay.dark .wa-fx-card {\n  background: #111b21;\n}\n\n.dark .wa-fx-card-result,\n.wa-fx-overlay.dark .wa-fx-card-result {\n  background: rgba(37, 211, 102, 0.1);\n  border-color: rgba(37, 211, 102, 0.22);\n}\n\n.dark .wa-fx-card-result:hover,\n.wa-fx-overlay.dark .wa-fx-card-result:hover {\n  background: rgba(37, 211, 102, 0.16);\n  border-color: rgba(37, 211, 102, 0.35);\n}\n\n.dark .wa-fx-card-result:active,\n.dark .wa-fx-card-result.is-copied,\n.wa-fx-overlay.dark .wa-fx-card-result:active,\n.wa-fx-overlay.dark .wa-fx-card-result.is-copied {\n  background: rgba(37, 211, 102, 0.22);\n  box-shadow: inset 0 0 0 1px rgba(37, 211, 102, 0.3);\n}\n\n.dark .wa-fx-amount-input,\n.dark .wa-fx-list-head,\n.dark .wa-fx-rate-code,\n.dark .wa-fx-rate-right,\n.wa-fx-overlay.dark .wa-fx-amount-input,\n.wa-fx-overlay.dark .wa-fx-list-head,\n.wa-fx-overlay.dark .wa-fx-rate-code,\n.wa-fx-overlay.dark .wa-fx-rate-right {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-select,\n.wa-fx-overlay.dark .wa-fx-currency-select {\n  background: #233138;\n  border-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-dropdown,\n.wa-fx-overlay.dark .wa-fx-currency-dropdown {\n  background: #1f2c34;\n  border-color: #3b4a54;\n  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);\n}\n\n.dark .wa-fx-currency-search,\n.wa-fx-overlay.dark .wa-fx-currency-search {\n  background: #111b21;\n  border-bottom-color: #3b4a54;\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option,\n.wa-fx-overlay.dark .wa-fx-currency-option {\n  color: #e9edef;\n}\n\n.dark .wa-fx-currency-option:hover,\n.dark .wa-fx-currency-option.is-active,\n.wa-fx-overlay.dark .wa-fx-currency-option:hover,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-active {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-currency-option-name,\n.wa-fx-overlay.dark .wa-fx-currency-option-name,\n.dark .wa-fx-currency-empty,\n.wa-fx-overlay.dark .wa-fx-currency-empty,\n.dark .wa-fx-currency-section,\n.wa-fx-overlay.dark .wa-fx-currency-section {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-sep,\n.wa-fx-overlay.dark .wa-fx-currency-sep {\n  background: rgba(233, 237, 239, 0.1);\n}\n\n.dark .wa-fx-currency-option.is-pinned,\n.wa-fx-overlay.dark .wa-fx-currency-option.is-pinned {\n  background: rgba(37, 211, 102, 0.08);\n}\n\n.dark .wa-fx-currency-pin,\n.wa-fx-overlay.dark .wa-fx-currency-pin {\n  color: #8696a0;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.dark .wa-fx-currency-pin.is-on,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin.is-on {\n  color: #6366f1;\n}\n\n.dark .wa-fx-currency-pin:hover,\n.wa-fx-overlay.dark .wa-fx-currency-pin:hover {\n  background: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-code-badge,\n.wa-fx-overlay.dark .wa-fx-code-badge {\n  background: transparent;\n  color: #aebac1;\n}\n\n.dark .wa-fx-code-badge-target,\n.wa-fx-overlay.dark .wa-fx-code-badge-target {\n  background: transparent;\n  color: #6366f1;\n}\n\n.dark .wa-fx-result-amount,\n.wa-fx-overlay.dark .wa-fx-result-amount {\n  color: #6366f1;\n}\n\n.dark .wa-fx-result-amount:hover,\n.dark .wa-fx-result-amount.is-copied,\n.wa-fx-overlay.dark .wa-fx-result-amount:hover,\n.wa-fx-overlay.dark .wa-fx-result-amount.is-copied {\n  background: rgba(37, 211, 102, 0.14);\n}\n\n.dark .wa-fx-result-code,\n.wa-fx-overlay.dark .wa-fx-result-code {\n  color: #6366f1;\n}\n\n.dark .wa-fx-rate-list,\n.wa-fx-overlay.dark .wa-fx-rate-list {\n  background: #111b21;\n  border-color: rgba(233, 237, 239, 0.08);\n}\n\n.dark .wa-fx-rate-item,\n.wa-fx-overlay.dark .wa-fx-rate-item {\n  border-bottom-color: rgba(233, 237, 239, 0.06);\n}\n\n.dark .wa-fx-rate-item.is-local,\n.wa-fx-overlay.dark .wa-fx-rate-item.is-local {\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.dark .wa-fx-local-badge,\n.wa-fx-overlay.dark .wa-fx-local-badge {\n  color: #6366f1;\n  background: rgba(37, 211, 102, 0.18);\n}\n\n.wa-country-info {\n  margin-left: 8px !important;\n  font-size: 14px !important;\n  color: #667781 !important;\n  font-weight: normal !important;\n  display: inline !important;\n}\n\n.dark .wa-country-info {\n  color: #8696a0 !important; /* --text-muted */\n}";
 
 
 
   function cfg() {
 
-    return window.__whatsnowTranslateCfg || {};
+    return window.__faloTranslateCfg || {};
 
   }
 
@@ -13016,7 +13016,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     try {
 
-      return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+      return !!(window.__faloCan && window.__faloCan("core_translate"));
 
     } catch (_) {}
 
@@ -13052,9 +13052,9 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   var storePhoneResolveGen = 0;
 
-  var PHONE_CACHE_KEY = "whatsnowPhoneByTitle";
+  var PHONE_CACHE_KEY = "faloPhoneByTitle";
 
-  var ISO_CACHE_KEY = "whatsnowIsoByTitle";
+  var ISO_CACHE_KEY = "faloIsoByTitle";
 
   var storeIsoByKey = {};
 
@@ -13170,7 +13170,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     try {
 
-      return !!(window.__whatsnowStorePhone && window.__whatsnowStorePhone.isReady && window.__whatsnowStorePhone.isReady());
+      return !!(window.__faloStorePhone && window.__faloStorePhone.isReady && window.__faloStorePhone.isReady());
 
     } catch (_) {
 
@@ -13232,9 +13232,9 @@ var CANADA_NANP_AREA_CODES = new Set([
 
       try {
 
-        if (window.__whatsnowStorePhone && window.__whatsnowStorePhone.discoverStore) {
+        if (window.__faloStorePhone && window.__faloStorePhone.discoverStore) {
 
-          window.__whatsnowStorePhone.discoverStore(true);
+          window.__faloStorePhone.discoverStore(true);
 
         }
 
@@ -13384,7 +13384,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     try {
 
-      var api = window.__whatsnowStorePhone;
+      var api = window.__faloStorePhone;
 
       if (api) {
 
@@ -13480,7 +13480,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
           var data = event.data;
 
-          if (!data || data.source !== "whatsnow" || data.dir !== "p2c") return;
+          if (!data || data.source !== "falo" || data.dir !== "p2c") return;
 
           if (String(data.type) !== "WAContactExport:result") return;
 
@@ -13514,7 +13514,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
           {
 
-            source: "whatsnow",
+            source: "falo",
 
             dir: "c2p",
 
@@ -13872,7 +13872,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function ensureStyles() {
 
-    if (document.getElementById("whatsnow-country-fx-styles")) return;
+    if (document.getElementById("falo-country-fx-styles")) return;
 
     var parent = document.head || document.documentElement;
 
@@ -13880,7 +13880,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     var s = document.createElement("style");
 
-    s.id = "whatsnow-country-fx-styles";
+    s.id = "falo-country-fx-styles";
 
     s.textContent = STYLE_CSS;
 
@@ -14162,13 +14162,13 @@ var CANADA_NANP_AREA_CODES = new Set([
 
 
 
-  // ---------- FX: open full 1:1 panel from watrans-fx.js ----------
+  // ---------- FX: open full 1:1 panel from falo-fx.js ----------
 
   function showCurrencyConverterPopup(opts) {
 
     try {
 
-      var fn = window.__whatsnowShowFxPopup;
+      var fn = window.__faloShowFxPopup;
 
       if (typeof fn === 'function') return fn(opts);
 
@@ -14176,7 +14176,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     try {
 
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
 
       if (h && typeof h.showCurrencyConverterPopup === 'function') {
 
@@ -14899,8 +14899,8 @@ var CANADA_NANP_AREA_CODES = new Set([
         else infoHeader.appendChild(remark);
       }
       try {
-        if (typeof window.__whatsnowStabilizeHeaderStack === "function") {
-          window.__whatsnowStabilizeHeaderStack(infoHeader);
+        if (typeof window.__faloStabilizeHeaderStack === "function") {
+          window.__faloStabilizeHeaderStack(infoHeader);
         }
       } catch (_) {}
     }
@@ -15281,7 +15281,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
         try {
 
-          var hLang = window.__whatsnowTranslateHelpers;
+          var hLang = window.__faloTranslateHelpers;
 
           if (hLang && typeof hLang.loadSessionLanguageSettings === "function") {
 
@@ -15299,9 +15299,9 @@ var CANADA_NANP_AREA_CODES = new Set([
 
           var ih = header.querySelector('[data-testid="conversation-info-header"]');
 
-          if (typeof window.__whatsnowStabilizeHeaderStack === "function") {
+          if (typeof window.__faloStabilizeHeaderStack === "function") {
 
-            window.__whatsnowStabilizeHeaderStack(ih);
+            window.__faloStabilizeHeaderStack(ih);
 
           }
 
@@ -15441,7 +15441,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
       if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke) {
 
-        window.__TAURI__.core.invoke("dlog", { msg: "watrans-country-fx: store ready" });
+        window.__TAURI__.core.invoke("dlog", { msg: "falo-country-fx: store ready" });
 
       }
 
@@ -15455,11 +15455,11 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     var bus =
 
-      (window.__whatsnowTranslateHelpers &&
+      (window.__faloTranslateHelpers &&
 
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
+        window.__faloTranslateHelpers.domMutationBus) ||
 
-      window.__whatsnowDomMutationBus;
+      window.__faloDomMutationBus;
 
     if (bus && typeof bus.register === "function") {
 
@@ -15515,7 +15515,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   } catch (_) {}
 
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
 
     schedule(40);
 
@@ -15525,7 +15525,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   try {
 
-    window.__whatsnowGetCountryInfo = function () {
+    window.__faloGetCountryInfo = function () {
 
       try {
 
@@ -15547,7 +15547,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
     if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke) {
 
-      window.__TAURI__.core.invoke("dlog", { msg: "watrans-country-fx: ready (fast path)" });
+      window.__TAURI__.core.invoke("dlog", { msg: "falo-country-fx: ready (fast path)" });
 
     }
 
@@ -15556,26 +15556,26 @@ var CANADA_NANP_AREA_CODES = new Set([
 })();
 
 // ===== run @0x74D9C8 (18321 bytes) =====
-/*! WATransChat msg-device — 1:1 from WATransChat content-msg-device.js + styles.css
+/*! Falo msg-device — 1:1 from Falo content-msg-device.js + styles.css
  * Infer contact client type (iOS / Android / Web) from WhatsApp message id prefixes.
  * Bubble hover badge + conversation header avatar badge.
  */
 (function () {
   "use strict";
-  if (window.__whatsnowMsgDeviceInstalled) return;
-  window.__whatsnowMsgDeviceInstalled = true;
+  if (window.__faloMsgDeviceInstalled) return;
+  window.__faloMsgDeviceInstalled = true;
 
   function cfg() {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.getCfg) return h.getCfg() || {};
     } catch (_) {}
-    return window.__whatsnowTranslateCfg || {};
+    return window.__faloTranslateCfg || {};
   }
 
   function canCore() {
     try {
-      return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+      return !!(window.__faloCan && window.__faloCan("core_translate"));
     } catch (_) {}
     return false;
   }
@@ -15586,7 +15586,7 @@ var CANADA_NANP_AREA_CODES = new Set([
     return c.showDevice !== false;
   }
 
-  var STYLE_ID = "whatsnow-msg-device-style";
+  var STYLE_ID = "falo-msg-device-style";
   function ensureStyles() {
     if (document.getElementById(STYLE_ID)) return;
     var parent = document.head || document.documentElement;
@@ -16033,9 +16033,9 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   try {
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       bus.register(scheduleScan, { id: "msg-device" });
     } else {
@@ -16061,18 +16061,18 @@ var CANADA_NANP_AREA_CODES = new Set([
     } catch (_) {}
   }, 2500);
 
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     scheduleScan();
   });
 
   try {
-    window.__whatsnowMsgDevice = {
+    window.__faloMsgDevice = {
       detectDeviceFromMessageId: detectDeviceFromMessageId,
       extractMessageIdPart: extractMessageIdPart,
       refreshLabels: refreshAllDeviceLabels,
       scan: scanMessageDevices,
     };
-    window.__whatsnowTranslateHelpers = Object.assign(window.__whatsnowTranslateHelpers || {}, {
+    window.__faloTranslateHelpers = Object.assign(window.__faloTranslateHelpers || {}, {
       detectWaMsgDevice: detectDeviceFromMessageId,
       extractWaMsgIdPart: extractMessageIdPart,
       refreshWaMsgDeviceLabels: refreshAllDeviceLabels,
@@ -16081,36 +16081,36 @@ var CANADA_NANP_AREA_CODES = new Set([
   } catch (_) {}
 })();
 // ===== run @0x752170 (93688 bytes) =====
-/*! WATransChat send-hook — 1:1 from WATransChat content-send-hook.js (副本89).
- * chrome.storage / __waext → __whatsnowTranslateCfg + Tauri translate_text.
+/*! Falo send-hook — 1:1 from Falo content-send-hook.js (副本89).
+ * chrome.storage / __waext → __faloTranslateCfg + Tauri translate_text.
  */
 (function () {
   "use strict";
-  if (window.__whatsnowSendHookInstalled) return;
+  if (window.__faloSendHookInstalled) return;
 
   function cfg() {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.getCfg) return h.getCfg() || {};
     } catch (_) {}
-    return window.__whatsnowTranslateCfg || {};
+    return window.__faloTranslateCfg || {};
   }
   function canCore() {
-    // WATransChat parity: require core_translate; never allow when logged out.
+    // Falo parity: require core_translate; never allow when logged out.
     try {
-      if (typeof window.__whatsnowCan === "function") {
-        return !!window.__whatsnowCan("core_translate");
+      if (typeof window.__faloCan === "function") {
+        return !!window.__faloCan("core_translate");
       }
     } catch (_) {}
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.canTranslate) return !!h.canTranslate();
     } catch (_) {}
     return false;
   }
   // Install even when logged out so a later login (caps inject) can gate per-send.
   // Per-call canCore() skips translate and lets native send through.
-  window.__whatsnowSendHookInstalled = true;
+  window.__faloSendHookInstalled = true;
 
   var currentUiLang = "zh";
   try {
@@ -16120,21 +16120,21 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function normalizeUiLang(x) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.normalize) return i18n.normalize(x);
     } catch (_) {}
     return String(x || "zh").toLowerCase().indexOf("en") === 0 ? "en" : "zh";
   }
   function tPage(l, k, fb) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.t) return i18n.t(l, k, fb);
     } catch (_) {}
     return fb;
   }
   function tPageFill(l, k, fb, vars) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.fill) return i18n.fill(l, k, fb, vars);
     } catch (_) {}
     var s = String(fb || "");
@@ -16148,7 +16148,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function normalizeLangFamily(code) {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.normalizeLangFamily) return h.normalizeLangFamily(code);
     } catch (_) {}
     var c = String(code || "").toLowerCase();
@@ -16181,10 +16181,10 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function isProRealtime() {
     try {
-      if (typeof window.__whatsnowCan === "function") {
-        if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+      if (typeof window.__faloCan === "function") {
+        if (window.__faloCan("pro_engines") || window.__faloCan("ai_proxy")) return true;
       }
-      var c = window.__whatsnowCaps;
+      var c = window.__faloCaps;
       if (c && (c.isPro || c.isPremium)) return true;
     } catch (_) {}
     return false;
@@ -16200,7 +16200,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function getOutboundEngineList() {
     try {
-      var api = window.__whatsnowEngineList;
+      var api = window.__faloEngineList;
       if (api && api.GLOBAL_INPUT_ENGINES) return api.GLOBAL_INPUT_ENGINES.slice();
     } catch (_) {}
     return FREE_CYCLE_ENGINES.concat(PRO_ONLY_OUTBOUND_ENGINES);
@@ -16241,10 +16241,10 @@ var CANADA_NANP_AREA_CODES = new Set([
         // Persist as global compose engine via settings window path is async;
         // update live cfg + boot for this session.
         try {
-          var live = window.__whatsnowTranslateCfg || {};
+          var live = window.__faloTranslateCfg || {};
           live.engine = next;
-          window.__whatsnowTranslateCfg = live;
-          if (window.__whatsnowTranslateBoot) window.__whatsnowTranslateBoot.engine = next;
+          window.__faloTranslateCfg = live;
+          if (window.__faloTranslateBoot) window.__faloTranslateBoot.engine = next;
         } catch (_) {}
       }
       currentEnginePref = next;
@@ -16257,7 +16257,7 @@ var CANADA_NANP_AREA_CODES = new Set([
     }
   }
 
-  /** WATransChat switchToNextOutboundEngine — cycle compose engine with Pro gate. */
+  /** Falo switchToNextOutboundEngine — cycle compose engine with Pro gate. */
   function switchToNextOutboundEngine(done) {
     var finish = function (result) {
       try {
@@ -16299,7 +16299,7 @@ var CANADA_NANP_AREA_CODES = new Set([
       if (typeof cb === "function") cb(null, "未登录或订阅已过期");
       return;
     }
-    var helpers = window.__whatsnowTranslateHelpers;
+    var helpers = window.__faloTranslateHelpers;
     var c = cfg();
     var engine = resolveCurrentOutboundEngine();
     var p =
@@ -16452,8 +16452,8 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function getCurrentCustomerIdentifier() {
     try {
-      if (typeof window.__whatsnowGetCustomerIdentifier === "function") {
-        var external = window.__whatsnowGetCustomerIdentifier() || "";
+      if (typeof window.__faloGetCustomerIdentifier === "function") {
+        var external = window.__faloGetCustomerIdentifier() || "";
         if (external && isValidCustomerIdentifier(external)) {
           currentCustomerIdentifier = external;
           var ph = extractPhoneNumberFromText(external);
@@ -16514,7 +16514,7 @@ var CANADA_NANP_AREA_CODES = new Set([
     if (typeof conf.targetLang === "string" && conf.targetLang.trim()) {
       return conf.targetLang.trim();
     }
-    // Legacy WATransChat field
+    // Legacy Falo field
     if (typeof conf.lang === "string" && conf.lang.trim()) return conf.lang.trim();
     return "";
   }
@@ -16533,7 +16533,7 @@ var CANADA_NANP_AREA_CODES = new Set([
     currentEnginePref =
       value && String(value).trim() ? String(value).trim() : "";
     try {
-      window.__whatsnowCustomerEngine = currentEnginePref || "";
+      window.__faloCustomerEngine = currentEnginePref || "";
     } catch (_) {}
   }
 
@@ -16551,8 +16551,8 @@ var CANADA_NANP_AREA_CODES = new Set([
     currentTargetLangPref = "";
     currentEnginePref = "";
     try {
-      window.__whatsnowCustomerLang = "";
-      window.__whatsnowCustomerEngine = "";
+      window.__faloCustomerLang = "";
+      window.__faloCustomerEngine = "";
     } catch (_) {}
 
     if (!isValidCustomerIdentifier(identifier)) {
@@ -16590,8 +16590,8 @@ var CANADA_NANP_AREA_CODES = new Set([
     }
 
     try {
-      window.__whatsnowCustomerLang = currentTargetLangPref || "";
-      window.__whatsnowCustomerEngine = currentEnginePref || "";
+      window.__faloCustomerLang = currentTargetLangPref || "";
+      window.__faloCustomerEngine = currentEnginePref || "";
     } catch (_) {}
 
     lastLoadedCustomerId = identifier;
@@ -16664,12 +16664,12 @@ var CANADA_NANP_AREA_CODES = new Set([
         // Invalid id: write global default only (extension defaultTargetLang).
         try {
           window.defaultTargetLang = targetLang;
-          var boot = window.__whatsnowTranslateBoot || {};
+          var boot = window.__faloTranslateBoot || {};
           boot.defaultCustomerLang = targetLang;
-          window.__whatsnowTranslateBoot = boot;
+          window.__faloTranslateBoot = boot;
           var c = cfg();
-          if (window.__whatsnowApplyTranslateConfig) {
-            window.__whatsnowApplyTranslateConfig(
+          if (window.__faloApplyTranslateConfig) {
+            window.__faloApplyTranslateConfig(
               Object.assign({}, c, { defaultCustomerLang: targetLang })
             );
           }
@@ -16698,8 +16698,8 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   function getCountryInfo() {
     try {
-      if (typeof window.__whatsnowGetCountryInfo === "function") {
-        return window.__whatsnowGetCountryInfo() || {};
+      if (typeof window.__faloGetCountryInfo === "function") {
+        return window.__faloGetCountryInfo() || {};
       }
     } catch (_) {}
     return {};
@@ -16710,7 +16710,7 @@ var CANADA_NANP_AREA_CODES = new Set([
 
   var autoSendInputTranslationCache = true;
   try {
-    var boot0 = window.__whatsnowTranslateBoot || cfg() || {};
+    var boot0 = window.__faloTranslateBoot || cfg() || {};
     if (typeof boot0.autoSend === "boolean") {
       autoSendInputTranslationCache = boot0.autoSend !== false;
     } else {
@@ -16720,7 +16720,7 @@ var CANADA_NANP_AREA_CODES = new Set([
   try {
     var rawSrc =
       (cfg() && cfg().sourceLang) ||
-      (window.__whatsnowTranslateBoot && window.__whatsnowTranslateBoot.sourceLang) ||
+      (window.__faloTranslateBoot && window.__faloTranslateBoot.sourceLang) ||
       window.userSourceLangSetting;
     window.userSourceLangSetting =
       rawSrc && String(rawSrc).trim() ? String(rawSrc).trim() : "auto";
@@ -16732,7 +16732,7 @@ var CANADA_NANP_AREA_CODES = new Set([
   try {
     var dtl =
       (cfg() && cfg().defaultCustomerLang) ||
-      (window.__whatsnowTranslateBoot && window.__whatsnowTranslateBoot.defaultCustomerLang) ||
+      (window.__faloTranslateBoot && window.__faloTranslateBoot.defaultCustomerLang) ||
       window.defaultTargetLang;
     window.defaultTargetLang =
       dtl && String(dtl).trim() ? String(dtl).trim() : "auto";
@@ -16740,7 +16740,7 @@ var CANADA_NANP_AREA_CODES = new Set([
     window.defaultTargetLang = "auto";
   }
 
-  window.addEventListener("whatsnow-translate-config", function (ev) {
+  window.addEventListener("falo-translate-config", function (ev) {
     try {
       var d = (ev && ev.detail) || cfg();
       if (typeof d.autoSend === "boolean") autoSendInputTranslationCache = d.autoSend !== false;
@@ -16853,14 +16853,14 @@ function waSendDebounceHit() {
   window.__waEventLockTs = nowTs;
   return false;
 }
-// settings: whatsnow-translate-config (see preamble)
+// settings: falo-translate-config (see preamble)
 
 // autoSendInputTranslationCache initialized in preamble from cfg()
 
 // 获取 WhatsApp 发送框（或媒体 caption 输入框）的“当前编辑器”
 // WhatsApp 在不同模式（普通文本/图片 caption）下，页面可能同时存在多个 contenteditable，
 // 需要优先选择：聚焦的、可见的、且当前有内容的编辑器，否则读取到空串就不会触发翻译拦截。
-// 对齐 WATransChat：配文时必须写/发配文面板，绝不能落到背后会话输入框（否则只发文字丢图）。
+// 对齐 Falo：配文时必须写/发配文面板，绝不能落到背后会话输入框（否则只发文字丢图）。
 function getMediaCaptionRoot() {
   try {
     return document.querySelector('[data-testid="media-caption-input-container"]') || null;
@@ -17317,7 +17317,7 @@ async function clearComposerText(scopeEl) {
     }, 80);
   } catch (_) {}
 }
-// ========== 输入框上方状态条：正在翻译中 / 报错原因 / 切换接口（对齐 WATransChat）==========
+// ========== 输入框上方状态条：正在翻译中 / 报错原因 / 切换接口（对齐 Falo）==========
 var __waComposerToastLeaveTimer = null;
 var __waComposerToastAutoHideTimer = null;
 
@@ -17859,7 +17859,7 @@ function formatLanguageLabelFromCode(langCode, localeKey) {
   if (!langCode) return "";
   var ui = normalizeUiLang(localeKey || currentUiLang || "zh");
   try {
-    var api = window.__whatsnowLangList;
+    var api = window.__faloLangList;
     if (api && typeof api.formatLanguageDisplayName === "function") {
       return api.formatLanguageDisplayName(langCode, ui) || String(langCode);
     }
@@ -17905,7 +17905,7 @@ function resolveComposerHintEngineId() {
 function getEngineDisplayName(engineId, ui) {
   var id = String(engineId || "google_web");
   try {
-    var api = window.__whatsnowEngineList;
+    var api = window.__faloEngineList;
     if (api) {
       var map = api.nameMap ? api.nameMap(ui || "zh") : null;
       if (map && map[id]) return map[id];
@@ -18122,7 +18122,7 @@ function refreshComposerTargetLangHint2() {
 }
 
 try {
-  window.__whatsnowRefreshComposerHint = refreshComposerTargetLangHint;
+  window.__faloRefreshComposerHint = refreshComposerTargetLangHint;
 } catch (_) {}
 
 // Empty composer → rewrite placeholder (send / delete)
@@ -18439,7 +18439,7 @@ function handleNativeSendClickEvent(evt, container) {
   try {
     targetLang = getTargetLangForSend();
   } catch (err) {
-    console.warn('[WhatsNow] getTargetLangForSend failed on send click', err);
+    console.warn('[Falo] getTargetLangForSend failed on send click', err);
     return false;
   }
   if (shouldSkipOutgoingTranslate(targetLang, original)) {
@@ -18637,7 +18637,7 @@ function handleComposerEnterForTranslate(e, source) {
   try {
     targetLang = getTargetLangForSend();
   } catch (err) {
-    console.warn('[WATransChat] getTargetLangForSend failed, sending original', err);
+    console.warn('[Falo] getTargetLangForSend failed, sending original', err);
     if (e) {
       try { e.stopPropagation(); e.preventDefault(); } catch (_) {}
     }
@@ -18729,7 +18729,7 @@ if (!window.__waGlobalEnterHooked) {
 
 
   try {
-    window.__whatsnowTranslateHelpers = Object.assign(window.__whatsnowTranslateHelpers || {}, {
+    window.__faloTranslateHelpers = Object.assign(window.__faloTranslateHelpers || {}, {
       getTargetLangForSend: getTargetLangForSend,
       getNativeComposerElement: getNativeComposerElement,
       getMediaCaptionEditorEl: getMediaCaptionEditorEl,
@@ -18765,23 +18765,23 @@ if (!window.__waGlobalEnterHooked) {
       clampOutboundEngine: clampOutboundEngine,
     });
   } catch (e) {
-    console.warn("[WATransChat] publish send-hook helpers failed", e);
+    console.warn("[Falo] publish send-hook helpers failed", e);
   }
   try {
     if (window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke) {
-      window.__TAURI__.core.invoke("dlog", { msg: "watrans-send-hook: ready (1:1)" });
+      window.__TAURI__.core.invoke("dlog", { msg: "falo-send-hook: ready (1:1)" });
     }
   } catch (_) {}
 })();
 // ===== run @0x768F80 (31970 bytes) =====
-/*! WATransChat page membership badge — 1:1 visual states from content-member-ui.js.
+/*! Falo page membership badge — 1:1 visual states from content-member-ui.js.
  * States: logged_out | expired | expiring | trial | none | active (badge hidden).
- * Uses __whatsnowMembership (from caps_script); never reads tokens.
+ * Uses __faloMembership (from caps_script); never reads tokens.
  */
 (function () {
   "use strict";
-  if (window.__whatsnowMemberUiInstalled) return;
-  window.__whatsnowMemberUiInstalled = true;
+  if (window.__faloMemberUiInstalled) return;
+  window.__faloMemberUiInstalled = true;
 
   var ONE_DAY_MS = 24 * 60 * 60 * 1000;
   var VIP_SVG =
@@ -18799,7 +18799,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function getUiLang() {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.getUiLang) return i18n.getUiLang();
     } catch (_) {}
     return "zh";
@@ -18807,7 +18807,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function tPage(key, fbZh) {
     try {
-      var i18n = window.__whatsnowPageI18n;
+      var i18n = window.__faloPageI18n;
       if (i18n && i18n.t) return i18n.t(getUiLang(), key, fbZh);
     } catch (_) {}
     return fbZh;
@@ -18815,7 +18815,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function membershipInfo() {
     try {
-      return window.__whatsnowMembership || {};
+      return window.__faloMembership || {};
     } catch (_) {
       return {};
     }
@@ -18916,7 +18916,7 @@ if (!window.__waGlobalEnterHooked) {
   function getExtensionBrandText() {
     var m = membershipInfo();
     var ver = m && m.appVersion ? String(m.appVersion) : "";
-    return ver ? "WATransChat v" + ver : "WATransChat";
+    return ver ? "Falo v" + ver : "Falo";
   }
 
   function ensureMemberStatusStyles() {
@@ -19467,17 +19467,17 @@ if (!window.__waGlobalEnterHooked) {
     } catch (_) {}
   }
 
-  window.__whatsnowOnMembershipUpdate = function () {
+  window.__faloOnMembershipUpdate = function () {
     try {
       updateMemberButtonStatusText();
     } catch (_) {}
     try {
-      if (typeof window.__whatsnowOnPhraseMembershipUpdate === "function") {
-        window.__whatsnowOnPhraseMembershipUpdate();
+      if (typeof window.__faloOnPhraseMembershipUpdate === "function") {
+        window.__faloOnPhraseMembershipUpdate();
       }
     } catch (_) {}
   };
-  window.__whatsnowUpdateMemberButtonStatusText = updateMemberButtonStatusText;
+  window.__faloUpdateMemberButtonStatusText = updateMemberButtonStatusText;
 
   try {
     document.addEventListener("visibilitychange", function () {
@@ -19501,18 +19501,18 @@ if (!window.__waGlobalEnterHooked) {
   } catch (_) {}
 })();
 // ===== run @0x770C78 (39905 bytes) =====
-/*! WATransChat voice STT — 1:1 from WATransChat page.js + content-voice-stt.js.
+/*! Falo voice STT — 1:1 from Falo page.js + content-voice-stt.js.
  * Same-world: localStorage cache + Tauri ai_proxy(/api/proxy/audio/transcribe).
- * Sole author provenance: WATransChat by @benedictusrey; STT logic from WATransChat.
+ * Sole author provenance: Falo by @benedictusrey; STT logic from Falo.
  */
 (() => {
-	if (window.__WhatsNowVoiceSttInstalled) return;
-	window.__WhatsNowVoiceSttInstalled = true;
+	if (window.__FaloVoiceSttInstalled) return;
+	window.__FaloVoiceSttInstalled = true;
 
 	try {
-		if (!document.getElementById('whatsnow-voice-stt-style')) {
+		if (!document.getElementById('falo-voice-stt-style')) {
 			const st = document.createElement('style');
-			st.id = 'whatsnow-voice-stt-style';
+			st.id = 'falo-voice-stt-style';
 			st.textContent =
 				'.wa-audio-to-text-ui{position:relative;z-index:0;box-sizing:border-box;}' +
 				'.wa-audio-to-text-ui.wa-audio-to-text-ui--has-text{padding-bottom:26px!important;}';
@@ -19667,21 +19667,21 @@ if (!window.__waGlobalEnterHooked) {
 		const msg = (voiceUiStrings && voiceUiStrings.proOnly) ||
 			'此功能仅专业版会员可用，请升级到专业版会员。';
 		try {
-			if (typeof window.__whatsnowShowNotice === 'function') {
-				window.__whatsnowShowNotice(msg);
+			if (typeof window.__faloShowNotice === 'function') {
+				window.__faloShowNotice(msg);
 				return;
 			}
 		} catch (_) {}
-		try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
+		try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {}
 	}
 
-	/** Extension: caps.voice_stt (or pro proxy). WATransChat: __whatsnowCan. */
+	/** Extension: caps.voice_stt (or pro proxy). Falo: __faloCan. */
 	function checkPermissionOnce() {
 		try {
-			if (typeof window.__whatsnowCan === 'function') {
+			if (typeof window.__faloCan === 'function') {
 				return !!(
-					window.__whatsnowCan('voice_stt') ||
-					window.__whatsnowCan('ai_proxy')
+					window.__faloCan('voice_stt') ||
+					window.__faloCan('ai_proxy')
 				);
 			}
 		} catch (_) {}
@@ -19740,7 +19740,7 @@ if (!window.__waGlobalEnterHooked) {
 	}
 
 	try {
-		window.__WhatsNowVoiceSttReady = true;
+		window.__FaloVoiceSttReady = true;
 	} catch (_) {}
 
 	const RECOGNIZE_BTN_COLOR = '#4b5563';
@@ -19770,7 +19770,7 @@ if (!window.__waGlobalEnterHooked) {
 
 	function pushVoiceUiStringsFromCfg() {
 		try {
-			const ui = (window.__whatsnowTranslateCfg && window.__whatsnowTranslateCfg.uiLang) || 'zh';
+			const ui = (window.__faloTranslateCfg && window.__faloTranslateCfg.uiLang) || 'zh';
 			if (String(ui).toLowerCase().indexOf('en') === 0) {
 				voiceUiStrings = Object.assign({}, voiceUiStrings, {
 					recognize: 'Transcribe',
@@ -20075,8 +20075,8 @@ if (!window.__waGlobalEnterHooked) {
 		syncVoiceUiHasTextClass(uiRoot, msgId);
 		// Kick bridge translate scan so transcription gets a .translated-text line.
 		try {
-			if (window.__whatsnowTranslateHelpers && typeof window.__whatsnowTranslateHelpers.scheduleScan === 'function') {
-				window.__whatsnowTranslateHelpers.scheduleScan(200);
+			if (window.__faloTranslateHelpers && typeof window.__faloTranslateHelpers.scheduleScan === 'function') {
+				window.__faloTranslateHelpers.scheduleScan(200);
 			}
 		} catch (_) {}
 	}
@@ -20719,11 +20719,11 @@ if (!window.__waGlobalEnterHooked) {
 })();
     xw@   �
 // ===== run @0x77A860 (14793 bytes) =====
-/*! WATransChat AI suggest helpers — from WATransChat content-translate-visible + toolbar + paste. */
+/*! Falo AI suggest helpers — from Falo content-translate-visible + toolbar + paste. */
 (function () {
   "use strict";
-  if (window.__WhatsNowAiHelpersInstalled) return;
-  window.__WhatsNowAiHelpersInstalled = true;
+  if (window.__FaloAiHelpersInstalled) return;
+  window.__FaloAiHelpersInstalled = true;
 
   function getWaAiExplainConversationRoot() {
     return document.querySelector('[data-testid="conversation-panel-messages"]') ||
@@ -20906,7 +20906,7 @@ if (!window.__waGlobalEnterHooked) {
     } catch (_) { return []; }
   }
 
-  // 仅统一换行符，不压缩连续空行（与 WATransChat 输入框路径一致）
+  // 仅统一换行符，不压缩连续空行（与 Falo 输入框路径一致）
   function normalizeNewlines(text) {
     return String(text == null ? "" : text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
   }
@@ -20947,7 +20947,7 @@ if (!window.__waGlobalEnterHooked) {
       return;
     }
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && typeof h.pasteReplaceText === "function") {
         await h.pasteReplaceText(targetEl, rawText);
         return;
@@ -20991,9 +20991,9 @@ if (!window.__waGlobalEnterHooked) {
       started = true;
       try {
         var bus =
-          (window.__whatsnowTranslateHelpers &&
-            window.__whatsnowTranslateHelpers.domMutationBus) ||
-          window.__whatsnowDomMutationBus;
+          (window.__faloTranslateHelpers &&
+            window.__faloTranslateHelpers.domMutationBus) ||
+          window.__faloDomMutationBus;
         if (bus && typeof bus.register === "function") {
           bus.register(function () { schedule(); }, { id: "ai-toolbar" });
         } else {
@@ -21015,7 +21015,7 @@ if (!window.__waGlobalEnterHooked) {
     } catch (_) { return null; }
   }
 
-  window.__whatsnowAiHelpers = {
+  window.__faloAiHelpers = {
     getWaAiExplainConversationRoot: getWaAiExplainConversationRoot,
     getWaAiExplainChatMessageRows: getWaAiExplainChatMessageRows,
     getWaAiExplainMsgDirection: getWaAiExplainMsgDirection,
@@ -21028,21 +21028,21 @@ if (!window.__waGlobalEnterHooked) {
     waAiMsgToolbar: waAiMsgToolbar,
     normalizeUiLang: function (x) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.normalize) return i18n.normalize(x);
       } catch (_) {}
       return String(x || "zh").toLowerCase().indexOf("en") === 0 ? "en" : "zh";
     },
     tPage: function (l, k, fb) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.t) return i18n.t(l, k, fb);
       } catch (_) {}
       return fb;
     },
     tPageFill: function (l, k, fb, vars) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.fill) return i18n.fill(l, k, fb, vars);
       } catch (_) {}
       var s = String(fb || "");
@@ -21053,25 +21053,25 @@ if (!window.__waGlobalEnterHooked) {
     },
     getUiLang: function () {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.getUiLang) return i18n.getUiLang();
       } catch (_) {}
       try {
-        var c = window.__whatsnowTranslateCfg || window.__whatsnowTranslateBoot || {};
+        var c = window.__faloTranslateCfg || window.__faloTranslateBoot || {};
         return c.uiLang || "zh";
       } catch (_) { return "zh"; }
     },
-    showNoTitleNotice: function (msg) { try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} },
+    showNoTitleNotice: function (msg) { try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} },
     checkHasCapabilityRealtime: function (cap, cb) {
-      try { cb(!!(window.__whatsnowCan && window.__whatsnowCan(cap))); }
+      try { cb(!!(window.__faloCan && window.__faloCan(cap))); }
       catch (_) { cb(false); }
     },
     checkIsProRealtime: function (cb) {
       try {
-        cb(!!(window.__whatsnowCan && (
-          window.__whatsnowCan("ai_proxy") ||
-          window.__whatsnowCan("ai_suggest") ||
-          window.__whatsnowCan("ai_explain")
+        cb(!!(window.__faloCan && (
+          window.__faloCan("ai_proxy") ||
+          window.__faloCan("ai_suggest") ||
+          window.__faloCan("ai_explain")
         )));
       } catch (_) { cb(false); }
     }
@@ -21079,19 +21079,19 @@ if (!window.__waGlobalEnterHooked) {
 })();
 `�w@   �
 // ===== run @0x77E230 (55129 bytes) =====
-/*! WATransChat AI suggest reply — 1:1 from WATransChat content-ai-suggest.js */
+/*! Falo AI suggest reply — 1:1 from Falo content-ai-suggest.js */
 (function () {
   "use strict";
-  if (window.__WhatsNowAiSuggestInstalled) return;
-  window.__WhatsNowAiSuggestInstalled = true;
+  if (window.__FaloAiSuggestInstalled) return;
+  window.__FaloAiSuggestInstalled = true;
 
-  var SUGGEST_CSS = ".wa-ai-suggest-reply-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(37, 211, 102, 0.1);\n  color: #128c7e;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-suggest-reply-btn .wa-ai-suggest-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-reply-btn .wa-ai-suggest-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-suggest-reply-btn:hover {\n  background: rgba(37, 211, 102, 0.18);\n  border-color: rgba(18, 140, 126, 0.35);\n}\n\n.wa-ai-suggest-reply-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-suggest-reply-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-suggest-reply-btn {\n  background: rgba(37, 211, 102, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #25d366;\n}\n\n.dark .wa-ai-suggest-reply-btn:hover {\n  background: rgba(37, 211, 102, 0.22);\n  border-color: rgba(37, 211, 102, 0.4);\n}\n\n/* AI\u5206\u6790\u6309\u94ae\uff08\u4e0e\u63a8\u8350\u56de\u590d\u5e76\u5217\uff09 */\n.wa-ai-explain-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(53, 120, 229, 0.1);\n  color: #2a6fdb;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-explain-btn:hover {\n  background: rgba(53, 120, 229, 0.18);\n  border-color: rgba(42, 111, 219, 0.35);\n}\n\n.wa-ai-explain-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-explain-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-explain-btn {\n  background: rgba(83, 160, 255, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #7ab8ff;\n}\n\n.dark .wa-ai-explain-btn:hover {\n  background: rgba(83, 160, 255, 0.22);\n  border-color: rgba(122, 184, 255, 0.4);\n}\n\n/* AI\u63a8\u8350\u56de\u590d\u9009\u62e9\u5f39\u7a97 */\n.wa-ai-suggest-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(11, 20, 26, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal {\n  width: min(440px, 92vw);\n  max-height: min(80vh, 640px);\n  overflow: visible;\n  background: #fff;\n  color: #111b21;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-body {\n  display: none;\n}\n\n.wa-ai-suggest-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  position: relative;\n  z-index: 3;\n  flex-shrink: 0;\n  overflow: visible;\n}\n\n.wa-ai-suggest-modal-actions {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  flex-shrink: 0;\n  position: relative;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  line-height: 0;\n  color: #667781;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal .wa-fu-settings__panel {\n  z-index: 20;\n  line-height: normal;\n  width: min(280px, calc(100vw - 48px));\n  max-height: min(70vh, 440px);\n  overflow-y: auto;\n}\n\n.wa-fu-settings__title--section {\n  margin-top: 8px;\n  padding-top: 10px;\n  border-top: 1px solid var(--fu-line, rgba(0, 0, 0, 0.08));\n}\n\n.wa-ai-suggest-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 650;\n  line-height: 1.3;\n}\n\n.wa-ai-suggest-modal-close {\n  border: none;\n  background: transparent;\n  color: #667781;\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  border-radius: 50%;\n  cursor: pointer;\n  line-height: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal-close svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal-close:hover {\n  background: rgba(0, 0, 0, 0.06);\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal-hint {\n  margin: 0;\n  padding: 0 16px 14px;\n  font-size: 13px;\n  color: #667781;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error) {\n  animation: wa-ai-suggest-pulse 1.6s ease-in-out infinite;\n}\n\n.wa-ai-suggest-dots::after {\n  content: '';\n  display: inline-block;\n  width: 1.2em;\n  text-align: left;\n  animation: wa-ai-suggest-dots 1.4s infinite;\n}\n\n@keyframes wa-ai-suggest-dots {\n  0%, 20% { content: ''; }\n  21%, 40% { content: '.'; }\n  41%, 60% { content: '..'; }\n  61%, 100% { content: '...'; }\n}\n\n@keyframes wa-ai-suggest-pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.5; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error),\n  .wa-ai-suggest-dots::after {\n    animation: none;\n  }\n  .wa-ai-suggest-dots::after {\n    content: '...';\n  }\n}\n\n.wa-ai-suggest-modal-hint.is-error {\n  color: #c0392b;\n}\n\n.wa-ai-suggest-modal-body {\n  padding: 0 12px 14px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  overflow: auto;\n  flex: 1 1 auto;\n  min-height: 0;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-option {\n  display: block;\n  width: 100%;\n  text-align: left;\n  border: 1px solid #e9edef;\n  background: #f0f2f5;\n  color: inherit;\n  border-radius: 12px;\n  padding: 10px 12px;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-option:hover {\n  border-color: #25d366;\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.wa-ai-suggest-option-index {\n  display: inline-block;\n  font-size: 11px;\n  font-weight: 650;\n  color: #128c7e;\n  margin-bottom: 4px;\n}\n\n.wa-ai-suggest-option-text {\n  display: block;\n  font-size: 14px;\n  line-height: 1.5;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.dark .wa-ai-suggest-modal {\n  background: #202c33;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-close {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-hint {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-hint.is-error {\n  color: #ff8b81;\n}\n\n.dark .wa-ai-suggest-option {\n  background: #111b21;\n  border-color: #2a3942;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-option:hover {\n  border-color: #25d366;\n  background: rgba(37, 211, 102, 0.12);\n}\n.wa-fu {\n  --fu-bg: #ffffff;\n  --fu-bg-elevated: #ffffff;\n  --fu-surface: #f4f6f7;\n  --fu-surface-2: #eef1f3;\n  --fu-text: #111b21;\n  --fu-muted: #667781;\n  --fu-line: rgba(17, 27, 33, 0.08);\n  --fu-line-strong: rgba(17, 27, 33, 0.14);\n  --fu-accent: #008069;\n  --fu-accent-strong: #006d5b;\n  --fu-accent-soft: rgba(0, 128, 105, 0.12);\n  --fu-danger: #d14b4b;\n  --fu-danger-soft: rgba(209, 75, 75, 0.1);\n  --fu-shadow: 0 8px 28px rgba(11, 20, 26, 0.16);\n  --fu-card-shadow: 0 1px 2px rgba(11, 20, 26, 0.04);\n  --fu-card-shadow-hover: 0 2px 8px rgba(11, 20, 26, 0.08);\n  --fu-radius: 16px;\n  --fu-font: \"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;\n  --fu-ease: cubic-bezier(0.22, 1, 0.36, 1);\n  color: var(--fu-text);\n  font-family: var(--fu-font);\n  -webkit-font-smoothing: antialiased;\n}\n\n.wa-fu.wa-fu--dark,\nbody.dark .wa-fu,\nhtml[data-color-mode=\"dark\"] .wa-fu {\n  --fu-bg: #111b21;\n  --fu-bg-elevated: #1a242b;\n  --fu-surface: #1f2c33;\n  --fu-surface-2: #253238;\n  --fu-text: #e9edef;\n  --fu-muted: #8696a0;\n  --fu-line: rgba(233, 237, 239, 0.1);\n  --fu-line-strong: rgba(233, 237, 239, 0.18);\n  --fu-accent: #00a884;\n  --fu-accent-strong: #02c497;\n  --fu-accent-soft: rgba(0, 168, 132, 0.16);\n  --fu-danger: #ef6b6b;\n  --fu-danger-soft: rgba(239, 107, 107, 0.14);\n  --fu-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);\n  --fu-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);\n  --fu-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.32);\n}\n\n.wa-fu-icon-btn {\n  appearance: none;\n  border: none;\n  background: transparent;\n  color: #54656f;\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s var(--fu-ease);\n  -webkit-tap-highlight-color: transparent;\n}\n\n.wa-fu-icon-btn:hover { background: rgba(0, 0, 0, 0.06); }\n.wa-fu-icon-btn:active { transform: scale(0.96); }\n\n.wa-fu-icon-btn--ghost {\n  width: 34px;\n  height: 34px;\n  color: var(--fu-muted);\n}\n\n.wa-fu-icon-btn--danger {\n  width: 30px;\n  height: 30px;\n  color: var(--fu-muted);\n  opacity: 0;\n  transition: opacity 0.16s ease, background-color 0.16s ease, color 0.16s ease;\n}\n\n.wa-fu-icon-btn--soft {\n  width: 30px;\n  height: 30px;\n  opacity: 0;\n  transition: opacity 0.16s ease, background-color 0.16s ease, color 0.16s ease;\n}\n\n.wa-fu-item:hover .wa-fu-icon-btn--danger,\n.wa-fu-item:focus-within .wa-fu-icon-btn--danger,\n.wa-fu-item:hover .wa-fu-icon-btn--soft,\n.wa-fu-item:focus-within .wa-fu-icon-btn--soft { opacity: 1; }\n\n.wa-fu-icon-btn--danger:hover {\n  background: var(--fu-danger-soft);\n  color: var(--fu-danger);\n}\n\n.wa-fu--dark .wa-fu-icon-btn,\nbody.dark .wa-followup-todo-btn,\nhtml[data-color-mode=\"dark\"] .wa-followup-todo-btn { color: #aebac1; }\n.wa-fu-settings {\n  position: relative;\n}\n\n.wa-fu-settings__panel {\n  position: absolute;\n  top: calc(100% + 6px);\n  right: 0;\n  z-index: 5;\n  width: min(260px, calc(100vw - 48px));\n  padding: 10px;\n  border-radius: 12px;\n  background: var(--fu-bg-elevated);\n  border: 1px solid var(--fu-line);\n  box-shadow: var(--fu-shadow);\n}\n\n.wa-fu-settings__panel[hidden] { display: none !important; }\n\n.wa-fu-settings__title {\n  font-size: 11px;\n  font-weight: 700;\n  color: var(--fu-muted);\n  letter-spacing: 0.02em;\n  padding: 2px 6px 8px;\n}\n\n.wa-fu-settings__option {\n  appearance: none;\n  width: 100%;\n  text-align: left;\n  border: 1px solid transparent;\n  background: transparent;\n  color: var(--fu-text);\n  border-radius: 10px;\n  padding: 9px 10px;\n  cursor: pointer;\n  transition: background-color 0.16s ease, border-color 0.16s ease;\n}\n\n.wa-fu-settings__option + .wa-fu-settings__option { margin-top: 4px; }\n\n.wa-fu-settings__option:hover {\n  background: var(--fu-surface);\n}\n\n.wa-fu-settings__option.is-active {\n  background: var(--fu-accent-soft);\n  border-color: transparent;\n}\n\n.wa-fu-settings__option-label {\n  font-size: 13px;\n  font-weight: 700;\n}\n\n.wa-fu-settings__option-hint {\n  margin-top: 2px;\n  font-size: 11px;\n  color: var(--fu-muted);\n  line-height: 1.35;\n}\n\n.wa-fu-settings__option.is-active .wa-fu-settings__option-label {\n  color: var(--fu-accent-strong);\n}\n.wa-ai-suggest-reply-btn {\n  pointer-events: auto !important;\n  position: relative;\n  z-index: 2;\n}\n.wa-ai-suggest-overlay {\n  position: fixed !important;\n  inset: 0 !important;\n  z-index: 2147483646 !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n}";
+  var SUGGEST_CSS = ".wa-ai-suggest-reply-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(37, 211, 102, 0.1);\n  color: #4f46e5;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-suggest-reply-btn .wa-ai-suggest-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-reply-btn .wa-ai-suggest-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-suggest-reply-btn:hover {\n  background: rgba(37, 211, 102, 0.18);\n  border-color: rgba(18, 140, 126, 0.35);\n}\n\n.wa-ai-suggest-reply-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-suggest-reply-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-suggest-reply-btn {\n  background: rgba(37, 211, 102, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #6366f1;\n}\n\n.dark .wa-ai-suggest-reply-btn:hover {\n  background: rgba(37, 211, 102, 0.22);\n  border-color: rgba(37, 211, 102, 0.4);\n}\n\n/* AI\u5206\u6790\u6309\u94ae\uff08\u4e0e\u63a8\u8350\u56de\u590d\u5e76\u5217\uff09 */\n.wa-ai-explain-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(53, 120, 229, 0.1);\n  color: #2a6fdb;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-explain-btn:hover {\n  background: rgba(53, 120, 229, 0.18);\n  border-color: rgba(42, 111, 219, 0.35);\n}\n\n.wa-ai-explain-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-explain-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-explain-btn {\n  background: rgba(83, 160, 255, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #7ab8ff;\n}\n\n.dark .wa-ai-explain-btn:hover {\n  background: rgba(83, 160, 255, 0.22);\n  border-color: rgba(122, 184, 255, 0.4);\n}\n\n/* AI\u63a8\u8350\u56de\u590d\u9009\u62e9\u5f39\u7a97 */\n.wa-ai-suggest-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(11, 20, 26, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal {\n  width: min(440px, 92vw);\n  max-height: min(80vh, 640px);\n  overflow: visible;\n  background: #fff;\n  color: #111b21;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-body {\n  display: none;\n}\n\n.wa-ai-suggest-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  position: relative;\n  z-index: 3;\n  flex-shrink: 0;\n  overflow: visible;\n}\n\n.wa-ai-suggest-modal-actions {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  flex-shrink: 0;\n  position: relative;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  line-height: 0;\n  color: #667781;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal .wa-fu-settings__panel {\n  z-index: 20;\n  line-height: normal;\n  width: min(280px, calc(100vw - 48px));\n  max-height: min(70vh, 440px);\n  overflow-y: auto;\n}\n\n.wa-fu-settings__title--section {\n  margin-top: 8px;\n  padding-top: 10px;\n  border-top: 1px solid var(--fu-line, rgba(0, 0, 0, 0.08));\n}\n\n.wa-ai-suggest-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 650;\n  line-height: 1.3;\n}\n\n.wa-ai-suggest-modal-close {\n  border: none;\n  background: transparent;\n  color: #667781;\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  border-radius: 50%;\n  cursor: pointer;\n  line-height: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal-close svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal-close:hover {\n  background: rgba(0, 0, 0, 0.06);\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal-hint {\n  margin: 0;\n  padding: 0 16px 14px;\n  font-size: 13px;\n  color: #667781;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error) {\n  animation: wa-ai-suggest-pulse 1.6s ease-in-out infinite;\n}\n\n.wa-ai-suggest-dots::after {\n  content: '';\n  display: inline-block;\n  width: 1.2em;\n  text-align: left;\n  animation: wa-ai-suggest-dots 1.4s infinite;\n}\n\n@keyframes wa-ai-suggest-dots {\n  0%, 20% { content: ''; }\n  21%, 40% { content: '.'; }\n  41%, 60% { content: '..'; }\n  61%, 100% { content: '...'; }\n}\n\n@keyframes wa-ai-suggest-pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.5; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error),\n  .wa-ai-suggest-dots::after {\n    animation: none;\n  }\n  .wa-ai-suggest-dots::after {\n    content: '...';\n  }\n}\n\n.wa-ai-suggest-modal-hint.is-error {\n  color: #c0392b;\n}\n\n.wa-ai-suggest-modal-body {\n  padding: 0 12px 14px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  overflow: auto;\n  flex: 1 1 auto;\n  min-height: 0;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-option {\n  display: block;\n  width: 100%;\n  text-align: left;\n  border: 1px solid #e9edef;\n  background: #f0f2f5;\n  color: inherit;\n  border-radius: 12px;\n  padding: 10px 12px;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-option:hover {\n  border-color: #6366f1;\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.wa-ai-suggest-option-index {\n  display: inline-block;\n  font-size: 11px;\n  font-weight: 650;\n  color: #4f46e5;\n  margin-bottom: 4px;\n}\n\n.wa-ai-suggest-option-text {\n  display: block;\n  font-size: 14px;\n  line-height: 1.5;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.dark .wa-ai-suggest-modal {\n  background: #202c33;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-close {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-hint {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-hint.is-error {\n  color: #ff8b81;\n}\n\n.dark .wa-ai-suggest-option {\n  background: #111b21;\n  border-color: #2a3942;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-option:hover {\n  border-color: #6366f1;\n  background: rgba(37, 211, 102, 0.12);\n}\n.wa-fu {\n  --fu-bg: #ffffff;\n  --fu-bg-elevated: #ffffff;\n  --fu-surface: #f4f6f7;\n  --fu-surface-2: #eef1f3;\n  --fu-text: #111b21;\n  --fu-muted: #667781;\n  --fu-line: rgba(17, 27, 33, 0.08);\n  --fu-line-strong: rgba(17, 27, 33, 0.14);\n  --fu-accent: #008069;\n  --fu-accent-strong: #006d5b;\n  --fu-accent-soft: rgba(0, 128, 105, 0.12);\n  --fu-danger: #d14b4b;\n  --fu-danger-soft: rgba(209, 75, 75, 0.1);\n  --fu-shadow: 0 8px 28px rgba(11, 20, 26, 0.16);\n  --fu-card-shadow: 0 1px 2px rgba(11, 20, 26, 0.04);\n  --fu-card-shadow-hover: 0 2px 8px rgba(11, 20, 26, 0.08);\n  --fu-radius: 16px;\n  --fu-font: \"Segoe UI\", system-ui, -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", Arial, sans-serif;\n  --fu-ease: cubic-bezier(0.22, 1, 0.36, 1);\n  color: var(--fu-text);\n  font-family: var(--fu-font);\n  -webkit-font-smoothing: antialiased;\n}\n\n.wa-fu.wa-fu--dark,\nbody.dark .wa-fu,\nhtml[data-color-mode=\"dark\"] .wa-fu {\n  --fu-bg: #111b21;\n  --fu-bg-elevated: #1a242b;\n  --fu-surface: #1f2c33;\n  --fu-surface-2: #253238;\n  --fu-text: #e9edef;\n  --fu-muted: #8696a0;\n  --fu-line: rgba(233, 237, 239, 0.1);\n  --fu-line-strong: rgba(233, 237, 239, 0.18);\n  --fu-accent: #00a884;\n  --fu-accent-strong: #02c497;\n  --fu-accent-soft: rgba(0, 168, 132, 0.16);\n  --fu-danger: #ef6b6b;\n  --fu-danger-soft: rgba(239, 107, 107, 0.14);\n  --fu-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);\n  --fu-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);\n  --fu-card-shadow-hover: 0 3px 10px rgba(0, 0, 0, 0.32);\n}\n\n.wa-fu-icon-btn {\n  appearance: none;\n  border: none;\n  background: transparent;\n  color: #54656f;\n  width: 40px;\n  height: 40px;\n  border-radius: 50%;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s var(--fu-ease);\n  -webkit-tap-highlight-color: transparent;\n}\n\n.wa-fu-icon-btn:hover { background: rgba(0, 0, 0, 0.06); }\n.wa-fu-icon-btn:active { transform: scale(0.96); }\n\n.wa-fu-icon-btn--ghost {\n  width: 34px;\n  height: 34px;\n  color: var(--fu-muted);\n}\n\n.wa-fu-icon-btn--danger {\n  width: 30px;\n  height: 30px;\n  color: var(--fu-muted);\n  opacity: 0;\n  transition: opacity 0.16s ease, background-color 0.16s ease, color 0.16s ease;\n}\n\n.wa-fu-icon-btn--soft {\n  width: 30px;\n  height: 30px;\n  opacity: 0;\n  transition: opacity 0.16s ease, background-color 0.16s ease, color 0.16s ease;\n}\n\n.wa-fu-item:hover .wa-fu-icon-btn--danger,\n.wa-fu-item:focus-within .wa-fu-icon-btn--danger,\n.wa-fu-item:hover .wa-fu-icon-btn--soft,\n.wa-fu-item:focus-within .wa-fu-icon-btn--soft { opacity: 1; }\n\n.wa-fu-icon-btn--danger:hover {\n  background: var(--fu-danger-soft);\n  color: var(--fu-danger);\n}\n\n.wa-fu--dark .wa-fu-icon-btn,\nbody.dark .wa-followup-todo-btn,\nhtml[data-color-mode=\"dark\"] .wa-followup-todo-btn { color: #aebac1; }\n.wa-fu-settings {\n  position: relative;\n}\n\n.wa-fu-settings__panel {\n  position: absolute;\n  top: calc(100% + 6px);\n  right: 0;\n  z-index: 5;\n  width: min(260px, calc(100vw - 48px));\n  padding: 10px;\n  border-radius: 12px;\n  background: var(--fu-bg-elevated);\n  border: 1px solid var(--fu-line);\n  box-shadow: var(--fu-shadow);\n}\n\n.wa-fu-settings__panel[hidden] { display: none !important; }\n\n.wa-fu-settings__title {\n  font-size: 11px;\n  font-weight: 700;\n  color: var(--fu-muted);\n  letter-spacing: 0.02em;\n  padding: 2px 6px 8px;\n}\n\n.wa-fu-settings__option {\n  appearance: none;\n  width: 100%;\n  text-align: left;\n  border: 1px solid transparent;\n  background: transparent;\n  color: var(--fu-text);\n  border-radius: 10px;\n  padding: 9px 10px;\n  cursor: pointer;\n  transition: background-color 0.16s ease, border-color 0.16s ease;\n}\n\n.wa-fu-settings__option + .wa-fu-settings__option { margin-top: 4px; }\n\n.wa-fu-settings__option:hover {\n  background: var(--fu-surface);\n}\n\n.wa-fu-settings__option.is-active {\n  background: var(--fu-accent-soft);\n  border-color: transparent;\n}\n\n.wa-fu-settings__option-label {\n  font-size: 13px;\n  font-weight: 700;\n}\n\n.wa-fu-settings__option-hint {\n  margin-top: 2px;\n  font-size: 11px;\n  color: var(--fu-muted);\n  line-height: 1.35;\n}\n\n.wa-fu-settings__option.is-active .wa-fu-settings__option-label {\n  color: var(--fu-accent-strong);\n}\n.wa-ai-suggest-reply-btn {\n  pointer-events: auto !important;\n  position: relative;\n  z-index: 2;\n}\n.wa-ai-suggest-overlay {\n  position: fixed !important;\n  inset: 0 !important;\n  z-index: 2147483646 !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n}";
   function ensureSuggestStyle() {
     try {
-      var st = document.getElementById("whatsnow-ai-suggest-style");
+      var st = document.getElementById("falo-ai-suggest-style");
       if (!st) {
         st = document.createElement("style");
-        st.id = "whatsnow-ai-suggest-style";
+        st.id = "falo-ai-suggest-style";
         (document.head || document.documentElement).appendChild(st);
       }
       if (st.textContent !== SUGGEST_CSS) st.textContent = SUGGEST_CSS;
@@ -21102,9 +21102,9 @@ if (!window.__waGlobalEnterHooked) {
 
   function bootSuggest() {
     ensureSuggestStyle();
-    var H = window.__whatsnowAiHelpers || {};
+    var H = window.__faloAiHelpers || {};
     var W = { helpers: H, can: function (cap) {
-      try { return !!(window.__whatsnowCan && window.__whatsnowCan(cap)); } catch (_) { return false; }
+      try { return !!(window.__faloCan && window.__faloCan(cap)); } catch (_) { return false; }
     } };
     var normalizeUiLang = H.normalizeUiLang || function (x) { return x || "zh"; };
     var tPage = H.tPage || function (_l, _k, fb) { return fb; };
@@ -21115,7 +21115,7 @@ if (!window.__waGlobalEnterHooked) {
       });
       return s;
     };
-    var showNoTitleNotice = H.showNoTitleNotice || function (msg) { try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} };
+    var showNoTitleNotice = H.showNoTitleNotice || function (msg) { try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} };
     var checkHasCapabilityRealtime = H.checkHasCapabilityRealtime || function (cap, cb) { cb(!!(W.can && W.can(cap))); };
     var checkIsProRealtime = H.checkIsProRealtime || function (cb) {
       cb(!!(W.can && (W.can("ai_suggest") || W.can("ai_proxy"))));
@@ -21132,7 +21132,7 @@ if (!window.__waGlobalEnterHooked) {
     var currentUiLang = (typeof H.getUiLang === "function" ? H.getUiLang() : "zh");
     function getCurrentUserSourceLang() {
       try {
-        var s = window.userSourceLang || (window.__whatsnowTranslateCfg && window.__whatsnowTranslateCfg.sourceLang) || "zh-CN";
+        var s = window.userSourceLang || (window.__faloTranslateCfg && window.__faloTranslateCfg.sourceLang) || "zh-CN";
         if (!s || s === "auto") return "zh-CN";
         return String(s);
       } catch (_) { return "zh-CN"; }
@@ -21234,7 +21234,7 @@ if (!window.__waGlobalEnterHooked) {
     const id = normalizeSuggestEngine(engine);
     return new Promise((resolve) => {
       try {
-        const cfg = window.__whatsnowTranslateCfg || window.__whatsnowTranslateBoot || {};
+        const cfg = window.__faloTranslateCfg || window.__faloTranslateBoot || {};
         if (id === 'chatgpt') {
           const key = String(cfg.chatgptApiKey || '').trim();
           if (key) resolve({ ok: true, engine: id });
@@ -21315,7 +21315,7 @@ if (!window.__waGlobalEnterHooked) {
       : '';
     try {
       // 拆分后上下文收集在 content-translate-visible；点击时读最新 helpers，避免初始化竞态
-      const helpers = (window.__whatsnowAiHelpers) || H || {};
+      const helpers = (window.__faloAiHelpers) || H || {};
       if (typeof helpers.collectChatHistoryTranslateContext === 'function') {
         return helpers.collectChatHistoryTranslateContext(anchorEl, hint) || [];
       }
@@ -21665,8 +21665,8 @@ if (!window.__waGlobalEnterHooked) {
   async function insertSuggestedReplyToComposer(text) {
     let editor = null;
     try {
-      const viaHelper = (window.__whatsnowAiHelpers && typeof window.__whatsnowAiHelpers.getNativeComposerElement === 'function')
-        ? window.__whatsnowAiHelpers.getNativeComposerElement
+      const viaHelper = (window.__faloAiHelpers && typeof window.__faloAiHelpers.getNativeComposerElement === 'function')
+        ? window.__faloAiHelpers.getNativeComposerElement
         : getNativeComposerElement;
       editor = viaHelper();
     } catch (_) {
@@ -21681,8 +21681,8 @@ if (!window.__waGlobalEnterHooked) {
     }
     if (!editor) return false;
     try {
-      const paste = (window.__whatsnowAiHelpers && typeof window.__whatsnowAiHelpers.pasteReplaceText === 'function')
-        ? window.__whatsnowAiHelpers.pasteReplaceText
+      const paste = (window.__faloAiHelpers && typeof window.__faloAiHelpers.pasteReplaceText === 'function')
+        ? window.__faloAiHelpers.pasteReplaceText
         : pasteReplaceText;
       await paste(editor, text);
       return true;
@@ -22048,7 +22048,7 @@ if (!window.__waGlobalEnterHooked) {
   }
 
   function tryStart() {
-    if (!window.__whatsnowAiHelpers) {
+    if (!window.__faloAiHelpers) {
       setTimeout(tryStart, 50);
       return;
     }
@@ -22059,19 +22059,19 @@ if (!window.__waGlobalEnterHooked) {
 })();
   0�w@   N
 // ===== run @0x78B990 (32513 bytes) =====
-/*! WATransChat AI explain — 1:1 from WATransChat content-ai-explain.js */
+/*! Falo AI explain — 1:1 from Falo content-ai-explain.js */
 (function () {
   "use strict";
-  if (window.__WhatsNowAiExplainInstalled) return;
-  window.__WhatsNowAiExplainInstalled = true;
+  if (window.__FaloAiExplainInstalled) return;
+  window.__FaloAiExplainInstalled = true;
 
-  var EXPLAIN_CSS = ".wa-ai-explain-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(53, 120, 229, 0.1);\n  color: #2a6fdb;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-explain-btn:hover {\n  background: rgba(53, 120, 229, 0.18);\n  border-color: rgba(42, 111, 219, 0.35);\n}\n\n.wa-ai-explain-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-explain-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-explain-btn {\n  background: rgba(83, 160, 255, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #7ab8ff;\n}\n\n.dark .wa-ai-explain-btn:hover {\n  background: rgba(83, 160, 255, 0.22);\n.wa-ai-suggest-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(11, 20, 26, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal {\n  width: min(440px, 92vw);\n  max-height: min(80vh, 640px);\n  overflow: visible;\n  background: #fff;\n  color: #111b21;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-body {\n  display: none;\n}\n\n.wa-ai-suggest-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  position: relative;\n  z-index: 3;\n  flex-shrink: 0;\n  overflow: visible;\n}\n\n.wa-ai-suggest-modal-actions {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  flex-shrink: 0;\n  position: relative;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  line-height: 0;\n  color: #667781;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal .wa-fu-settings__panel {\n  z-index: 20;\n  line-height: normal;\n  width: min(280px, calc(100vw - 48px));\n  max-height: min(70vh, 440px);\n  overflow-y: auto;\n}\n\n.wa-fu-settings__title--section {\n  margin-top: 8px;\n  padding-top: 10px;\n  border-top: 1px solid var(--fu-line, rgba(0, 0, 0, 0.08));\n}\n\n.wa-ai-suggest-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 650;\n  line-height: 1.3;\n}\n\n.wa-ai-suggest-modal-close {\n  border: none;\n  background: transparent;\n  color: #667781;\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  border-radius: 50%;\n  cursor: pointer;\n  line-height: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal-close svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal-close:hover {\n  background: rgba(0, 0, 0, 0.06);\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal-hint {\n  margin: 0;\n  padding: 0 16px 14px;\n  font-size: 13px;\n  color: #667781;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error) {\n  animation: wa-ai-suggest-pulse 1.6s ease-in-out infinite;\n}\n\n.wa-ai-suggest-dots::after {\n  content: '';\n  display: inline-block;\n  width: 1.2em;\n  text-align: left;\n  animation: wa-ai-suggest-dots 1.4s infinite;\n}\n\n@keyframes wa-ai-suggest-dots {\n  0%, 20% { content: ''; }\n  21%, 40% { content: '.'; }\n  41%, 60% { content: '..'; }\n  61%, 100% { content: '...'; }\n}\n\n@keyframes wa-ai-suggest-pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.5; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error),\n  .wa-ai-suggest-dots::after {\n    animation: none;\n  }\n  .wa-ai-suggest-dots::after {\n    content: '...';\n  }\n}\n\n.wa-ai-suggest-modal-hint.is-error {\n  color: #c0392b;\n}\n\n.wa-ai-suggest-modal-body {\n  padding: 0 12px 14px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  overflow: auto;\n  flex: 1 1 auto;\n  min-height: 0;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-option {\n  display: block;\n  width: 100%;\n  text-align: left;\n  border: 1px solid #e9edef;\n  background: #f0f2f5;\n  color: inherit;\n  border-radius: 12px;\n  padding: 10px 12px;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-option:hover {\n  border-color: #25d366;\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.wa-ai-suggest-option-index {\n  display: inline-block;\n  font-size: 11px;\n  font-weight: 650;\n  color: #128c7e;\n  margin-bottom: 4px;\n}\n\n.wa-ai-suggest-option-text {\n  display: block;\n  font-size: 14px;\n  line-height: 1.5;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.dark .wa-ai-suggest-modal {\n  background: #202c33;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-close {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-hint {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-hint.is-error {\n  color: #ff8b81;\n}\n\n.dark .wa-ai-suggest-option {\n  background: #111b21;\n  border-color: #2a3942;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-option:hover {\n  border-color: #25d366;\n  background: rgba(37, 211, 102, 0.12);\n}\n.wa-ai-explain-btn {\n  pointer-events: auto !important;\n  position: relative;\n  z-index: 2;\n}\n.wa-ai-suggest-overlay {\n  position: fixed !important;\n  inset: 0 !important;\n  z-index: 2147483646 !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n}";
+  var EXPLAIN_CSS = ".wa-ai-explain-btn {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 4px;\n  margin: 0 4px 3px 0;\n  padding: 2px 8px;\n  border: 1px solid rgba(0, 0, 0, 0.12);\n  border-radius: 12px;\n  background: rgba(53, 120, 229, 0.1);\n  color: #2a6fdb;\n  font-size: 11px;\n  line-height: 1.2;\n  cursor: pointer;\n  user-select: none;\n  white-space: nowrap;\n  box-sizing: border-box;\n  flex-shrink: 0;\n  vertical-align: middle;\n  align-self: center;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n  flex-shrink: 0;\n}\n\n.wa-ai-explain-btn .wa-ai-explain-icon svg {\n  display: block;\n  width: 10px;\n  height: 10px;\n}\n\n.wa-ai-explain-btn:hover {\n  background: rgba(53, 120, 229, 0.18);\n  border-color: rgba(42, 111, 219, 0.35);\n}\n\n.wa-ai-explain-btn:disabled {\n  opacity: 0.65;\n  cursor: wait;\n}\n\n.wa-ai-explain-btn.is-loading {\n  pointer-events: none;\n}\n\n.dark .wa-ai-explain-btn {\n  background: rgba(83, 160, 255, 0.14);\n  border-color: rgba(233, 237, 239, 0.16);\n  color: #7ab8ff;\n}\n\n.dark .wa-ai-explain-btn:hover {\n  background: rgba(83, 160, 255, 0.22);\n.wa-ai-suggest-overlay {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483646;\n  background: rgba(11, 20, 26, 0.45);\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  padding: 16px;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal {\n  width: min(440px, 92vw);\n  max-height: min(80vh, 640px);\n  overflow: visible;\n  background: #fff;\n  color: #111b21;\n  border-radius: 14px;\n  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);\n  font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n  display: flex;\n  flex-direction: column;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-body {\n  display: none;\n}\n\n.wa-ai-suggest-modal-head {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  gap: 12px;\n  padding: 14px 16px 10px;\n  position: relative;\n  z-index: 3;\n  flex-shrink: 0;\n  overflow: visible;\n}\n\n.wa-ai-suggest-modal-actions {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  gap: 2px;\n  flex-shrink: 0;\n  position: relative;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  line-height: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  line-height: 0;\n  color: #667781;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal .wa-fu-settings__panel {\n  z-index: 20;\n  line-height: normal;\n  width: min(280px, calc(100vw - 48px));\n  max-height: min(70vh, 440px);\n  overflow-y: auto;\n}\n\n.wa-fu-settings__title--section {\n  margin-top: 8px;\n  padding-top: 10px;\n  border-top: 1px solid var(--fu-line, rgba(0, 0, 0, 0.08));\n}\n\n.wa-ai-suggest-modal-title {\n  margin: 0;\n  font-size: 16px;\n  font-weight: 650;\n  line-height: 1.3;\n}\n\n.wa-ai-suggest-modal-close {\n  border: none;\n  background: transparent;\n  color: #667781;\n  width: 32px;\n  height: 32px;\n  padding: 0;\n  margin: 0;\n  border-radius: 50%;\n  cursor: pointer;\n  line-height: 0;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  flex-shrink: 0;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-modal-close svg {\n  display: block;\n  width: 18px;\n  height: 18px;\n  flex-shrink: 0;\n}\n\n.wa-ai-suggest-modal-close:hover {\n  background: rgba(0, 0, 0, 0.06);\n  color: #111b21;\n}\n\n.wa-ai-suggest-modal-hint {\n  margin: 0;\n  padding: 0 16px 14px;\n  font-size: 13px;\n  color: #667781;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error) {\n  animation: wa-ai-suggest-pulse 1.6s ease-in-out infinite;\n}\n\n.wa-ai-suggest-dots::after {\n  content: '';\n  display: inline-block;\n  width: 1.2em;\n  text-align: left;\n  animation: wa-ai-suggest-dots 1.4s infinite;\n}\n\n@keyframes wa-ai-suggest-dots {\n  0%, 20% { content: ''; }\n  21%, 40% { content: '.'; }\n  41%, 60% { content: '..'; }\n  61%, 100% { content: '...'; }\n}\n\n@keyframes wa-ai-suggest-pulse {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0.5; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .wa-ai-suggest-modal.is-loading .wa-ai-suggest-modal-hint:not(.is-error),\n  .wa-ai-suggest-dots::after {\n    animation: none;\n  }\n  .wa-ai-suggest-dots::after {\n    content: '...';\n  }\n}\n\n.wa-ai-suggest-modal-hint.is-error {\n  color: #c0392b;\n}\n\n.wa-ai-suggest-modal-body {\n  padding: 0 12px 14px;\n  display: flex;\n  flex-direction: column;\n  gap: 8px;\n  overflow: auto;\n  flex: 1 1 auto;\n  min-height: 0;\n  position: relative;\n  z-index: 1;\n}\n\n.wa-ai-suggest-option {\n  display: block;\n  width: 100%;\n  text-align: left;\n  border: 1px solid #e9edef;\n  background: #f0f2f5;\n  color: inherit;\n  border-radius: 12px;\n  padding: 10px 12px;\n  cursor: pointer;\n  box-sizing: border-box;\n}\n\n.wa-ai-suggest-option:hover {\n  border-color: #6366f1;\n  background: rgba(37, 211, 102, 0.1);\n}\n\n.wa-ai-suggest-option-index {\n  display: inline-block;\n  font-size: 11px;\n  font-weight: 650;\n  color: #4f46e5;\n  margin-bottom: 4px;\n}\n\n.wa-ai-suggest-option-text {\n  display: block;\n  font-size: 14px;\n  line-height: 1.5;\n  white-space: pre-wrap;\n  word-break: break-word;\n}\n\n.dark .wa-ai-suggest-modal {\n  background: #202c33;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-close {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-close:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal .wa-ai-suggest-settings > .wa-fu-icon-btn:hover {\n  background: rgba(255, 255, 255, 0.08);\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-modal-hint {\n  color: #8696a0;\n}\n\n.dark .wa-ai-suggest-modal-hint.is-error {\n  color: #ff8b81;\n}\n\n.dark .wa-ai-suggest-option {\n  background: #111b21;\n  border-color: #2a3942;\n  color: #e9edef;\n}\n\n.dark .wa-ai-suggest-option:hover {\n  border-color: #6366f1;\n  background: rgba(37, 211, 102, 0.12);\n}\n.wa-ai-explain-btn {\n  pointer-events: auto !important;\n  position: relative;\n  z-index: 2;\n}\n.wa-ai-suggest-overlay {\n  position: fixed !important;\n  inset: 0 !important;\n  z-index: 2147483646 !important;\n  display: flex !important;\n  align-items: center !important;\n  justify-content: center !important;\n}";
   function ensureExplainStyle() {
     try {
-      var st = document.getElementById("whatsnow-ai-explain-style");
+      var st = document.getElementById("falo-ai-explain-style");
       if (!st) {
         st = document.createElement("style");
-        st.id = "whatsnow-ai-explain-style";
+        st.id = "falo-ai-explain-style";
         (document.head || document.documentElement).appendChild(st);
       }
       if (st.textContent !== EXPLAIN_CSS) st.textContent = EXPLAIN_CSS;
@@ -22082,14 +22082,14 @@ if (!window.__waGlobalEnterHooked) {
 
   function bootExplain() {
     ensureExplainStyle();
-    var H = window.__whatsnowAiHelpers || {};
+    var H = window.__faloAiHelpers || {};
     var W = { helpers: H, can: function (cap) {
-      try { return !!(window.__whatsnowCan && window.__whatsnowCan(cap)); } catch (_) { return false; }
+      try { return !!(window.__faloCan && window.__faloCan(cap)); } catch (_) { return false; }
     } };
     var normalizeUiLang = H.normalizeUiLang || function (x) { return x || "zh"; };
     var tPage = H.tPage || function (_l, _k, fb) { return fb; };
     var tPageFill = H.tPageFill || function (l, k, fb) { return tPage(l, k, fb); };
-    var showNoTitleNotice = H.showNoTitleNotice || function (msg) { try { if (window.__whatsnowNotice) window.__whatsnowNotice(msg); else if (window.__whatsnowAlert) window.__whatsnowAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} };
+    var showNoTitleNotice = H.showNoTitleNotice || function (msg) { try { if (window.__faloNotice) window.__faloNotice(msg); else if (window.__faloAlert) window.__faloAlert(msg); else if (window.appAlert) window.appAlert(msg); else alert(msg); } catch (_) {} };
     var checkHasCapabilityRealtime = H.checkHasCapabilityRealtime || function (cap, cb) { cb(!!(W.can && W.can(cap))); };
     var checkIsProRealtime = H.checkIsProRealtime || function (cb) { cb(!!(W.can && W.can("ai_explain"))); };
     var collectWaAiExplainContext = H.collectWaAiExplainContext || function () { return []; };
@@ -22102,7 +22102,7 @@ if (!window.__waGlobalEnterHooked) {
     var currentUiLang = (typeof H.getUiLang === "function" ? H.getUiLang() : "zh");
     function getCurrentUserSourceLang() {
       try {
-        var s = window.userSourceLang || (window.__whatsnowTranslateCfg && window.__whatsnowTranslateCfg.sourceLang) || "zh-CN";
+        var s = window.userSourceLang || (window.__faloTranslateCfg && window.__faloTranslateCfg.sourceLang) || "zh-CN";
         if (!s || s === "auto") return "zh-CN";
         return String(s);
       } catch (_) { return "zh-CN"; }
@@ -22513,7 +22513,7 @@ if (!window.__waGlobalEnterHooked) {
         }
       } catch (_) {}
       try {
-        resolve(!!(window.__whatsnowCan && window.__whatsnowCan('ai_explain')));
+        resolve(!!(window.__faloCan && window.__faloCan('ai_explain')));
       } catch (_) {
         resolve(false);
       }
@@ -22714,7 +22714,7 @@ if (!window.__waGlobalEnterHooked) {
   }
 
   function tryStart() {
-    if (!window.__whatsnowAiHelpers) {
+    if (!window.__faloAiHelpers) {
       setTimeout(tryStart, 50);
       return;
     }
@@ -22725,15 +22725,15 @@ if (!window.__waGlobalEnterHooked) {
 })();
     ��x@   �
 // ===== run @0x793898 (62881 bytes) =====
-/*! WATransChat followup i18n packs (from extension i18n-data). */
+/*! Falo followup i18n packs (from extension i18n-data). */
 (function (g) {
   "use strict";
   if (g.__waFollowupI18nPacks) return;
   g.__waFollowupI18nPacks = {"zh":{"addFollowup":"添加跟进","added":"已添加跟进提醒","allTodos":"全部待办","cancel":"取消","clickEditTime":"点击修改时间","close":"关闭","currentCustomer":"当前客户","customer":"客户","customerFollowup":"客户跟进","customerNotInList":"未找到该客户，请手动打开会话","customerTodos":"客户待办","delete":"删除","descNone":"今天暂无紧急跟进","descOverdue":"有 {n} 项已逾期，建议优先处理","descToday":"今天还有 {n} 项待跟进","doneFollowup":"已完成跟进","dueReminder":"跟进提醒","edit":"编辑","editFollowup":"编辑跟进","emptyAllHint":"从客户会话里添加第一条","emptyAllTitle":"暂无待办","emptyDoneHint":"完成跟进后会出现在这里","emptyDoneTitle":"还没有完成记录","emptyTodayHint":"打开客户会话，添加下一次跟进提醒","emptyTodayTitle":"今天没有待跟进事项","entryMovedFloat":"入口已改为左下角悬浮","entryMovedSidebar":"入口已移到左侧边栏","entryPosition":"入口显示位置","entryPositionTitle":"「今日待办」入口位置","expired":"已到期","floatHint":"不占用边栏，显眼但可能会遮挡内容","floatLabel":"左下角悬浮窗","followupContent":"跟进内容","followupTodos":"跟进待办","footerTip":"在客户会话中添加待办更准确。点时间或编辑可改提醒，点条目可打开聊天。","in1h":"1 小时后","in30m":"30 分钟后","in3d":"3 天后","markDone":"标记完成","metricAll":"全部未完成","metricOverdue":"逾期","metricToday":"今日","monthDay":"{m}月{d}日","needTitle":"请填写跟进内容","needValidTime":"请选择有效时间","noChatList":"未找到聊天列表","noItemsForCustomer":"还没有跟进事项","noTodos":"暂无待办","noteOptional":"备注（可选）","notePlaceholder":"补充说明","notifCustomerFallback":"客户","notifTaskFallback":"待跟进","notifTitle":"客户跟进提醒","openChat":"打开会话","openChatFailed":"打开会话失败","openChatShort":"打开聊天","openValidChat":"请先打开一个有效的客户会话","overdue":"逾期","pendingCount":"{n} 项未完成","pendingFollowup":"待跟进","remindTime":"提醒时间","rescheduled":"已改期：{label}","saveChanges":"保存修改","saveReminder":"保存提醒","searchingChat":"正在搜索客户…","sectionLater":"稍后","sectionOverdue":"逾期","sectionOverduePending":"逾期未跟进","sectionToday":"今天","sectionTodayPlan":"今日安排","setReminderHint":"为这个客户设一个提醒时间","sidebarHint":"放在 WhatsApp 导航栏中","sidebarLabel":"左侧边栏","snooze":"改期","syncComplete":"同步完成","syncConflictSkipped":"有 {n} 条本地改动因云端更新而未覆盖","syncFailedRetry":"同步失败，将重试","syncNow":"立即同步","syncProRequired":"专业版/尊享版才可云端同步","synced":"已同步","syncing":"同步中…","tabAll":"全部","tabDone":"已完成","tabOverdue":"逾期","tabToday":"今日","titlePlaceholder":"例如：发送报价单后跟进","todayPrefix":"今天","todayTodos":"今日待办","tomorrow10":"明天 10:00","tomorrowPrefix":"明天","updated":"已更新跟进提醒","yesterdayPrefix":"昨天"},"en":{"addFollowup":"Add follow-up","added":"Follow-up added","allTodos":"All todos","cancel":"Cancel","clickEditTime":"Click to edit time","close":"Close","currentCustomer":"Current chat","customer":"Customer","customerFollowup":"Follow-ups","customerNotInList":"Customer not found. Please open the chat manually.","customerTodos":"Customer todos","delete":"Delete","descNone":"No urgent follow-ups today","descOverdue":"{n} overdue — handle these first","descToday":"{n} follow-ups left today","doneFollowup":"Follow-up completed","dueReminder":"Follow-up reminder","edit":"Edit","editFollowup":"Edit follow-up","emptyAllHint":"Add the first one from a customer chat","emptyAllTitle":"No todos","emptyDoneHint":"Finished follow-ups will appear here","emptyDoneTitle":"No completed items yet","emptyTodayHint":"Open a customer chat and add the next reminder","emptyTodayTitle":"Nothing to follow up today","entryMovedFloat":"Entry moved to bottom-left floating button","entryMovedSidebar":"Entry moved to the left sidebar","entryPosition":"Entry position","entryPositionTitle":"“Today” entry position","expired":"Due","floatHint":"Does not use the sidebar; may cover content","floatLabel":"Floating button","followupContent":"Follow-up","followupTodos":"Follow-ups","footerTip":"Add todos from a customer chat for accuracy. Tap time or Edit to change reminders; tap a row to open the chat.","in1h":"In 1 hour","in30m":"In 30 min","in3d":"In 3 days","markDone":"Mark done","metricAll":"Pending","metricOverdue":"Overdue","metricToday":"Today","monthDay":"{m}/{d}","needTitle":"Please enter follow-up content","needValidTime":"Please choose a valid time","noChatList":"Chat list not found","noItemsForCustomer":"No follow-ups yet","noTodos":"No todos","noteOptional":"Note (optional)","notePlaceholder":"Additional notes","notifCustomerFallback":"Customer","notifTaskFallback":"Follow up","notifTitle":"Customer follow-up","openChat":"Open chat","openChatFailed":"Failed to open chat","openChatShort":"Open chat","openValidChat":"Please open a valid customer chat first","overdue":"Overdue","pendingCount":"{n} pending","pendingFollowup":"Follow up","remindTime":"Reminder time","rescheduled":"Rescheduled: {label}","saveChanges":"Save changes","saveReminder":"Save reminder","searchingChat":"Searching for customer…","sectionLater":"Later","sectionOverdue":"Overdue","sectionOverduePending":"Overdue","sectionToday":"Today","sectionTodayPlan":"Today","setReminderHint":"Set a reminder for this customer","sidebarHint":"Place in the WhatsApp navigation bar","sidebarLabel":"Left sidebar","snooze":"Snooze","syncComplete":"Sync complete","syncConflictSkipped":"{n} local change(s) skipped — cloud was newer","syncFailedRetry":"Sync failed — retrying","syncNow":"Sync now","syncProRequired":"Cloud sync requires Pro/Premium","synced":"Synced","syncing":"Syncing…","tabAll":"All","tabDone":"Done","tabOverdue":"Overdue","tabToday":"Today","titlePlaceholder":"e.g. Follow up after sending the quote","todayPrefix":"Today","todayTodos":"Today","tomorrow10":"Tomorrow 10:00","tomorrowPrefix":"Tomorrow","updated":"Follow-up updated","yesterdayPrefix":"Yesterday"},"es":{"addFollowup":"Añadir seguimiento","added":"Se ha añadido información adicional","allTodos":"Todas las tareas pendientes","cancel":"Cancelar","clickEditTime":"Haz clic para editar la hora","close":"Cerrar","currentCustomer":"Chat actual","customer":"Cliente","customerFollowup":"Seguimientos","customerNotInList":"No se ha encontrado al cliente. Por favor, abre el chat manualmente.","customerTodos":"Tareas del cliente","delete":"Eliminar","descNone":"Hoy no hay seguimientos urgentes","descOverdue":"{n} pendientes: ocúpate primero de estos","descToday":"{n} seguimientos pendientes hoy","doneFollowup":"Seguimiento completado","dueReminder":"Recordatorio de seguimiento","edit":"Editar","editFollowup":"Editar respuesta","emptyAllHint":"Añade el primero de un chat con un cliente","emptyAllTitle":"No todos","emptyDoneHint":"Los seguimientos finalizados aparecerán aquí","emptyDoneTitle":"Aún no hay elementos completados","emptyTodayHint":"Abre un chat con un cliente y añade el siguiente recordatorio","emptyTodayTitle":"Hoy no hay nada que seguir","entryMovedFloat":"La entrada se ha desplazado al botón flotante de la esquina inferior izquierda","entryMovedSidebar":"La entrada se ha trasladado a la barra lateral izquierda","entryPosition":"Puesto de iniciación","entryPositionTitle":"Posición de entrada «hoy»","expired":"A pagar","floatHint":"No utiliza la barra lateral; puede tapar el contenido","floatLabel":"Botón flotante","followupContent":"Seguimiento","followupTodos":"Seguimientos","footerTip":"Añade tareas pendientes a partir de un chat con un cliente para mayor precisión. Toca «Hora» o «Editar» para modificar los recordatorios; toca una fila para abrir el chat.","in1h":"Dentro de una hora","in30m":"En 30 minutos","in3d":"Dentro de 3 días","markDone":"Marcar como hecho","metricAll":"Pendiente","metricOverdue":"Atrasado","metricToday":"Hoy","monthDay":"{m}/{d}","needTitle":"Introduce aquí el contenido de seguimiento","needValidTime":"Elige una hora válida, por favor","noChatList":"No se ha encontrado la lista de chats","noItemsForCustomer":"Aún no hay respuestas","noTodos":"No todos","noteOptional":"Nota (opcional)","notePlaceholder":"Notas adicionales","notifCustomerFallback":"Cliente","notifTaskFallback":"Seguimiento","notifTitle":"Seguimiento de cliente","openChat":"Abrir chat","openChatFailed":"No se ha podido abrir el chat","openChatShort":"Abrir chat","openValidChat":"Por favor, abre primero un chat de atención al cliente válido","overdue":"Atrasado","pendingCount":"{n} pendientes","pendingFollowup":"Seguimiento","remindTime":"Es hora de recordar","rescheduled":"Cambio de fecha: {label}","saveChanges":"Guardar cambios","saveReminder":"Guardar recordatorio","searchingChat":"Buscando cliente…","sectionLater":"Más tarde","sectionOverdue":"Atrasado","sectionOverduePending":"Atrasado","sectionToday":"Hoy","sectionTodayPlan":"Hoy","setReminderHint":"Configurar un recordatorio para este cliente","sidebarHint":"Colócalo en la barra de navegación de WhatsApp","sidebarLabel":"Barra lateral izquierda","snooze":"Repetición de alarma","syncComplete":"Sincronización completa","syncConflictSkipped":"{n} cambio(s) local(es) omitido(s): la nube era más reciente","syncFailedRetry":"Error de sincronización — reintentando","syncNow":"Sincronizar ahora","syncProRequired":"La sincronización en la nube requiere Pro/Premium","synced":"Sincronizado","syncing":"Sincronizando…","tabAll":"Todo","tabDone":"Hecho","tabOverdue":"Atrasado","tabToday":"Hoy","titlePlaceholder":"Por ejemplo: Realizar un seguimiento tras enviar el presupuesto","todayPrefix":"Hoy","todayTodos":"Hoy","tomorrow10":"Mañana a las 10:00","tomorrowPrefix":"Mañana","updated":"Actualización del seguimiento","yesterdayPrefix":"Ayer"},"pt-PT":{"addFollowup":"Adicionar acompanhamento","added":"Adição de acompanhamento","allTodos":"Todas as tarefas","cancel":"Cancelar","clickEditTime":"Clique para editar a hora","close":"Fechar","currentCustomer":"Conversa atual","customer":"Cliente","customerFollowup":"Acompanhamentos","customerNotInList":"Cliente não encontrado. Por favor, abra o chat manualmente.","customerTodos":"Tarefas do cliente","delete":"Excluir","descNone":"Hoje não há acompanhamentos urgentes","descOverdue":"{n} em atraso — resolva esses primeiro","descToday":"{n} acompanhamentos restantes hoje","doneFollowup":"Acompanhamento concluído","dueReminder":"Lembrete de acompanhamento","edit":"Editar","editFollowup":"Editar resposta","emptyAllHint":"Adicione a primeira mensagem de um chat com o cliente","emptyAllTitle":"Nem todos","emptyDoneHint":"Os acompanhamentos concluídos aparecerão aqui","emptyDoneTitle":"Ainda não há itens concluídos","emptyTodayHint":"Abra um chat com o cliente e adicione o próximo lembrete","emptyTodayTitle":"Não há nada a ser acompanhado hoje","entryMovedFloat":"A entrada foi movida para o botão flutuante no canto inferior esquerdo","entryMovedSidebar":"A entrada foi movida para a barra lateral esquerda","entryPosition":"Cargo inicial","entryPositionTitle":"Posição de entrada “Hoje”","expired":"Vencimento","floatHint":"Não utiliza a barra lateral; pode ocultar o conteúdo","floatLabel":"Botão flutuante","followupContent":"Acompanhamento","followupTodos":"Acompanhamentos","footerTip":"Adicione tarefas pendentes a partir de um chat com o cliente para garantir a precisão. Toque em “Hora” ou em “Editar” para alterar os lembretes; toque em uma linha para abrir o chat.","in1h":"Em 1 hora","in30m":"Em 30 minutos","in3d":"Daqui a 3 dias","markDone":"Marcar como concluído","metricAll":"Em espera","metricOverdue":"Em atraso","metricToday":"Hoje","monthDay":"{m}/{d}","needTitle":"Insira o conteúdo de acompanhamento","needValidTime":"Por favor, escolha um horário válido","noChatList":"Lista de bate-papos não encontrada","noItemsForCustomer":"Ainda não há respostas","noTodos":"Nem todos","noteOptional":"Nota (opcional)","notePlaceholder":"Notas adicionais","notifCustomerFallback":"Cliente","notifTaskFallback":"Acompanhar","notifTitle":"Acompanhamento de cliente","openChat":"Abrir bate-papo","openChatFailed":"Não foi possível abrir o chat","openChatShort":"Abrir bate-papo","openValidChat":"Por favor, abra primeiro um chat de atendimento ao cliente válido","overdue":"Em atraso","pendingCount":"{n} pendente","pendingFollowup":"Acompanhamento","remindTime":"Hora do lembrete","rescheduled":"Remarcado: {label}","saveChanges":"Salvar alterações","saveReminder":"Salvar lembrete","searchingChat":"Procurando pelo cliente…","sectionLater":"Mais tarde","sectionOverdue":"Em atraso","sectionOverduePending":"Em atraso","sectionToday":"Hoje","sectionTodayPlan":"Hoje","setReminderHint":"Definir um lembrete para este cliente","sidebarHint":"Colocar na barra de navegação do WhatsApp","sidebarLabel":"Barra lateral esquerda","snooze":"Adiar o alarme","syncComplete":"Sincronização concluída","syncConflictSkipped":"{n} alteração(ões) local(is) ignorada(s) — a nuvem era mais recente","syncFailedRetry":"Falha na sincronização — a tentar novamente","syncNow":"Sincronizar agora","syncProRequired":"A sincronização na nuvem requer Pro/Premium","synced":"Sincronizado","syncing":"A sincronizar…","tabAll":"Todos","tabDone":"Concluído","tabOverdue":"Em atraso","tabToday":"Hoje","titlePlaceholder":"por exemplo: Acompanhamento após o envio do orçamento","todayPrefix":"Hoje","todayTodos":"Hoje","tomorrow10":"Amanhã, às 10h","tomorrowPrefix":"Amanhã","updated":"Atualização do acompanhamento","yesterdayPrefix":"Ontem"},"pt-BR":{"addFollowup":"Adicionar acompanhamento","added":"Adição de acompanhamento","allTodos":"Todas as tarefas","cancel":"Cancelar","clickEditTime":"Clique para editar a hora","close":"Fechar","currentCustomer":"Conversa atual","customer":"Cliente","customerFollowup":"Acompanhamentos","customerNotInList":"Cliente não encontrado. Por favor, abra o chat manualmente.","customerTodos":"Tarefas do cliente","delete":"Excluir","descNone":"Hoje não há acompanhamentos urgentes","descOverdue":"{n} em atraso — resolva esses primeiro","descToday":"{n} acompanhamentos restantes hoje","doneFollowup":"Acompanhamento concluído","dueReminder":"Lembrete de acompanhamento","edit":"Editar","editFollowup":"Editar resposta","emptyAllHint":"Adicione a primeira mensagem de um chat com o cliente","emptyAllTitle":"Nem todos","emptyDoneHint":"Os acompanhamentos concluídos aparecerão aqui","emptyDoneTitle":"Ainda não há itens concluídos","emptyTodayHint":"Abra um chat com o cliente e adicione o próximo lembrete","emptyTodayTitle":"Não há nada a ser acompanhado hoje","entryMovedFloat":"A entrada foi movida para o botão flutuante no canto inferior esquerdo","entryMovedSidebar":"A entrada foi movida para a barra lateral esquerda","entryPosition":"Cargo inicial","entryPositionTitle":"Posição de entrada “Hoje”","expired":"Vencimento","floatHint":"Não utiliza a barra lateral; pode ocultar o conteúdo","floatLabel":"Botão flutuante","followupContent":"Acompanhamento","followupTodos":"Acompanhamentos","footerTip":"Adicione tarefas pendentes a partir de um chat com o cliente para garantir a precisão. Toque em “Hora” ou em “Editar” para alterar os lembretes; toque em uma linha para abrir o chat.","in1h":"Em 1 hora","in30m":"Em 30 minutos","in3d":"Daqui a 3 dias","markDone":"Marcar como concluído","metricAll":"Em espera","metricOverdue":"Em atraso","metricToday":"Hoje","monthDay":"{m}/{d}","needTitle":"Insira o conteúdo de acompanhamento","needValidTime":"Por favor, escolha um horário válido","noChatList":"Lista de bate-papos não encontrada","noItemsForCustomer":"Ainda não há respostas","noTodos":"Nem todos","noteOptional":"Nota (opcional)","notePlaceholder":"Notas adicionais","notifCustomerFallback":"Cliente","notifTaskFallback":"Acompanhar","notifTitle":"Acompanhamento de cliente","openChat":"Abrir chat","openChatFailed":"Não foi possível abrir o chat","openChatShort":"Abrir chat","openValidChat":"Por favor, abra primeiro um chat de atendimento ao cliente válido","overdue":"Em atraso","pendingCount":"{n} pendente","pendingFollowup":"Acompanhamento","remindTime":"Hora do lembrete","rescheduled":"Remarcado: {label}","saveChanges":"Salvar alterações","saveReminder":"Salvar lembrete","searchingChat":"Procurando pelo cliente…","sectionLater":"Mais tarde","sectionOverdue":"Em atraso","sectionOverduePending":"Em atraso","sectionToday":"Hoje","sectionTodayPlan":"Hoje","setReminderHint":"Definir um lembrete para este cliente","sidebarHint":"Colocar na barra de navegação do WhatsApp","sidebarLabel":"Barra lateral esquerda","snooze":"Adiar o alarme","syncComplete":"Sincronização concluída","syncConflictSkipped":"{n} alteração(ões) local(is) ignorada(s) — a nuvem era mais recente","syncFailedRetry":"Falha na sincronização — tentando novamente","syncNow":"Sincronizar agora","syncProRequired":"A sincronização na nuvem requer Pro/Premium","synced":"Sincronizado","syncing":"Sincronizando…","tabAll":"Todos","tabDone":"Concluído","tabOverdue":"Em atraso","tabToday":"Hoje","titlePlaceholder":"por exemplo: Acompanhamento após o envio do orçamento","todayPrefix":"Hoje","todayTodos":"Hoje","tomorrow10":"Amanhã, às 10h","tomorrowPrefix":"Amanhã","updated":"Atualização do acompanhamento","yesterdayPrefix":"Ontem"},"fr":{"addFollowup":"Ajouter un suivi","added":"Ajout d'un suivi","allTodos":"Toutes les tâches","cancel":"Annuler","clickEditTime":"Cliquez ici pour modifier l'heure","close":"Fermer","currentCustomer":"Discussion actuelle","customer":"Client","customerFollowup":"Suivis","customerNotInList":"Client introuvable. Veuillez ouvrir le chat manuellement.","customerTodos":"Tâches à effectuer par le client","delete":"Supprimer","descNone":"Pas de suivi urgent aujourd'hui","descOverdue":"{n} en retard — à traiter en priorité","descToday":"{n} relances restantes aujourd'hui","doneFollowup":"Suivi terminé","dueReminder":"Rappel de suivi","edit":"Modifier","editFollowup":"Modifier le suivi","emptyAllHint":"Ajouter le premier message d'un chat client","emptyAllTitle":"Pas tout le monde","emptyDoneHint":"Les suivis terminés apparaîtront ici","emptyDoneTitle":"Aucun élément n'a encore été validé","emptyTodayHint":"Ouvrez une conversation avec un client et ajoutez le prochain rappel","emptyTodayTitle":"Rien à suivre aujourd'hui","entryMovedFloat":"L'élément a été déplacé vers le bouton flottant en bas à gauche","entryMovedSidebar":"L'entrée a été déplacée dans la barre latérale gauche","entryPosition":"Poste de débutant","entryPositionTitle":"Position d'entrée « Aujourd'hui »","expired":"À payer","floatHint":"N'utilise pas la barre latérale ; peut recouvrir le contenu","floatLabel":"Bouton flottant","followupContent":"Suivi","followupTodos":"Suivis","footerTip":"Ajoutez des tâches à partir d'une conversation avec un client pour plus de précision. Appuyez sur « Heure » ou « Modifier » pour modifier les rappels ; appuyez sur une ligne pour ouvrir la conversation.","in1h":"Dans 1 heure","in30m":"Dans 30 minutes","in3d":"Dans 3 jours","markDone":"Cochez « Terminé »","metricAll":"En attente","metricOverdue":"En retard","metricToday":"Aujourd'hui","monthDay":"{m}/{d}","needTitle":"Veuillez saisir le contenu de suivi","needValidTime":"Veuillez choisir une heure valide","noChatList":"Liste de discussions introuvable","noItemsForCustomer":"Aucun suivi pour l'instant","noTodos":"Pas tout le monde","noteOptional":"Remarque (facultative)","notePlaceholder":"Remarques complémentaires","notifCustomerFallback":"Client","notifTaskFallback":"Suivi","notifTitle":"Suivi client","openChat":"Ouvrir le chat","openChatFailed":"Impossible d'ouvrir la discussion","openChatShort":"Ouvrir le chat","openValidChat":"Veuillez d'abord ouvrir une session de chat client valide","overdue":"En retard","pendingCount":"{n} en attente","pendingFollowup":"Suivi","remindTime":"C'est l'heure du rappel","rescheduled":"Reporté : {label}","saveChanges":"Enregistrer les modifications","saveReminder":"Enregistrer le rappel","searchingChat":"Recherche d'un client…","sectionLater":"Plus tard","sectionOverdue":"En retard","sectionOverduePending":"En retard","sectionToday":"Aujourd'hui","sectionTodayPlan":"Aujourd'hui","setReminderHint":"Programmer un rappel pour ce client","sidebarHint":"Emplacement dans la barre de navigation de WhatsApp","sidebarLabel":"Barre latérale gauche","snooze":"Répétition de l'alarme","syncComplete":"Synchronisation terminée","syncConflictSkipped":"{n} modification(s) locale(s) ignorée(s) — le cloud était plus récent","syncFailedRetry":"Échec de la sync — nouvel essai","syncNow":"Synchroniser","syncProRequired":"La sync cloud nécessite Pro/Premium","synced":"Synchronisé","syncing":"Synchronisation…","tabAll":"Tout","tabDone":"Terminé","tabOverdue":"En retard","tabToday":"Aujourd'hui","titlePlaceholder":"Par exemple : assurer le suivi après l'envoi du devis","todayPrefix":"Aujourd'hui","todayTodos":"Aujourd'hui","tomorrow10":"Demain à 10 h","tomorrowPrefix":"Demain","updated":"Mise à jour du suivi","yesterdayPrefix":"Hier"},"de":{"addFollowup":"Folgeeintrag hinzufügen","added":"Nachtrag hinzugefügt","allTodos":"Alle Aufgaben","cancel":"Abbrechen","clickEditTime":"Zum Bearbeiten der Uhrzeit hier klicken","close":"Schließen","currentCustomer":"Aktueller Chat","customer":"Kunde","customerFollowup":"Weiterverfolgung","customerNotInList":"Kunde nicht gefunden. Bitte öffnen Sie den Chat manuell.","customerTodos":"Aufgaben für Kunden","delete":"Löschen","descNone":"Heute gibt es keine dringenden Folgeaktionen","descOverdue":"{n} überfällig – diese zuerst bearbeiten","descToday":"{n} verbleibende Nachfassaktionen heute","doneFollowup":"Nachverfolgung abgeschlossen","dueReminder":"Erinnerung zur Nachverfolgung","edit":"Bearbeiten","editFollowup":"Folgebeitrag bearbeiten","emptyAllHint":"Füge den ersten aus einem Kundenchat hinzu","emptyAllTitle":"Nicht alle","emptyDoneHint":"Abgeschlossene Nachverfolgungen werden hier angezeigt","emptyDoneTitle":"Es gibt noch keine abgeschlossenen Einträge","emptyTodayHint":"Öffnen Sie einen Kundenchat und fügen Sie die nächste Erinnerung hinzu","emptyTodayTitle":"Heute gibt es nichts weiter zu besprechen","entryMovedFloat":"Eintrag wurde auf die schwebende Schaltfläche unten links verschoben","entryMovedSidebar":"Eintrag in die linke Seitenleiste verschoben","entryPosition":"Einstiegsposition","entryPositionTitle":"Einstiegsposition „Heute“","expired":"Fällig","floatHint":"Verwendet die Seitenleiste nicht; kann Inhalte überdecken","floatLabel":"Schwebende Schaltfläche","followupContent":"Weiterverfolgung","followupTodos":"Folgeuntersuchungen","footerTip":"Fügen Sie zur Genauigkeit Aufgaben aus einem Kundenchat hinzu. Tippen Sie auf „Zeit“ oder „Bearbeiten“, um Erinnerungen anzupassen; tippen Sie auf eine Zeile, um den Chat zu öffnen.","in1h":"In 1 Stunde","in30m":"In 30 Minuten","in3d":"In 3 Tagen","markDone":"Markieren: Fertig","metricAll":"Ausstehend","metricOverdue":"Überfällig","metricToday":"Heute","monthDay":"{m}/{d}","needTitle":"Bitte geben Sie den Folgeinhalt ein","needValidTime":"Bitte wählen Sie einen gültigen Zeitraum aus","noChatList":"Chat-Liste nicht gefunden","noItemsForCustomer":"Bisher keine Rückmeldungen","noTodos":"Nicht alle","noteOptional":"Anmerkung (optional)","notePlaceholder":"Weitere Anmerkungen","notifCustomerFallback":"Kunde","notifTaskFallback":"Nachfassen","notifTitle":"Kunden-Follow-up","openChat":"Chat öffnen","openChatFailed":"Der Chat konnte nicht geöffnet werden","openChatShort":"Chat öffnen","openValidChat":"Bitte eröffnen Sie zunächst einen gültigen Kunden-Chat.","overdue":"Überfällig","pendingCount":"{n} ausstehend","pendingFollowup":"Weiterverfolgung","remindTime":"Zeit für eine Erinnerung","rescheduled":"Verschoben: {label}","saveChanges":"Änderungen speichern","saveReminder":"Erinnerung speichern","searchingChat":"Auf der Suche nach einem Kunden…","sectionLater":"Später","sectionOverdue":"Überfällig","sectionOverduePending":"Überfällig","sectionToday":"Heute","sectionTodayPlan":"Heute","setReminderHint":"Eine Erinnerung für diesen Kunden einrichten","sidebarHint":"In der WhatsApp-Navigationsleiste platzieren","sidebarLabel":"Linke Seitenleiste","snooze":"Schlummerfunktion","syncComplete":"Sync abgeschlossen","syncConflictSkipped":"{n} lokale Änderung(en) übersprungen — Cloud war neuer","syncFailedRetry":"Sync fehlgeschlagen — erneuter Versuch","syncNow":"Jetzt synchronisieren","syncProRequired":"Cloud-Sync erfordert Pro/Premium","synced":"Synchronisiert","syncing":"Wird synchronisiert…","tabAll":"Alle","tabDone":"Fertig","tabOverdue":"Überfällig","tabToday":"Heute","titlePlaceholder":"z. B. Nachfassen nach dem Versenden des Angebots","todayPrefix":"Heute","todayTodos":"Heute","tomorrow10":"Morgen um 10:00 Uhr","tomorrowPrefix":"Morgen","updated":"Aktualisierung des Follow-ups","yesterdayPrefix":"Gestern"},"it":{"addFollowup":"Aggiungi un follow-up","added":"Aggiunto aggiornamento","allTodos":"Tutte le cose da fare","cancel":"Annulla","clickEditTime":"Clicca per modificare l'ora","close":"Chiudi","currentCustomer":"Chat attuale","customer":"Cliente","customerFollowup":"Aggiornamenti","customerNotInList":"Cliente non trovato. Apri la chat manualmente.","customerTodos":"Elenco delle cose da fare per i clienti","delete":"Elimina","descNone":"Oggi non ci sono follow-up urgenti","descOverdue":"{n} in ritardo — occuparsene per primi","descToday":"{n} follow-up rimanenti oggi","doneFollowup":"Follow-up completato","dueReminder":"Promemoria di follow-up","edit":"Modifica","editFollowup":"Modifica del follow-up","emptyAllHint":"Aggiungi il primo messaggio di una chat con un cliente","emptyAllTitle":"Non tutti","emptyDoneHint":"I follow-up completati appariranno qui","emptyDoneTitle":"Non ci sono ancora elementi completati","emptyTodayHint":"Apri una chat con il cliente e aggiungi il prossimo promemoria","emptyTodayTitle":"Oggi non c'è nulla da seguire","entryMovedFloat":"La voce è stata spostata sul pulsante mobile in basso a sinistra","entryMovedSidebar":"La voce è stata spostata nella barra laterale sinistra","entryPosition":"Posizione di ingresso","entryPositionTitle":"Posizione di ingresso “oggi”","expired":"A causa di","floatHint":"Non utilizza la barra laterale; potrebbe coprire il contenuto","floatLabel":"Pulsante fluttuante","followupContent":"Aggiornamento","followupTodos":"Aggiornamenti","footerTip":"Aggiungi le attività da una chat con un cliente per garantire la precisione. Tocca l'ora o \"Modifica\" per modificare i promemoria; tocca una riga per aprire la chat.","in1h":"Tra 1 ora","in30m":"Tra 30 minuti","in3d":"Tra 3 giorni","markDone":"Segna come completato","metricAll":"In sospeso","metricOverdue":"In ritardo","metricToday":"Oggi","monthDay":"{m}/{d}","needTitle":"Inserisci il contenuto di approfondimento","needValidTime":"Scegli un orario valido","noChatList":"Elenco chat non trovato","noItemsForCustomer":"Non ci sono ancora aggiornamenti","noTodos":"Non tutti","noteOptional":"Nota (facoltativa)","notePlaceholder":"Note aggiuntive","notifCustomerFallback":"Cliente","notifTaskFallback":"Follow-up","notifTitle":"Follow-up cliente","openChat":"Apri chat","openChatFailed":"Impossibile aprire la chat","openChatShort":"Apri chat","openValidChat":"Ti preghiamo di aprire prima una chat clienti valida","overdue":"In ritardo","pendingCount":"{n} in sospeso","pendingFollowup":"Aggiornamento","remindTime":"È ora di un promemoria","rescheduled":"Riprogrammato: {label}","saveChanges":"Salva le modifiche","saveReminder":"Salva promemoria","searchingChat":"Ricerca del cliente…","sectionLater":"Più tardi","sectionOverdue":"In ritardo","sectionOverduePending":"In ritardo","sectionToday":"Oggi","sectionTodayPlan":"Oggi","setReminderHint":"Imposta un promemoria per questo cliente","sidebarHint":"Posizionare nella barra di navigazione di WhatsApp","sidebarLabel":"Barra laterale sinistra","snooze":"Posticipa la sveglia","syncComplete":"Sincronizzazione completata","syncConflictSkipped":"{n} modifica/e locale/i saltata/e — il cloud era più recente","syncFailedRetry":"Sincronizzazione non riuscita — nuovo tentativo","syncNow":"Sincronizza ora","syncProRequired":"La sync cloud richiede Pro/Premium","synced":"Sincronizzato","syncing":"Sincronizzazione…","tabAll":"Tutto","tabDone":"Fatto","tabOverdue":"In ritardo","tabToday":"Oggi","titlePlaceholder":"ad es. Follow-up dopo l'invio del preventivo","todayPrefix":"Oggi","todayTodos":"Oggi","tomorrow10":"Domani alle 10:00","tomorrowPrefix":"Domani","updated":"Aggiornamento sul seguito","yesterdayPrefix":"Ieri"},"ja":{"addFollowup":"フォローアップを追加する","added":"追記を追加しました","allTodos":"すべてのToDo","cancel":"キャンセル","clickEditTime":"クリックして時間を編集","close":"閉じる","currentCustomer":"現在のチャット","customer":"お客様","customerFollowup":"フォローアップ","customerNotInList":"該当するお客様が見つかりません。手動でチャットを開いてください。","customerTodos":"顧客のToDoリスト","delete":"削除","descNone":"今日は緊急のフォローアップはありません","descOverdue":"{n} 期限切れ — これらを優先して処理してください","descToday":"{n} 本日のフォローアップ残数","doneFollowup":"フォローアップ完了","dueReminder":"フォローアップのリマインダー","edit":"編集","editFollowup":"フォローアップを編集","emptyAllHint":"顧客とのチャットから最初のものを追加する","emptyAllTitle":"すべてではない","emptyDoneHint":"完了したフォローアップはここに表示されます","emptyDoneTitle":"まだ完了した項目はありません","emptyTodayHint":"カスタマーチャットを開き、次のリマインダーを追加する","emptyTodayTitle":"本日は特に追って報告すべき事項はありません","entryMovedFloat":"エントリが左下のフローティングボタンに移動しました","entryMovedSidebar":"エントリが左側のサイドバーに移動しました","entryPosition":"初級職","entryPositionTitle":"「今日」の開始位置","expired":"期限","floatHint":"サイドバーは使用されません。コンテンツが隠れてしまう場合があります。","floatLabel":"フローティングボタン","followupContent":"フォローアップ","followupTodos":"フォローアップ","footerTip":"正確性を高めるため、顧客とのチャットからToDoを追加しましょう。「時間」または「編集」をタップしてリマインダーを変更し、行をタップするとチャットが開きます。","in1h":"1時間後","in30m":"30分後","in3d":"3日後","markDone":"マーク完了","metricAll":"保留中","metricOverdue":"延滞","metricToday":"今日","monthDay":"{m}/{d}","needTitle":"フォローアップの内容を入力してください","needValidTime":"有効な日時を選択してください","noChatList":"チャットリストが見つかりません","noItemsForCustomer":"まだフォローアップはありません","noTodos":"すべてではない","noteOptional":"注（任意）","notePlaceholder":"補足事項","notifCustomerFallback":"顧客","notifTaskFallback":"要フォロー","notifTitle":"顧客フォローアップ","openChat":"チャットを開く","openChatFailed":"チャットを開くことができませんでした","openChatShort":"チャットを開く","openValidChat":"まずは有効なカスタマーチャットを開いてください","overdue":"延滞","pendingCount":"{n} 保留中","pendingFollowup":"フォローアップ","remindTime":"リマインダーの時間です","rescheduled":"日程変更：{label}","saveChanges":"変更を保存","saveReminder":"リマインダーを保存","searchingChat":"お客様を検索中…","sectionLater":"また後で","sectionOverdue":"延滞","sectionOverduePending":"延滞","sectionToday":"今日","sectionTodayPlan":"今日","setReminderHint":"この顧客のリマインダーを設定する","sidebarHint":"WhatsAppのナビゲーションバーに配置する","sidebarLabel":"左サイドバー","snooze":"スヌーズ","syncComplete":"同期完了","syncConflictSkipped":"クラウドの方が新しいため、ローカルの変更 {n} 件をスキップしました","syncFailedRetry":"同期に失敗しました — 再試行します","syncNow":"今すぐ同期","syncProRequired":"クラウド同期には Pro/Premium が必要です","synced":"同期済み","syncing":"同期中…","tabAll":"すべて","tabDone":"完了","tabOverdue":"延滞","tabToday":"今日","titlePlaceholder":"例：見積書を送付した後のフォローアップ","todayPrefix":"今日","todayTodos":"今日","tomorrow10":"明日 10:00","tomorrowPrefix":"明日","updated":"フォローアップの更新","yesterdayPrefix":"昨日"},"ko":{"addFollowup":"후속 조치 추가","added":"후속 내용 추가됨","allTodos":"모든 할 일","cancel":"취소","clickEditTime":"시간을 수정하려면 클릭하세요","close":"닫기","currentCustomer":"현재 채팅","customer":"고객","customerFollowup":"후속 조치","customerNotInList":"해당 고객을 찾을 수 없습니다. 채팅을 수동으로 열어 주세요.","customerTodos":"고객 할 일 목록","delete":"삭제","descNone":"오늘은 긴급한 후속 조치가 없습니다","descOverdue":"{n} 건 미처리 — 이 것들부터 처리하세요","descToday":"{n} 오늘 남은 후속 조치","doneFollowup":"후속 조치 완료","dueReminder":"후속 조치 알림","edit":"편집","editFollowup":"후속 조치 편집","emptyAllHint":"고객 채팅에서 첫 번째 내용을 추가하세요","emptyAllTitle":"모두가 아닌","emptyDoneHint":"완료된 후속 조치는 이곳에 표시됩니다","emptyDoneTitle":"아직 완료된 항목이 없습니다","emptyTodayHint":"고객 채팅을 열고 다음 알림을 추가하세요","emptyTodayTitle":"오늘은 후속 조치할 사항이 없습니다.","entryMovedFloat":"항목이 왼쪽 하단의 플로팅 버튼으로 이동되었습니다.","entryMovedSidebar":"항목이 왼쪽 사이드바로 이동되었습니다","entryPosition":"초급 직위","entryPositionTitle":"“오늘” 항목의 위치","expired":"기한","floatHint":"사이드바를 사용하지 않으며, 콘텐츠를 가릴 수 있음","floatLabel":"플로팅 버튼","followupContent":"후속 조치","followupTodos":"후속 조치","footerTip":"정확성을 위해 고객 채팅 내용을 할 일 목록에 추가하세요. 알림 시간을 변경하려면 ‘시간’ 또는 ‘편집’을 탭하고, 채팅을 열려면 해당 행을 탭하세요.","in1h":"1시간 후","in30m":"30분 후","in3d":"3일 후","markDone":"완료 표시","metricAll":"처리 중","metricOverdue":"연체","metricToday":"오늘","monthDay":"{m}/{d}","needTitle":"후속 내용을 입력해 주세요","needValidTime":"유효한 시간을 선택해 주세요","noChatList":"채팅 목록을 찾을 수 없습니다.","noItemsForCustomer":"아직 후속 조치가 없습니다","noTodos":"모두가 아닌","noteOptional":"참고 (선택 사항)","notePlaceholder":"추가 참고 사항","notifCustomerFallback":"고객","notifTaskFallback":"후속 조치","notifTitle":"고객 후속 조치","openChat":"채팅 시작하기","openChatFailed":"채팅을 열 수 없습니다","openChatShort":"채팅 시작하기","openValidChat":"먼저 유효한 고객 채팅을 시작해 주세요","overdue":"연체","pendingCount":"{n} 처리 대기 중","pendingFollowup":"후속 조치","remindTime":"알림 시간","rescheduled":"일정 변경: {label}","saveChanges":"변경 사항 저장","saveReminder":"알림 저장","searchingChat":"고객 검색 중…","sectionLater":"나중에","sectionOverdue":"연체","sectionOverduePending":"연체","sectionToday":"오늘","sectionTodayPlan":"오늘","setReminderHint":"이 고객에 대한 알림을 설정하세요","sidebarHint":"WhatsApp 탐색 모음에 배치하기","sidebarLabel":"왼쪽 사이드바","snooze":"잠깐 미루기","syncComplete":"동기화 완료","syncConflictSkipped":"클라우드가 더 최신이어서 로컬 변경 {n}개를 건너뛰었습니다","syncFailedRetry":"동기화 실패 — 다시 시도합니다","syncNow":"지금 동기화","syncProRequired":"클라우드 동기화는 Pro/Premium이 필요합니다","synced":"동기화됨","syncing":"동기화 중…","tabAll":"전체","tabDone":"완료","tabOverdue":"연체","tabToday":"오늘","titlePlaceholder":"예: 견적서 발송 후 후속 조치","todayPrefix":"오늘","todayTodos":"오늘","tomorrow10":"내일 10:00","tomorrowPrefix":"내일","updated":"후속 조치 업데이트됨","yesterdayPrefix":"어제"},"ru":{"addFollowup":"Добавить последующие действия","added":"Добавлено продолжение","allTodos":"Все задачи","cancel":"Отменить","clickEditTime":"Нажмите, чтобы изменить время","close":"Закрыть","currentCustomer":"Текущий чат","customer":"Клиент","customerFollowup":"Дальнейшие действия","customerNotInList":"Клиент не найден. Пожалуйста, откройте чат вручную.","customerTodos":"Задачи клиента","delete":"Удалить","descNone":"Сегодня нет срочных последующих действий","descOverdue":"{n} просроченных — сначала займитесь ими","descToday":"{n} оставшихся ответов на сегодня","doneFollowup":"Контроль завершен","dueReminder":"Напоминание о дальнейших действиях","edit":"Редактировать","editFollowup":"Редактировать последующие действия","emptyAllHint":"Добавить первый сообщение из чата с клиентом","emptyAllTitle":"Не все","emptyDoneHint":"Здесь будут отображаться завершённые отслеживания","emptyDoneTitle":"Пока нет завершенных заданий","emptyTodayHint":"Откройте чат с клиентом и добавьте следующее напоминание","emptyTodayTitle":"Сегодня нет ничего, что требовало бы дальнейших действий","entryMovedFloat":"Элемент перемещен на плавающую кнопку в левом нижнем углу","entryMovedSidebar":"Запись перемещена в левую боковую панель","entryPosition":"Начальная должность","entryPositionTitle":"Начальная позиция «Сегодня»","expired":"Срок","floatHint":"Не использует боковую панель; может перекрывать контент","floatLabel":"Плавающая кнопка","followupContent":"Дальнейшие действия","followupTodos":"Дальнейшие действия","footerTip":"Добавьте задачи из чата с клиентом для большей точности. Нажмите на время или «Изменить», чтобы изменить напоминания; нажмите на строку, чтобы открыть чат.","in1h":"Через 1 час","in30m":"Через 30 минут","in3d":"Через 3 дня","markDone":"Пометить как выполненное","metricAll":"В процессе рассмотрения","metricOverdue":"Просроченный","metricToday":"Сегодня","monthDay":"{m}/{d}","needTitle":"Введите, пожалуйста, дополнительный текст","needValidTime":"Пожалуйста, выберите допустимое время","noChatList":"Список чатов не найден","noItemsForCustomer":"Пока нет ответов","noTodos":"Не все","noteOptional":"Примечание (необязательно)","notePlaceholder":"Дополнительные примечания","notifCustomerFallback":"Клиент","notifTaskFallback":"Напомнить","notifTitle":"Напоминание о клиенте","openChat":"Открыть чат","openChatFailed":"Не удалось открыть чат","openChatShort":"Открыть чат","openValidChat":"Пожалуйста, сначала откройте действующий чат с клиентом","overdue":"Просроченный","pendingCount":"{n} в ожидании","pendingFollowup":"Дальнейшие действия","remindTime":"Время напоминания","rescheduled":"Изменено: {label}","saveChanges":"Сохранить изменения","saveReminder":"Сохранить напоминание","searchingChat":"Поиск клиента…","sectionLater":"Позже","sectionOverdue":"Просроченный","sectionOverduePending":"Просроченный","sectionToday":"Сегодня","sectionTodayPlan":"Сегодня","setReminderHint":"Установить напоминание об этом клиенте","sidebarHint":"Разместить в панели навигации WhatsApp","sidebarLabel":"Левая боковая панель","snooze":"Отложить будильник","syncComplete":"Синхронизация завершена","syncConflictSkipped":"Пропущено локальных изменений: {n} — в облаке новее","syncFailedRetry":"Ошибка синхронизации — повтор","syncNow":"Синхронизировать","syncProRequired":"Облачная синхронизация требует Pro/Premium","synced":"Синхронизировано","syncing":"Синхронизация…","tabAll":"Все","tabDone":"Готово","tabOverdue":"Просроченный","tabToday":"Сегодня","titlePlaceholder":"Например: после отправки коммерческого предложения необходимо проконтролировать его рассмотрение","todayPrefix":"Сегодня","todayTodos":"Сегодня","tomorrow10":"Завтра в 10:00","tomorrowPrefix":"Завтра","updated":"Обновлена информация о дальнейших действиях","yesterdayPrefix":"Вчера"},"ar":{"addFollowup":"إضافة متابعة","added":"تمت إضافة متابعة","allTodos":"جميع المهام","cancel":"إلغاء","clickEditTime":"انقر لتعديل الوقت","close":"إغلاق","currentCustomer":"المحادثة الحالية","customer":"العميل","customerFollowup":"المتابعات","customerNotInList":"لم يتم العثور على العميل. يرجى فتح الدردشة يدويًّا.","customerTodos":"مهام العملاء","delete":"حذف","descNone":"لا توجد متابعات عاجلة اليوم","descOverdue":"{n} متأخرة — يجب معالجتها أولاً","descToday":"{n} متابعة متبقية اليوم","doneFollowup":"اكتملت المتابعة","dueReminder":"تذكير بالمتابعة","edit":"تحرير","editFollowup":"تحرير المتابعة","emptyAllHint":"أضف أول رسالة من محادثة مع أحد العملاء","emptyAllTitle":"ليس الجميع","emptyDoneHint":"ستظهر المتابعات المكتملة هنا","emptyDoneTitle":"لا توجد عناصر مكتملة حتى الآن","emptyTodayHint":"افتح محادثة مع العميل وأضف التذكير التالي","emptyTodayTitle":"لا يوجد ما يستدعي المتابعة اليوم","entryMovedFloat":"تم نقل العنصر إلى الزر العائم في أسفل اليسار","entryMovedSidebar":"تم نقل العنصر إلى الشريط الجانبي الأيسر","entryPosition":"منصب مبتدئ","entryPositionTitle":"مركز الدخول في «اليوم»","expired":"مستحق","floatHint":"لا يستخدم الشريط الجانبي؛ وقد يحجب المحتوى","floatLabel":"زر عائم","followupContent":"المتابعة","followupTodos":"المتابعات","footerTip":"أضف المهام من محادثة مع أحد العملاء لضمان الدقة. انقر على «الوقت» أو «تعديل» لتغيير التذكيرات؛ انقر على أي صف لفتح المحادثة.","in1h":"خلال ساعة واحدة","in30m":"خلال 30 دقيقة","in3d":"خلال 3 أيام","markDone":"ضع علامة \"تم\"","metricAll":"قيد الانتظار","metricOverdue":"متأخر","metricToday":"اليوم","monthDay":"{m}/{d}","needTitle":"يرجى إدخال محتوى المتابعة","needValidTime":"يرجى اختيار وقت صالح","noChatList":"لم يتم العثور على قائمة الدردشة","noItemsForCustomer":"لم يتم إجراء أي متابعة حتى الآن","noTodos":"ليس الجميع","noteOptional":"ملاحظة (اختيارية)","notePlaceholder":"ملاحظات إضافية","notifCustomerFallback":"عميل","notifTaskFallback":"متابعة","notifTitle":"متابعة العميل","openChat":"فتح الدردشة","openChatFailed":"فشل فتح الدردشة","openChatShort":"فتح الدردشة","openValidChat":"يرجى فتح محادثة دردشة عملاء صالحة أولاً","overdue":"متأخر","pendingCount":"{n} قيد الانتظار","pendingFollowup":"المتابعة","remindTime":"وقت التذكير","rescheduled":"تم تغيير الموعد: {label}","saveChanges":"حفظ التغييرات","saveReminder":"حفظ التذكير","searchingChat":"البحث عن عميل…","sectionLater":"لاحقًا","sectionOverdue":"متأخر","sectionOverduePending":"متأخر","sectionToday":"اليوم","sectionTodayPlan":"اليوم","setReminderHint":"اضبط تذكيرًا لهذا العميل","sidebarHint":"وضعه في شريط التنقل في WhatsApp","sidebarLabel":"الشريط الجانبي الأيسر","snooze":"تأجيل المنبه","syncComplete":"اكتملت المزامنة","syncConflictSkipped":"تم تخطي {n} من التغييرات المحلية — السحابة أحدث","syncFailedRetry":"فشلت المزامنة — إعادة المحاولة","syncNow":"مزامنة الآن","syncProRequired":"المزامنة السحابية تتطلب Pro/Premium","synced":"تمت المزامنة","syncing":"جارٍ المزامنة…","tabAll":"الكل","tabDone":"تم","tabOverdue":"متأخر","tabToday":"اليوم","titlePlaceholder":"على سبيل المثال: المتابعة بعد إرسال عرض الأسعار","todayPrefix":"اليوم","todayTodos":"اليوم","tomorrow10":"غدًا الساعة 10:00","tomorrowPrefix":"غدًا","updated":"تم تحديث المتابعة","yesterdayPrefix":"أمس"},"tr":{"addFollowup":"Takip ekle","added":"Takip bilgisi eklendi","allTodos":"Tüm yapılacaklar","cancel":"İptal et","clickEditTime":"Saati düzenlemek için tıklayın","close":"Kapat","currentCustomer":"Geçerli sohbet","customer":"Müşteri","customerFollowup":"Takip işlemleri","customerNotInList":"Müşteri bulunamadı. Lütfen sohbeti manuel olarak açın.","customerTodos":"Müşteri yapılacaklar listesi","delete":"Sil","descNone":"Bugün acil bir takip yok","descOverdue":"{n} gecikmiş — önce bunları halledin","descToday":"{n} bugün kalan takip sayısı","doneFollowup":"Takip işlemi tamamlandı","dueReminder":"Takip hatırlatması","edit":"Düzenle","editFollowup":"Devam mesajını düzenle","emptyAllHint":"Müşteri sohbetinden ilk mesajı ekle","emptyAllTitle":"Herkes değil","emptyDoneHint":"Tamamlanan takip işlemleri burada görünecektir","emptyDoneTitle":"Henüz tamamlanmış öğe yok","emptyTodayHint":"Bir müşteri sohbeti açın ve bir sonraki hatırlatıcıyı ekleyin","emptyTodayTitle":"Bugün takip edilecek bir şey yok","entryMovedFloat":"Giriş, sol alt köşedeki kayan düğmeye taşındı","entryMovedSidebar":"Giriş, sol kenar çubuğuna taşındı","entryPosition":"Giriş pozisyonu","entryPositionTitle":"“Bugün” giriş konumu","expired":"Ödenecek","floatHint":"Kenar çubuğunu kullanmaz; içeriği kapatabilir","floatLabel":"Yüzen düğme","followupContent":"Takip","followupTodos":"Takip işlemleri","footerTip":"Doğruluk sağlamak için müşteri sohbetinden yapılacaklar listesine öğeler ekleyin. Hatırlatıcıları değiştirmek için “Saat” veya “Düzenle” seçeneğine dokunun; sohbeti açmak için bir satıra dokunun.","in1h":"1 saat içinde","in30m":"30 dakika içinde","in3d":"3 gün içinde","markDone":"Tamam olarak işaretle","metricAll":"Beklemede","metricOverdue":"Gecikmiş","metricToday":"Bugün","monthDay":"{m}/{d}","needTitle":"Lütfen takip içeriğini girin","needValidTime":"Lütfen geçerli bir zaman aralığı seçin","noChatList":"Sohbet listesi bulunamadı","noItemsForCustomer":"Henüz herhangi bir takip yok","noTodos":"Herkes değil","noteOptional":"Not (isteğe bağlı)","notePlaceholder":"Ek notlar","notifCustomerFallback":"Müşteri","notifTaskFallback":"Takip","notifTitle":"Müşteri takibi","openChat":"Sohbeti aç","openChatFailed":"Sohbet açılamadı","openChatShort":"Sohbeti aç","openValidChat":"Lütfen önce geçerli bir müşteri sohbeti açın","overdue":"Gecikmiş","pendingCount":"{n} beklemede","pendingFollowup":"Takip","remindTime":"Hatırlatma zamanı","rescheduled":"Tarihi değiştirildi: {label}","saveChanges":"Değişiklikleri kaydet","saveReminder":"Hatırlatıcıyı kaydet","searchingChat":"Müşteri aranıyor…","sectionLater":"Daha sonra","sectionOverdue":"Gecikmiş","sectionOverduePending":"Gecikmiş","sectionToday":"Bugün","sectionTodayPlan":"Bugün","setReminderHint":"Bu müşteri için bir hatırlatma ayarla","sidebarHint":"WhatsApp gezinme çubuğuna yerleştirin","sidebarLabel":"Sol kenar çubuğu","snooze":"Erteleme","syncComplete":"Senkronizasyon tamamlandı","syncConflictSkipped":"{n} yerel değişiklik atlandı — bulut daha yeniydi","syncFailedRetry":"Senkronizasyon başarısız — yeniden deneniyor","syncNow":"Şimdi senkronize et","syncProRequired":"Bulut senkronizasyonu Pro/Premium gerektirir","synced":"Senkronize edildi","syncing":"Senkronize ediliyor…","tabAll":"Tümü","tabDone":"Tamam","tabOverdue":"Gecikmiş","tabToday":"Bugün","titlePlaceholder":"Örneğin: Teklifi gönderdikten sonra takip etmek","todayPrefix":"Bugün","todayTodos":"Bugün","tomorrow10":"Yarın saat 10:00","tomorrowPrefix":"Yarın","updated":"Takip bilgisi güncellendi","yesterdayPrefix":"Dün"},"id":{"addFollowup":"Tambahkan tindak lanjut","added":"Tindak lanjut ditambahkan","allTodos":"Semua tugas","cancel":"Batal","clickEditTime":"Klik untuk mengedit waktu","close":"Tutup","currentCustomer":"Chat saat ini","customer":"Pelanggan","customerFollowup":"Tindak lanjut","customerNotInList":"Pelanggan tidak ditemukan. Silakan buka obrolan secara manual.","customerTodos":"Daftar tugas pelanggan","delete":"Hapus","descNone":"Tidak ada tindak lanjut mendesak hari ini","descOverdue":"{n} yang sudah lewat batas waktu — selesaikan yang ini dulu","descToday":"{n} tindak lanjut yang tersisa hari ini","doneFollowup":"Tindak lanjut telah diselesaikan","dueReminder":"Pengingat tindak lanjut","edit":"Sunting","editFollowup":"Edit tanggapan lanjutan","emptyAllHint":"Tambahkan yang pertama dari obrolan pelanggan","emptyAllTitle":"Tidak semua","emptyDoneHint":"Tindak lanjut yang telah diselesaikan akan ditampilkan di sini","emptyDoneTitle":"Belum ada item yang diselesaikan","emptyTodayHint":"Buka obrolan pelanggan dan tambahkan pengingat berikutnya","emptyTodayTitle":"Tidak ada yang perlu ditindaklanjuti hari ini","entryMovedFloat":"Entri dipindahkan ke tombol mengambang di pojok kiri bawah","entryMovedSidebar":"Entri dipindahkan ke bilah samping kiri","entryPosition":"Posisi awal","entryPositionTitle":"Posisi pembukaan “Hari Ini”","expired":"Jatuh tempo","floatHint":"Tidak menggunakan bilah samping; mungkin menutupi konten","floatLabel":"Tombol mengambang","followupContent":"Tindak lanjut","followupTodos":"Tindak lanjut","footerTip":"Tambahkan tugas dari obrolan pelanggan untuk memastikan keakuratan. Ketuk waktu atau Sunting untuk mengubah pengingat; ketuk baris untuk membuka obrolan.","in1h":"Dalam 1 jam","in30m":"Dalam 30 menit","in3d":"Dalam 3 hari","markDone":"Tandai sebagai selesai","metricAll":"Sedang diproses","metricOverdue":"Tertunda","metricToday":"Hari ini","monthDay":"{m}/{d}","needTitle":"Silakan masukkan konten lanjutan","needValidTime":"Silakan pilih waktu yang valid","noChatList":"Daftar obrolan tidak ditemukan","noItemsForCustomer":"Belum ada tindak lanjut","noTodos":"Tidak semua","noteOptional":"Catatan (opsional)","notePlaceholder":"Catatan tambahan","notifCustomerFallback":"Pelanggan","notifTaskFallback":"Tindak lanjut","notifTitle":"Tindak lanjut pelanggan","openChat":"Buka obrolan","openChatFailed":"Gagal membuka obrolan","openChatShort":"Buka obrolan","openValidChat":"Silakan buka obrolan pelanggan yang masih aktif terlebih dahulu","overdue":"Tertunda","pendingCount":"{n} tertunda","pendingFollowup":"Tindak lanjut","remindTime":"Waktunya pengingat","rescheduled":"Diundur: {label}","saveChanges":"Simpan perubahan","saveReminder":"Simpan pengingat","searchingChat":"Mencari pelanggan…","sectionLater":"Nanti","sectionOverdue":"Tertunda","sectionOverduePending":"Tertunda","sectionToday":"Hari ini","sectionTodayPlan":"Hari ini","setReminderHint":"Atur pengingat untuk pelanggan ini","sidebarHint":"Tempatkan di bilah navigasi WhatsApp","sidebarLabel":"Bilah samping kiri","snooze":"Tunda","syncComplete":"Sinkronisasi selesai","syncConflictSkipped":"{n} perubahan lokal dilewati — cloud lebih baru","syncFailedRetry":"Sinkronisasi gagal — mencoba lagi","syncNow":"Sinkronkan sekarang","syncProRequired":"Sinkronisasi cloud memerlukan Pro/Premium","synced":"Tersinkronisasi","syncing":"Menyinkronkan…","tabAll":"Semua","tabDone":"Selesai","tabOverdue":"Tertunda","tabToday":"Hari ini","titlePlaceholder":"misalnya: Melakukan tindak lanjut setelah mengirimkan penawaran","todayPrefix":"Hari ini","todayTodos":"Hari ini","tomorrow10":"Besok pukul 10.00","tomorrowPrefix":"Besok","updated":"Pembaruan tindak lanjut","yesterdayPrefix":"Kemarin"},"nl":{"addFollowup":"Vervolg toevoegen","added":"Vervolg toegevoegd","allTodos":"Alle taken","cancel":"Annuleren","clickEditTime":"Klik hier om de tijd aan te passen","close":"Sluiten","currentCustomer":"Huidige chat","customer":"Klant","customerFollowup":"Vervolgacties","customerNotInList":"Klant niet gevonden. Open de chat handmatig.","customerTodos":"Te doen-lijst voor klanten","delete":"Verwijderen","descNone":"Vandaag geen dringende vervolgacties","descOverdue":"{n} achterstallig — behandel deze eerst","descToday":"{n} resterende follow-ups vandaag","doneFollowup":"Opvolging afgerond","dueReminder":"Herinnering voor opvolging","edit":"Bewerken","editFollowup":"Vervolg bewerken","emptyAllHint":"Voeg de eerste uit een klantchat toe","emptyAllTitle":"Niet iedereen","emptyDoneHint":"Voltooide vervolgacties verschijnen hier","emptyDoneTitle":"Er zijn nog geen voltooide items","emptyTodayHint":"Open een klantchat en voeg de volgende herinnering toe","emptyTodayTitle":"Vandaag niets om op te volgen","entryMovedFloat":"Het item is verplaatst naar de zwevende knop linksonder","entryMovedSidebar":"Het item is verplaatst naar de linkerzijbalk","entryPosition":"Instapfunctie","entryPositionTitle":"Ingangspositie „vandaag“","expired":"Vervaldatum","floatHint":"Maakt geen gebruik van de zijbalk; kan de inhoud bedekken","floatLabel":"Zwevende knop","followupContent":"Vervolg","followupTodos":"Vervolgacties","footerTip":"Voeg taken toe vanuit een klantchat om de nauwkeurigheid te waarborgen. Tik op ‘Tijd’ of ‘Bewerken’ om herinneringen aan te passen; tik op een rij om de chat te openen.","in1h":"Over 1 uur","in30m":"Over 30 minuten","in3d":"Over 3 dagen","markDone":"Mark: klaar","metricAll":"In behandeling","metricOverdue":"Achterstallig","metricToday":"Vandaag","monthDay":"{m}/{d}","needTitle":"Voer hier de vervolgtekst in","needValidTime":"Kies een geldig tijdstip","noChatList":"Chatlijst niet gevonden","noItemsForCustomer":"Nog geen reacties","noTodos":"Niet iedereen","noteOptional":"Opmerking (optioneel)","notePlaceholder":"Aanvullende opmerkingen","notifCustomerFallback":"Klant","notifTaskFallback":"Opvolgen","notifTitle":"Klantfollow-up","openChat":"Chat openen","openChatFailed":"Het openen van de chat is mislukt","openChatShort":"Chat openen","openValidChat":"Open eerst een geldige klantchat","overdue":"Achterstallig","pendingCount":"{n} in behandeling","pendingFollowup":"Opvolging","remindTime":"Tijd voor een herinnering","rescheduled":"Verplaatst: {label}","saveChanges":"Wijzigingen opslaan","saveReminder":"Herinnering opslaan","searchingChat":"Op zoek naar klant…","sectionLater":"Later","sectionOverdue":"Achterstallig","sectionOverduePending":"Achterstallig","sectionToday":"Vandaag","sectionTodayPlan":"Vandaag","setReminderHint":"Stel een herinnering in voor deze klant","sidebarHint":"Plaats in de navigatiebalk van WhatsApp","sidebarLabel":"Linkerzijbalk","snooze":"Snooze","syncComplete":"Synchronisatie voltooid","syncConflictSkipped":"{n} lokale wijziging(en) overgeslagen — cloud was nieuwer","syncFailedRetry":"Sync mislukt — opnieuw proberen","syncNow":"Nu synchroniseren","syncProRequired":"Cloudsync vereist Pro/Premium","synced":"Gesynchroniseerd","syncing":"Synchroniseren…","tabAll":"Alles","tabDone":"Klaar","tabOverdue":"Achterstallig","tabToday":"Vandaag","titlePlaceholder":"bijv. Opvolging na het versturen van de offerte","todayPrefix":"Vandaag","todayTodos":"Vandaag","tomorrow10":"Morgen om 10.00 uur","tomorrowPrefix":"Morgen","updated":"Update van de follow-up","yesterdayPrefix":"Gisteren"},"pl":{"addFollowup":"Dodaj dalsze działania","added":"Dodano aktualizację","allTodos":"Wszystkie zadania","cancel":"Anuluj","clickEditTime":"Kliknij, aby edytować godzinę","close":"Zamknij","currentCustomer":"Bieżący czat","customer":"Klient","customerFollowup":"Dalsze działania","customerNotInList":"Nie znaleziono klienta. Proszę ręcznie otworzyć czat.","customerTodos":"Zadania dla klientów","delete":"Usuń","descNone":"Dzisiaj nie ma żadnych pilnych spraw do załatwienia","descOverdue":"{n} zaległe — najpierw zajmij się tymi","descToday":"{n} pozostałych działań następczych na dzisiaj","doneFollowup":"Działania następcze zakończone","dueReminder":"Przypomnienie o dalszych działaniach","edit":"Edytuj","editFollowup":"Edytuj odpowiedź","emptyAllHint":"Dodaj pierwszą wiadomość z czatu z klientem","emptyAllTitle":"Nie wszyscy","emptyDoneHint":"W tym miejscu pojawią się zakończone działania następcze","emptyDoneTitle":"Nie ma jeszcze żadnych zakończonych pozycji","emptyTodayHint":"Otwórz czat z klientem i dodaj kolejne przypomnienie","emptyTodayTitle":"Dzisiaj nie ma żadnych spraw do załatwienia","entryMovedFloat":"Element przeniesiono do pływającego przycisku w lewym dolnym rogu","entryMovedSidebar":"Wpis przeniesiono do lewego paska bocznego","entryPosition":"Stanowisko dla początkujących","entryPositionTitle":"Pozycja wejścia „Dzisiaj”","expired":"Termin","floatHint":"Nie wykorzystuje paska bocznego; może zasłaniać treść","floatLabel":"Pływający przycisk","followupContent":"Dalsze działania","followupTodos":"Dalsze działania","footerTip":"Aby zapewnić dokładność, dodaj zadania z czatu z klientem. Naciśnij pole czasu lub przycisk „Edytuj”, aby zmienić przypomnienia; naciśnij wiersz, aby otworzyć czat.","in1h":"Za godzinę","in30m":"Za 30 minut","in3d":"Za 3 dni","markDone":"Zaznacz jako wykonane","metricAll":"W toku","metricOverdue":"Przeterminowane","metricToday":"Dzisiaj","monthDay":"{m}/{d}","needTitle":"Wprowadź treść uzupełniającą","needValidTime":"Proszę wybrać prawidłowy czas","noChatList":"Nie znaleziono listy czatów","noItemsForCustomer":"Na razie nie ma żadnych dalszych informacji","noTodos":"Nie wszyscy","noteOptional":"Uwaga (opcjonalna)","notePlaceholder":"Dodatkowe uwagi","notifCustomerFallback":"Klient","notifTaskFallback":"Follow-up","notifTitle":"Follow-up klienta","openChat":"Otwórz czat","openChatFailed":"Nie udało się otworzyć czatu","openChatShort":"Otwórz czat","openValidChat":"Proszę najpierw otworzyć czat z obsługą klienta","overdue":"Przeterminowane","pendingCount":"{n} w toku","pendingFollowup":"Dalsze działania","remindTime":"Czas na przypomnienie","rescheduled":"Zmiana terminu: {label}","saveChanges":"Zapisz zmiany","saveReminder":"Zapisz przypomnienie","searchingChat":"Wyszukiwanie klienta…","sectionLater":"Później","sectionOverdue":"Przeterminowane","sectionOverduePending":"Przeterminowane","sectionToday":"Dzisiaj","sectionTodayPlan":"Dzisiaj","setReminderHint":"Ustaw przypomnienie dotyczące tego klienta","sidebarHint":"Umieść w pasku nawigacyjnym WhatsApp","sidebarLabel":"Lewy pasek boczny","snooze":"Drzemka","syncComplete":"Synchronizacja zakończona","syncConflictSkipped":"Pominięto {n} lokalnych zmian — chmura była nowsza","syncFailedRetry":"Synchronizacja nie powiodła się — ponawianie","syncNow":"Synchronizuj teraz","syncProRequired":"Synchronizacja w chmurze wymaga Pro/Premium","synced":"Zsynchronizowano","syncing":"Synchronizowanie…","tabAll":"Wszystkie","tabDone":"Gotowe","tabOverdue":"Przeterminowane","tabToday":"Dzisiaj","titlePlaceholder":"np. Kontakt po wysłaniu oferty","todayPrefix":"Dzisiaj","todayTodos":"Dzisiaj","tomorrow10":"Jutro o godz. 10:00","tomorrowPrefix":"Jutro","updated":"Aktualizacja informacji uzupełniających","yesterdayPrefix":"Wczoraj"}};
 })(typeof window !== "undefined" ? window : globalThis);
 // ===== run @0x7A2E50 (19353 bytes) =====
-/*! WATransChat followup shim — chrome.storage / runtime / i18n / alarms for desktop WebView.
- *  Ports WATransChat browser-extension followup-todos onto Tauri (no MV3 APIs).
+/*! Falo followup shim — chrome.storage / runtime / i18n / alarms for desktop WebView.
+ *  Ports Falo browser-extension followup-todos onto Tauri (no MV3 APIs).
  */
 (function (global) {
   "use strict";
@@ -22759,7 +22759,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function cfg() {
     try {
-      return global.__whatsnowTranslateCfg || global.__whatsnowTranslateBoot || {};
+      return global.__faloTranslateCfg || global.__faloTranslateBoot || {};
     } catch (_) {
       return {};
     }
@@ -22778,7 +22778,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function canCap(cap) {
     try {
-      if (typeof global.__whatsnowCan === "function") return !!global.__whatsnowCan(cap);
+      if (typeof global.__faloCan === "function") return !!global.__faloCan(cap);
     } catch (_) {}
     return false;
   }
@@ -22847,8 +22847,8 @@ if (!window.__waGlobalEnterHooked) {
       });
       return table;
     }
-    if (!global.WATransChatI18n) {
-      global.WATransChatI18n = {
+    if (!global.FaloI18n) {
+      global.FaloI18n = {
         whenReady: function () {
           return Promise.resolve();
         },
@@ -22862,7 +22862,7 @@ if (!window.__waGlobalEnterHooked) {
         getFollowupI18n: getFollowupI18n,
       };
     } else {
-      var api = global.WATransChatI18n;
+      var api = global.FaloI18n;
       if (typeof api.getFollowupI18n !== "function") api.getFollowupI18n = getFollowupI18n;
       if (typeof api.pickPack !== "function") api.pickPack = pickPack;
       else {
@@ -23063,7 +23063,7 @@ if (!window.__waGlobalEnterHooked) {
   function handleCheckSubscription(cb) {
     var valid = canCap("followup_todos") || canCap("core_translate");
     // When membership not injected yet, allow local UI if setting is on (parity with trial).
-    if (!global.__whatsnowCan) valid = showFollowupEnabled();
+    if (!global.__faloCan) valid = showFollowupEnabled();
     var caps = {
       followup_todos: canCap("followup_todos") || valid,
       followup_todos_sync: canCap("followup_todos_sync"),
@@ -23125,7 +23125,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function notifTitlePack() {
     try {
-      var api = global.WATransChatI18n;
+      var api = global.FaloI18n;
       var lang = api && api.getEffectiveUiLang ? api.getEffectiveUiLang() : "zh";
       var pack = api && api.pickPack ? api.pickPack("followup", lang) : {};
       var en = api && api.pickPack ? api.pickPack("followup", "en") : {};
@@ -23268,15 +23268,15 @@ if (!window.__waGlobalEnterHooked) {
 
   // Live toggle: showFollowup via translate config apply
   try {
-    var prevApply = global.__whatsnowApplyTranslateConfig;
-    global.__whatsnowApplyTranslateConfig = function (c) {
+    var prevApply = global.__faloApplyTranslateConfig;
+    global.__faloApplyTranslateConfig = function (c) {
       if (typeof prevApply === "function") {
         try {
           prevApply(c);
         } catch (_) {}
       } else {
         try {
-          global.__whatsnowTranslateCfg = Object.assign({}, global.__whatsnowTranslateCfg || {}, c || {});
+          global.__faloTranslateCfg = Object.assign({}, global.__faloTranslateCfg || {}, c || {});
         } catch (_) {}
       }
       try {
@@ -23292,8 +23292,8 @@ if (!window.__waGlobalEnterHooked) {
 
   // Open customer sheet when notification route is followup:*
   try {
-    var prevOpen = global.__whatsnowOpenNotificationTarget;
-    global.__whatsnowOpenNotificationTarget = function (route) {
+    var prevOpen = global.__faloOpenNotificationTarget;
+    global.__faloOpenNotificationTarget = function (route) {
       var p =
         typeof prevOpen === "function"
           ? prevOpen(route)
@@ -23325,13 +23325,13 @@ if (!window.__waGlobalEnterHooked) {
   }, 1500);
 
   try {
-    invoke("dlog", { msg: "watrans-followup-shim: ready" });
+    invoke("dlog", { msg: "falo-followup-shim: ready" });
   } catch (_) {}
 })(typeof window !== "undefined" ? window : globalThis);
   P@z@   �
 // ===== run @0x7A79F0 (107554 bytes) =====
 /*!
- * WATransChat 客户跟进待办（方案 B）— UI redesign
+ * Falo 客户跟进待办（方案 B）— UI redesign
  */
 (async function () {
   'use strict';
@@ -23341,13 +23341,13 @@ if (!window.__waGlobalEnterHooked) {
 
   try {
     // 等 content 脚本注入的 i18n（同 isolated world，通常已就绪）
-    if (!globalThis.WATransChatI18n) {
-      for (let i = 0; i < 40 && !globalThis.WATransChatI18n; i += 1) {
+    if (!globalThis.FaloI18n) {
+      for (let i = 0; i < 40 && !globalThis.FaloI18n; i += 1) {
         await new Promise((r) => setTimeout(r, 50));
       }
     }
-    if (globalThis.WATransChatI18n && typeof globalThis.WATransChatI18n.whenReady === 'function') {
-      await globalThis.WATransChatI18n.whenReady();
+    if (globalThis.FaloI18n && typeof globalThis.FaloI18n.whenReady === 'function') {
+      await globalThis.FaloI18n.whenReady();
     }
   } catch (_) {}
 
@@ -23410,7 +23410,7 @@ if (!window.__waGlobalEnterHooked) {
   let identityRefreshPromise = null;
   let legacyRepairPromise = null;
 
-  const __I18N = (typeof globalThis !== 'undefined' && globalThis.WATransChatI18n) ? globalThis.WATransChatI18n : null;
+  const __I18N = (typeof globalThis !== 'undefined' && globalThis.FaloI18n) ? globalThis.FaloI18n : null;
   const I18N = (__I18N && typeof __I18N.getFollowupI18n === 'function') ? (__I18N.getFollowupI18n() || {}) : {};
   function normalizeUiLang(lang) {
     return __I18N ? __I18N.normalizeUiLang(lang, 'zh') : (lang === 'en' ? 'en' : 'zh');
@@ -23681,7 +23681,7 @@ if (!window.__waGlobalEnterHooked) {
       let name = displayName;
       let key = '';
       try {
-        const api = window.__whatsnowStorePhone;
+        const api = window.__faloStorePhone;
         if (api && typeof api.getActiveContactPhone === 'function') {
           const payload = await api.getActiveContactPhone();
           if (payload && !payload.isGroup) {
@@ -24121,7 +24121,7 @@ if (!window.__waGlobalEnterHooked) {
 
   function currentAccountId() {
     try {
-      return String(window.__whatsnowAccountId || '').trim();
+      return String(window.__faloAccountId || '').trim();
     } catch (_) {
       return '';
     }
@@ -24772,7 +24772,7 @@ if (!window.__waGlobalEnterHooked) {
    */
   async function resolveActiveChatIdFromStore() {
     try {
-      const api = window.__whatsnowStorePhone;
+      const api = window.__faloStorePhone;
       if (!api) return '';
 
       if (typeof api.getActiveContactPhone === 'function') {
@@ -25090,8 +25090,8 @@ if (!window.__waGlobalEnterHooked) {
       if (typeof globalThis.__waextOpenChatByPhoneMain === 'function') {
         return globalThis.__waextOpenChatByPhoneMain;
       }
-      if (typeof globalThis.__whatsnowOpenChatByQuery === 'function') {
-        return globalThis.__whatsnowOpenChatByQuery;
+      if (typeof globalThis.__faloOpenChatByQuery === 'function') {
+        return globalThis.__faloOpenChatByQuery;
       }
     } catch (_) {}
     return null;
@@ -25118,7 +25118,7 @@ if (!window.__waGlobalEnterHooked) {
     const title = String(customerName || customerKey || '').trim();
     if (!title) return null;
     try {
-      const api = window.__whatsnowStorePhone;
+      const api = window.__faloStorePhone;
       if (api && typeof api.resolveIdentityByTitle === 'function') {
         const r = await api.resolveIdentityByTitle(title);
         if (r && r.ok) {
@@ -26003,7 +26003,7 @@ if (!window.__waGlobalEnterHooked) {
 
     const header = h('div', 'wa-fu-drawer__header');
     const headText = h('div', 'wa-fu-drawer__head-text');
-    headText.appendChild(h('div', 'wa-fu-drawer__eyebrow', { text: 'WATransChat' }));
+    headText.appendChild(h('div', 'wa-fu-drawer__eyebrow', { text: 'Falo' }));
     headText.appendChild(h('h2', 'wa-fu-drawer__title', { text: t('followupTodos') }));
     headText.appendChild(buildSyncStatusEl());
     headText.appendChild(
@@ -26336,8 +26336,8 @@ if (!window.__waGlobalEnterHooked) {
       }
       if (changes.uiLang) {
         const next = changes.uiLang.newValue;
-        const api = (typeof globalThis !== 'undefined' && globalThis.WATransChatI18n)
-          ? globalThis.WATransChatI18n
+        const api = (typeof globalThis !== 'undefined' && globalThis.FaloI18n)
+          ? globalThis.FaloI18n
           : null;
         uiLang = normalizeUiLang(next);
         try {
@@ -26401,7 +26401,7 @@ if (!window.__waGlobalEnterHooked) {
       if (typeof window.__waFollowupShowEnabled === 'function') {
         return !!window.__waFollowupShowEnabled();
       }
-      const c = window.__whatsnowTranslateCfg || window.__whatsnowTranslateBoot || {};
+      const c = window.__faloTranslateCfg || window.__faloTranslateBoot || {};
       if (c && c.showFollowup === false) return false;
     } catch (_) {}
     return true;

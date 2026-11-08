@@ -45,5 +45,5 @@ cd wats_oss
 
 ## 推完建议填
 
-- Description：`WhatsApp Web 翻译插件 WATransChat 2.6.5 的开源重建（前端资源恢复 + Tauri 2 后端）`
+- Description：`WhatsApp Web 翻译插件 Falo 2.6.5 的开源重建（前端资源恢复 + Tauri 2 后端）`
 - Topics：`tauri` `rust` `whatsapp` `reverse-engineering` `i18n` `open-source`

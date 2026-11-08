@@ -1,8 +1,8 @@
 [package]
-name = "watranschat-oss"
+name = "falo-oss"
 version = "2.6.5"
 edition = "2021"
-description = "WATransChat 开源重建（Tauri 2 + WebView2）"
+description = "Falo 开源重建（Tauri 2 + WebView2）"
 license = "MIT"
 
 [build-dependencies]

@@ -1,13 +1,13 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
+// Falo — authored and maintained solely by @benedictusrey.
 const invoke = window.__TAURI__?.core?.invoke ?? (async () => {
   throw new Error(
-    (window.WhatsNowI18n && window.WhatsNowI18n.t("runtime.required")) ||
-      "WATransChat settings require the desktop runtime.",
+    (window.FaloI18n && window.FaloI18n.t("runtime.required")) ||
+      "Falo settings require the desktop runtime.",
   );
 });
 const listen = window.__TAURI__?.event?.listen;
 function t(key, vars) {
-  return window.WhatsNowI18n ? window.WhatsNowI18n.t(key, vars) : key;
+  return window.FaloI18n ? window.FaloI18n.t(key, vars) : key;
 }
 /** macOS WKWebView: native confirm/alert/prompt are silent no-ops. */
 function dialogLabels() {
@@ -35,11 +35,11 @@ async function askPrompt(message, defaultValue, opts) {
   return window.prompt(message, defaultValue);
 }
 function uiLang() {
-  return window.WhatsNowI18n ? window.WhatsNowI18n.getLang() : "zh";
+  return window.FaloI18n ? window.FaloI18n.getLang() : "zh";
 }
 function applyUiLang(lang) {
-  if (!window.WhatsNowI18n) return "zh";
-  const next = window.WhatsNowI18n.setLang(lang);
+  if (!window.FaloI18n) return "zh";
+  const next = window.FaloI18n.setLang(lang);
   const active =
     document.querySelector(".nav-item.active")?.dataset?.panelTarget || "overview";
   showPanel(active);
@@ -90,7 +90,7 @@ const TEXTS = [
   "translate_text_color",
 ];
 
-/** WATransChat `ee` — engines that expose a custom AI system prompt editor. */
+/** Falo `ee` — engines that expose a custom AI system prompt editor. */
 const AI_PROMPT_ENGINES = [
   "deepseek",
   "volc_deepseek",
@@ -98,7 +98,7 @@ const AI_PROMPT_ENGINES = [
   "openai_custom",
   "deepseek_custom",
 ];
-/** Engine id → Settings field (WATransChat `de` / `sr`). */
+/** Engine id → Settings field (Falo `de` / `sr`). */
 const AI_PROMPT_FIELD = {
   deepseek: "ai_system_prompt_deepseek",
   volc_deepseek: "ai_system_prompt_volc_deepseek",
@@ -106,7 +106,7 @@ const AI_PROMPT_FIELD = {
   openai_custom: "ai_system_prompt_openai_custom",
   deepseek_custom: "ai_system_prompt_deepseek_custom",
 };
-/** WATransChat default `Vr` / `_t`. */
+/** Falo default `Vr` / `_t`. */
 const AI_PROMPT_DEFAULT = `You are a professional \${toCode} native translator who needs to fluently translate text into \${toCode}.
 
 ## Translation Rules
@@ -116,7 +116,7 @@ const AI_PROMPT_DEFAULT = `You are a professional \${toCode} native translator w
 
 ## OUTPUT FORMAT:
 Output translation directly`;
-/** WATransChat finance industry template `Vt`. */
+/** Falo finance industry template `Vt`. */
 const AI_PROMPT_FINANCE = `You are a professional \${toCode} native translator specializing in finance who needs to fluently translate text into \${toCode}.
 
 ## Translation Rules
@@ -136,12 +136,12 @@ let aiPromptCache = {
   ai_system_prompt_openai_custom: "",
   ai_system_prompt_deepseek_custom: "",
 };
-/** Currently shown prompt engine (WATransChat `Pe`). */
+/** Currently shown prompt engine (Falo `Pe`). */
 let aiPromptActiveEngine = "";
 const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
 let selectedTheme = "light";
 function themeLabel(theme) {
-  if (window.WhatsNowI18n) return window.WhatsNowI18n.themeLabel(theme);
+  if (window.FaloI18n) return window.FaloI18n.themeLabel(theme);
   return theme || "light";
 }
 const PANEL_NAMES = Object.freeze([
@@ -160,7 +160,7 @@ const PANEL_NAMES = Object.freeze([
   "about",
 ]);
 function panelMeta(name) {
-  if (window.WhatsNowI18n) return window.WhatsNowI18n.panelMeta(name);
+  if (window.FaloI18n) return window.FaloI18n.panelMeta(name);
   return [name, ""];
 }
 function hasPanel(name) {
@@ -179,13 +179,13 @@ function platformDefaultHotkey() {
 }
 
 function applyTheme(theme) {
-  selectedTheme = window.WhatsNowTheme.apply(document, theme, systemDark.matches);
+  selectedTheme = window.FaloTheme.apply(document, theme, systemDark.matches);
   const overviewTheme = document.getElementById("overview_theme");
   if (overviewTheme) overviewTheme.textContent = themeLabel(selectedTheme);
 }
 
 function selectTheme(theme) {
-  const normalized = window.WhatsNowTheme.normalize(theme);
+  const normalized = window.FaloTheme.normalize(theme);
   const input = document.querySelector(`input[name="theme"][value="${normalized}"]`);
   if (input) input.checked = true;
   applyTheme(normalized);
@@ -277,9 +277,9 @@ function persistQualityLangs() {
   } catch (_) {}
 }
 
-/** WATransChat 1:1 language lists + searchable select (options.js lang-search). */
+/** Falo 1:1 language lists + searchable select (options.js lang-search). */
 function fillTranslateLangSelects(settings) {
-  const api = window.__whatsnowLangList;
+  const api = window.__faloLangList;
   if (!api || typeof api.fillSelect !== "function") return;
   const s = settings || {};
   const qDefaults = qualityLangDefaults(s);
@@ -339,7 +339,7 @@ async function settingsIsPro() {
   }
 }
 
-/** WATransChat 1:1 engine lists (options.js GLOBAL_INPUT / CHAT_HISTORY). */
+/** Falo 1:1 engine lists (options.js GLOBAL_INPUT / CHAT_HISTORY). */
 function readApiKeyConfigFromForm() {
   const val = (id) => String(document.getElementById(id)?.value || "").trim();
   return {
@@ -395,7 +395,7 @@ function focusApiKeyFieldsForEngine(engine) {
 }
 
 async function fillTranslateEngineSelects(settings) {
-  const api = window.__whatsnowEngineList;
+  const api = window.__faloEngineList;
   if (!api || typeof api.fillEngineSelect !== "function") return;
   const s = settings || {};
   const isPro = await settingsIsPro();
@@ -472,7 +472,7 @@ function readStoredAiPrompt(engine, bag) {
   return "";
 }
 
-/** Prefer compose engine, else history (WATransChat `Uc`). */
+/** Prefer compose engine, else history (Falo `Uc`). */
 function resolveAiPromptEngine(composeEngine, historyEngine) {
   const g = String(composeEngine || "");
   const h = String(historyEngine || "");
@@ -484,8 +484,8 @@ function resolveAiPromptEngine(composeEngine, historyEngine) {
 function aiPromptEngineLabel(engine) {
   const lang = uiLang();
   const map =
-    window.__whatsnowEngineList && typeof window.__whatsnowEngineList.nameMap === "function"
-      ? window.__whatsnowEngineList.nameMap(lang)
+    window.__faloEngineList && typeof window.__faloEngineList.nameMap === "function"
+      ? window.__faloEngineList.nameMap(lang)
       : null;
   return (map && map[engine]) || engine;
 }
@@ -614,17 +614,17 @@ function wireAiPromptSection() {
   document.getElementById("ai-prompt-template-btn")?.addEventListener("click", () => {
     applyAiPromptIndustryTemplate();
   });
-  document.addEventListener("whatsnow-ui-lang", () => {
+  document.addEventListener("falo-ui-lang", () => {
     refreshAiPromptSection();
   });
 }
 
 async function load() {
   const s = await invoke("get_settings");
-  const lang = window.WhatsNowI18n
-    ? window.WhatsNowI18n.normalize(s.ui_lang || "zh")
+  const lang = window.FaloI18n
+    ? window.FaloI18n.normalize(s.ui_lang || "zh")
     : "zh";
-  if (window.WhatsNowI18n) window.WhatsNowI18n.setLang(lang);
+  if (window.FaloI18n) window.FaloI18n.setLang(lang);
   const uiLangEl = document.getElementById("ui_lang");
   if (uiLangEl) uiLangEl.value = lang;
   selectTheme(s.theme || "light");
@@ -865,7 +865,7 @@ async function save() {
       const el = document.getElementById(f);
       if (el) s[f] = el.checked;
     }
-    // One switch (WATransChat enableTranslateButton): write both schema fields.
+    // One switch (Falo enableTranslateButton): write both schema fields.
     {
       const on = !!document.getElementById("translate_compose")?.checked;
       s.translate_compose = on;
@@ -878,7 +878,7 @@ async function save() {
       if (el) s[f] = el.value;
     }
     // Extension has no separate「译文语言」: incoming target follows 你的语言.
-    // auto → zh-CN (same as WATransChat userSourceLang fallback).
+    // auto → zh-CN (same as Falo userSourceLang fallback).
     {
       const src = String(s.translate_source_lang || "auto").trim() || "auto";
       s.translate_source_lang = src;
@@ -919,8 +919,8 @@ async function save() {
       Math.max(2, Number.isFinite(previewDuration) ? previewDuration : 2),
     );
     if (s.ui_lang != null) {
-      s.ui_lang = window.WhatsNowI18n
-        ? window.WhatsNowI18n.normalize(s.ui_lang)
+      s.ui_lang = window.FaloI18n
+        ? window.FaloI18n.normalize(s.ui_lang)
         : s.ui_lang;
     }
     collectProxyIntoSettings(s);
@@ -939,7 +939,7 @@ async function save() {
   }
 }
 
-/** WATransChat options.js updateUserStatus short labels (试用中/已订阅/已过期/未订阅). */
+/** Falo options.js updateUserStatus short labels (试用中/已订阅/已过期/未订阅). */
 function parseMembershipDateToMs(v) {
   if (!v) return 0;
   if (typeof v === "number" && isFinite(v)) {
@@ -1534,7 +1534,7 @@ function openDeviceLimitModal(payload) {
   if (deviceManageToken) refreshDeviceLimitList();
 }
 
-/** WATransChat options.js parity: map server English auth errors. */
+/** Falo options.js parity: map server English auth errors. */
 function localizeMembershipAuthError(raw) {
   let err = String(raw == null ? "" : raw).trim();
   if (!err) return t("membership.loginFailed");
@@ -1864,7 +1864,7 @@ async function logoutSingleDevice(deviceId) {
   try {
     await invoke("membership_logout_device", { deviceId: String(deviceId) });
   } catch (_) {
-    // Quiet failure, same as WATransChat options.js
+    // Quiet failure, same as Falo options.js
   }
   await loadDevicesList();
 }
@@ -1944,14 +1944,14 @@ async function checkForUpdateFromAbout() {
       showNote(noteId, t("about.updateAvailable"), 4000);
     } else if (result && result.upToDate) {
       const version =
-        window.__whatsnowAppVersion ||
+        window.__faloAppVersion ||
         document.querySelector("[data-version-ref]")?.textContent?.replace(/.*?(\d+\.\d+\.\d+).*/, "$1") ||
         "";
       showNote(noteId, t("about.updateLatest", { version }), 5000);
     } else if (result && result.error) {
       showNote(noteId, t("about.updateFail", { error: result.error }), 6000);
     } else {
-      showNote(noteId, t("about.updateLatest", { version: window.__whatsnowAppVersion || "" }), 4000);
+      showNote(noteId, t("about.updateLatest", { version: window.__faloAppVersion || "" }), 4000);
     }
   } catch (e) {
     showNote(noteId, t("about.updateFail", { error: String(e) }), 6000);
@@ -2107,7 +2107,7 @@ let cachedAccountList = [];
 let batchRunning = false;
 let batchCancel = false;
 
-window.__whatsnowAccountTabOpDone = function whatsnowAccountTabOpDone() {
+window.__faloAccountTabOpDone = function faloAccountTabOpDone() {
   const resolve = accountTabOpDoneResolver;
   accountTabOpDoneResolver = null;
   if (resolve) resolve();
@@ -2625,8 +2625,8 @@ function showPanel(panelName) {
   if (panelName === "devices") {
     loadDevicesList().catch(() => {});
   }
-  if (panelName === "backup" && window.WhatsNowContactsBackup) {
-    window.WhatsNowContactsBackup.onPanelShow();
+  if (panelName === "backup" && window.FaloContactsBackup) {
+    window.FaloContactsBackup.onPanelShow();
   }
 }
 
@@ -2679,17 +2679,17 @@ function wireShortcutPresets() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  if (window.WhatsNowI18n) window.WhatsNowI18n.setLang("zh");
+  if (window.FaloI18n) window.FaloI18n.setLang("zh");
   wireExternalLinks();
   wireThemePicker();
   wirePanelNavigation();
   wireFocusControls();
   wireShortcutPresets();
   wireMembership();
-  if (window.WhatsNowContactsBackup) window.WhatsNowContactsBackup.init();
-  if (window.WhatsNowSettingsBackup) window.WhatsNowSettingsBackup.init();
-  document.addEventListener("whatsnow-ui-lang", () => {
-    if (window.WhatsNowContactsBackup) window.WhatsNowContactsBackup.refreshUi();
+  if (window.FaloContactsBackup) window.FaloContactsBackup.init();
+  if (window.FaloSettingsBackup) window.FaloSettingsBackup.init();
+  document.addEventListener("falo-ui-lang", () => {
+    if (window.FaloContactsBackup) window.FaloContactsBackup.refreshUi();
   });
   const uiLangSelect = document.getElementById("ui_lang");
   if (uiLangSelect) {
@@ -2708,7 +2708,7 @@ window.addEventListener("DOMContentLoaded", () => {
   wireLock();
   document.getElementById("save").addEventListener("click", save);
 
-  // WATransChat parity: translation color/size apply immediately (no extra Save click).
+  // Falo parity: translation color/size apply immediately (no extra Save click).
   let appearanceSaveTimer = 0;
   async function saveTranslationAppearanceLive() {
     try {
@@ -2851,7 +2851,7 @@ function wireLock() {
   document.getElementById("idle_min").addEventListener("change", () => saveLockOptions().catch((e) => askAlert(String(e))));
 }
 
-// --- Engine latency probe + quality test (WATransChat options parity) ---
+// --- Engine latency probe + quality test (Falo options parity) ---
 
 const QUALITY_DAILY_LIMIT = 10;
 const QUALITY_QUOTA_KEY = "wn_qualityTranslateDailyQuota";
@@ -2906,7 +2906,7 @@ function consumeQualityQuota() {
 }
 
 function engineDisplayName(engine) {
-  const api = window.__whatsnowEngineList;
+  const api = window.__faloEngineList;
   if (api && typeof api.nameMap === "function") {
     const map = api.nameMap(uiLang());
     if (map && map[engine]) return map[engine];
@@ -3037,7 +3037,7 @@ async function applyQualityEngine(engine) {
   const id = String(engine || "").trim();
   if (!id) return;
   const name = engineDisplayName(id);
-  const api = window.__whatsnowEngineList;
+  const api = window.__faloEngineList;
   const isPro = await settingsIsPro();
   if (api && typeof api.isProEngine === "function" && api.isProEngine(id, "global") && !isPro) {
     askAlert(t("translation.qualityApplyDeniedPro"));
@@ -3152,7 +3152,7 @@ function wireLatencyAndQuality() {
       applyQualityEngine(engine).catch((e) => askAlert(String(e)));
     });
   }
-  document.addEventListener("whatsnow-ui-lang", () => {
+  document.addEventListener("falo-ui-lang", () => {
     // Refill searchable lang lists; current select values are preserved.
     fillTranslateLangSelects({
       translate_source_lang: document.getElementById("translate_source_lang")?.value,
@@ -3175,7 +3175,7 @@ function wireLatencyAndQuality() {
       probeBtn.disabled = true;
       if (statusEl) statusEl.textContent = t("translation.latencyProbing");
       try {
-        const api = window.__whatsnowEngineList;
+        const api = window.__faloEngineList;
         const engines = api && Array.isArray(api.GLOBAL_INPUT_ENGINES)
           ? api.GLOBAL_INPUT_ENGINES.slice()
           : undefined;
@@ -3231,7 +3231,7 @@ function wireLatencyAndQuality() {
         statusEl.textContent = t("translation.qualityRunning", { done: 0, total: "?" });
       }
       try {
-        const api = window.__whatsnowEngineList;
+        const api = window.__faloEngineList;
         const engines = api && Array.isArray(api.GLOBAL_INPUT_ENGINES)
           ? api.GLOBAL_INPUT_ENGINES.slice()
           : [

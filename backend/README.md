@@ -43,7 +43,7 @@ cargo check                          # 类型检查（需链接器）
 
 - `rustfmt`：10 个文件全部通过，已统一格式化。
 - `cargo check`（GNU 工具链 + MinGW）：**通过，0 error 0 warning**。
-- `cargo build`：**通过**，产出 `target/debug/watranschat-oss.exe`（288 MB，debug），
+- `cargo build`：**通过**，产出 `target/debug/falo-oss.exe`（288 MB，debug），
   启动后能渲染恢复出来的设置界面（见仓库根 `frontend_running.png`）。
 - 需要 `windres`：把 winlibs 的 `mingw64\bin` 加进 PATH 即可（tauri-winres 会调用）。
 
@@ -58,5 +58,5 @@ cargo check                          # 类型检查（需链接器）
 
 - 远端**路径**是约定值（`/v1/membership/*`、`/v1/phrases`），原始闭源客户端用的路径没恢复，
   对接真实服务时要按抓包改常量；
-- 存储位置统一放 `%APPDATA%/WATransChat/*.json`，原版用的可能是 SQLite；
+- 存储位置统一放 `%APPDATA%/Falo/*.json`，原版用的可能是 SQLite；
 - 会员/应用锁的**加密细节**是重建版（SHA-256 十六进制），不是原版算法。

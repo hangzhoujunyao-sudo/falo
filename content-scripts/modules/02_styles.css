@@ -12,7 +12,7 @@
           "body.dark .translated-text > .selectable-text.wa-chat-translate-fail," +
           ".dark .translated-text > .selectable-text.wa-chat-translate-fail{color:#8696a0!important}" +
           ".wa-chat-switch-engine-btn{appearance:none;border:1px solid rgba(18,140,126,0.35);" +
-          "background:rgba(37,211,102,0.1);color:#128c7e;font:inherit;font-size:12px;line-height:1.2;" +
+          "background:rgba(37,211,102,0.1);color:#4f46e5;font:inherit;font-size:12px;line-height:1.2;" +
           "padding:2px 8px;border-radius:12px;cursor:pointer;flex:0 0 auto}" +
           ".wa-chat-switch-engine-btn:hover{background:rgba(37,211,102,0.18);border-color:rgba(18,140,126,0.5)}" +
           ".wa-chat-switch-engine-btn:disabled{opacity:0.55;cursor:default}" +
@@ -29,10 +29,10 @@
     }
 
     function canTranslate() {
-      // WATransChat parity: require core_translate (isValid + cap). Logout clears
+      // Falo parity: require core_translate (isValid + cap). Logout clears
       // caps → false. Never allow "offline demo" after sign-out.
       try {
-        return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+        return !!(window.__faloCan && window.__faloCan("core_translate"));
       } catch (_) {}
       return false;
     }
@@ -84,13 +84,13 @@
       // or zh-CN when sourceLang is auto.
       cfg.targetLang =
         cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : "zh-CN";
-      // WATransChat userSourceLang — destination / "my language" for same-lang skip.
+      // Falo userSourceLang — destination / "my language" for same-lang skip.
       try {
         window.userSourceLang =
           cfg.sourceLang && cfg.sourceLang !== "auto" ? cfg.sourceLang : cfg.targetLang || "zh-CN";
         window.userSourceLangSetting = cfg.sourceLang || "auto";
         window.defaultTargetLang = cfg.defaultCustomerLang || "auto";
-        window.__whatsnowTranslateCfg = cfg;
+        window.__faloTranslateCfg = cfg;
       } catch (_) {}
       invoke("dlog", {
         msg:
@@ -114,17 +114,17 @@
       updateComposeButton();
       scheduleScan(80);
       try {
-        window.dispatchEvent(new CustomEvent("whatsnow-translate-config", { detail: cfg }));
+        window.dispatchEvent(new CustomEvent("falo-translate-config", { detail: cfg }));
       } catch (_) {}
     }
 
-    window.__whatsnowApplyTranslateConfig = function (c) {
+    window.__faloApplyTranslateConfig = function (c) {
       pendingCfg = c || pendingCfg;
       if (!started) return;
       applyConfig(c);
     };
 
-    // WATransChat roots from `$()` / `c()` / `X()` — pick the one that actually
+    // Falo roots from `$()` / `c()` / `X()` — pick the one that actually
     // holds message text. A near-empty scrolltrace node must not beat panel-body.
     function waIoPanelRoot() {
       var candidates = [
@@ -153,7 +153,7 @@
       return best;
     }
 
-    // WATransChat H() — segment container
+    // Falo H() — segment container
     /**
      * 从气泡 DOM 还原真实换行（比 innerText 更准）。
      * WA 每行是 display:block 的 span，段内已有 \\n；innerText 又在块边界再插 \\n → 空行翻倍。
@@ -232,7 +232,7 @@
         .replace(/\n{3,}/g, "\n\n");
     }
 
-    // WATransChat content-translate-visible.js — IndexedDB + sync memory cache.
+    // Falo content-translate-visible.js — IndexedDB + sync memory cache.
     // Chrome rarely remounts the chat DOM on minimize; WebView2 often does.
     // Memory hits must re-attach .translated-text in the same turn as the
     // MutationObserver callback so restore does not look like a slow reload.
@@ -490,7 +490,7 @@
       } catch (_) {}
     }
 
-    /** Chat-history only — never falls back to compose `cfg.engine` (WATransChat). */
+    /** Chat-history only — never falls back to compose `cfg.engine` (Falo). */
     function historyCacheEngine() {
       var eng =
         typeof cfg.historyEngine === "string" && cfg.historyEngine.trim()
@@ -603,7 +603,7 @@
       return span && span.parentNode && span.parentNode.nodeType === 1 ? span.parentNode : row;
     }
 
-    // WATransChat At() — in viewport
+    // Falo At() — in viewport
     function isInViewport(el) {
       try {
         var e = el.getBoundingClientRect();
@@ -615,7 +615,7 @@
       }
     }
 
-    // WATransChat R() — language family
+    // Falo R() — language family
     function normalizeLangFamily(t) {
       var e = String(t || "")
         .trim()
@@ -639,7 +639,7 @@
       return e.split(/[-_]/)[0] || "";
     }
 
-    // WATransChat Ct() — rough detect
+    // Falo Ct() — rough detect
     function detectLang(t) {
       var e = String(t == null ? "" : t).trim();
       if (!e) return "auto";
@@ -669,7 +669,7 @@
       return "auto";
     }
 
-    // WATransChat Tt() — skip when already in user language
+    // Falo Tt() — skip when already in user language
     function isSameAsUserLang(text, userLang) {
       var n = normalizeLangFamily(userLang || cfg.targetLang || "zh-CN");
       if (!n) return false;
@@ -679,7 +679,7 @@
       return !!(u && u === n);
     }
 
-    // WATransChat t() — bubble from selectable-text span
+    // Falo t() — bubble from selectable-text span
     function findBubbleFromSpan(o) {
       if (!o) return null;
       // Voice STT transcriptions sit inside conv-msg / msg-container rows.
@@ -751,7 +751,7 @@
 
     function pageUiLang() {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.getUiLang) return i18n.getUiLang();
       } catch (_) {}
       try {
@@ -761,14 +761,14 @@
     }
     function tPage(key, fbZh) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.t) return i18n.t(pageUiLang(), key, fbZh);
       } catch (_) {}
       return fbZh;
     }
     function tPageFill(key, fbZh, vars) {
       try {
-        var i18n = window.__whatsnowPageI18n;
+        var i18n = window.__faloPageI18n;
         if (i18n && i18n.fill) return i18n.fill(pageUiLang(), key, fbZh, vars);
       } catch (_) {}
       var s = String(fbZh || "");
@@ -783,7 +783,7 @@
     function getEngineDisplayName(engineId, ui) {
       var id = String(engineId || "google_web");
       try {
-        var api = window.__whatsnowEngineList;
+        var api = window.__faloEngineList;
         if (api) {
           var map = api.nameMap ? api.nameMap(ui || "zh") : null;
           if (map && map[id]) return map[id];
@@ -822,10 +822,10 @@
 
     function canUseProRetranslateEngines() {
       try {
-        if (window.__whatsnowCan) {
-          if (window.__whatsnowCan("pro_engines") || window.__whatsnowCan("ai_proxy")) return true;
+        if (window.__faloCan) {
+          if (window.__faloCan("pro_engines") || window.__faloCan("ai_proxy")) return true;
         }
-        var c = window.__whatsnowCaps;
+        var c = window.__faloCaps;
         if (c && (c.isPro || c.isPremium)) return true;
       } catch (_) {}
       return false;
@@ -873,7 +873,7 @@
       return safeIndex;
     }
 
-    // WATransChat mountRetranslateButton — before msg-meta time; AI buttons on the left
+    // Falo mountRetranslateButton — before msg-meta time; AI buttons on the left
     function mountRetranslateButton(msg, retranslateBtn, fallbackParent) {
       if (!retranslateBtn) return;
       try {
@@ -910,7 +910,7 @@
       }
     }
 
-    // WATransChat createTranslationWrapper — translation + retranslate icon button
+    // Falo createTranslationWrapper — translation + retranslate icon button
     function renderTranslation(row, span, translated, original, engineIndex) {
       if (!row || !translated) return;
       try {
@@ -936,7 +936,7 @@
         body.className = "selectable-text copyable-text _aupe";
         var trColor = normalizeTextColor(cfg.textColor);
         var trSize = normalizeFontSize(cfg.fontSize);
-        // Voice STT transcription (AudioToTextTranscription-*) — same padding as WATransChat.
+        // Voice STT transcription (AudioToTextTranscription-*) — same padding as Falo.
         var isAudioTx =
           span &&
           span.id &&
@@ -1011,8 +1011,8 @@
       if (CHAT_HISTORY_TRANSLATION_ENGINES.indexOf(next) < 0) next = "google_web";
       cfg.historyEngine = next;
       try {
-        if (window.__whatsnowTranslateCfg) window.__whatsnowTranslateCfg.historyEngine = next;
-        if (window.__whatsnowTranslateBoot) window.__whatsnowTranslateBoot.historyEngine = next;
+        if (window.__faloTranslateCfg) window.__faloTranslateCfg.historyEngine = next;
+        if (window.__faloTranslateBoot) window.__faloTranslateBoot.historyEngine = next;
       } catch (_) {}
       try {
         invokeChecked("set_chat_history_engine", { engine: next }).catch(function (err) {
@@ -1501,7 +1501,7 @@
         });
     }
 
-    /** WATransChat performChatMessageTranslation fallback chains for Google/Bing. */
+    /** Falo performChatMessageTranslation fallback chains for Google/Bing. */
     function historyFallbackEngines(preferred) {
       if (preferred === "bing") return ["google_web", "google", "google_chrome"];
       if (preferred === "google_web") return ["google", "google_chrome"];
@@ -1521,7 +1521,7 @@
 
     function collectHistoryTranslateContext(anchorEl, sourceText) {
       try {
-        var helpers = window.__whatsnowAiHelpers || {};
+        var helpers = window.__faloAiHelpers || {};
         if (typeof helpers.collectChatHistoryTranslateContext === "function") {
           return helpers.collectChatHistoryTranslateContext(anchorEl, sourceText) || [];
         }
@@ -1645,7 +1645,7 @@
       }
     }
 
-    // WATransChat `$()` — translate visible selectable-text spans
+    // Falo `$()` — translate visible selectable-text spans
     function translateVisibleMessages() {
       if (!cfg.enabled || !cfg.incoming || !canTranslate()) return;
       if (!ensureStyle()) return;
@@ -1730,7 +1730,7 @@
       }, typeof ms === "number" ? ms : 200);
     }
 
-    // WATransChat observer: IntersectionObserver on rows + MutationObserver on panel
+    // Falo observer: IntersectionObserver on rows + MutationObserver on panel
     function ensureIntersectionObserver() {
       if (rowIo || typeof IntersectionObserver !== "function") return rowIo;
       try {
@@ -1873,7 +1873,7 @@
     function findComposeInput(root) {
       // 优先走 send-hook 同源选框（已排除备注框、配文优先）
       try {
-        var h = window.__whatsnowTranslateHelpers || {};
+        var h = window.__faloTranslateHelpers || {};
         if (typeof h.getNativeComposerElement === "function") {
           var fromHook = h.getNativeComposerElement();
           if (fromHook) return fromHook;

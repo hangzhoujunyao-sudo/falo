@@ -18,32 +18,32 @@
     "offset": "0x6cc752"
   },
   {
-    "path": "/watrans-ui.js",
-    "file": "watrans-ui.js",
+    "path": "/falo-ui.js",
+    "file": "falo-ui.js",
     "bytes": 8781,
     "offset": "0x6de1f2"
   },
   {
-    "path": "/resources/watrans-send-hook.js",
-    "file": "resources/watrans-send-hook.js",
+    "path": "/resources/falo-send-hook.js",
+    "file": "resources/falo-send-hook.js",
     "bytes": 117,
     "offset": "0x6e044d"
   },
   {
-    "path": "/resources/watrans-ui.js",
-    "file": "resources/watrans-ui.js",
+    "path": "/resources/falo-ui.js",
+    "file": "resources/falo-ui.js",
     "bytes": 231,
     "offset": "0x6e04e1"
   },
   {
-    "path": "/watrans-country-fx.js",
-    "file": "watrans-country-fx.js",
+    "path": "/falo-country-fx.js",
+    "file": "falo-country-fx.js",
     "bytes": 2282,
     "offset": "0x6e05e0"
   },
   {
-    "path": "/watrans-voice-stt.js",
-    "file": "watrans-voice-stt.js",
+    "path": "/falo-voice-stt.js",
+    "file": "falo-voice-stt.js",
     "bytes": 2363,
     "offset": "0x6e0ef6"
   },
@@ -102,8 +102,8 @@
     "offset": "0x72608c"
   },
   {
-    "path": "/watrans-fx.js",
-    "file": "watrans-fx.js",
+    "path": "/falo-fx.js",
+    "file": "falo-fx.js",
     "bytes": 28585,
     "offset": "0x7469fb"
   },
@@ -150,14 +150,14 @@
     "offset": "0x7c4f69"
   },
   {
-    "path": "/watrans-engine-list.js",
-    "file": "watrans-engine-list.js",
+    "path": "/falo-engine-list.js",
+    "file": "falo-engine-list.js",
     "bytes": 75,
     "offset": "0x7c629e"
   },
   {
-    "path": "/watrans-lang-list.js",
-    "file": "watrans-lang-list.js",
+    "path": "/falo-lang-list.js",
+    "file": "falo-lang-list.js",
     "bytes": 68,
     "offset": "0x7c6ce8"
   },

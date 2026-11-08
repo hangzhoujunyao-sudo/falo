@@ -1,10 +1,10 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
+// Falo — authored and maintained solely by @benedictusrey.
 const invoke = window.__TAURI__?.core?.invoke ?? (async (command) => {
   if (command === "get_theme") return "light";
   if (command === "get_lock_status") {
     return { biometric_enabled: false, biometric_label: "", ui_lang: "zh" };
   }
-  throw new Error("WATransChat lock controls require the desktop runtime.");
+  throw new Error("Falo lock controls require the desktop runtime.");
 });
 const pwd = document.getElementById("password");
 const errEl = document.getElementById("error");
@@ -15,8 +15,8 @@ const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
 
 const STR = {
   en: {
-    title: "WATransChat — Locked",
-    heading: "WATransChat is locked",
+    title: "Falo — Locked",
+    heading: "Falo is locked",
     copy: "Unlock to reveal your accounts and message windows.",
     password: "Password",
     unlock: "Unlock",
@@ -29,12 +29,12 @@ const STR = {
     confirmOk: "OK",
     confirmCancel: "Cancel",
     resetConfirm:
-      "Reset WATransChat?\n\nThis logs out ALL accounts and removes the app lock. " +
+      "Reset Falo?\n\nThis logs out ALL accounts and removes the app lock. " +
       "You will need to re-scan the WhatsApp QR code. Your chats stay on your phone.",
   },
   zh: {
-    title: "WATransChat — 已锁定",
-    heading: "WATransChat 已锁定",
+    title: "Falo — 已锁定",
+    heading: "Falo 已锁定",
     copy: "解锁后即可查看账号与消息窗口。",
     password: "密码",
     unlock: "解锁",
@@ -47,7 +47,7 @@ const STR = {
     confirmOk: "确定",
     confirmCancel: "取消",
     resetConfirm:
-      "重置 WATransChat？\n\n这将退出所有账号并移除应用锁。" +
+      "重置 Falo？\n\n这将退出所有账号并移除应用锁。" +
       "之后需要重新扫描 WhatsApp 二维码。聊天记录仍保留在手机上。",
   },
 };
@@ -92,7 +92,7 @@ function applyUiLang(lang) {
 }
 
 function applyTheme(theme) {
-  window.WhatsNowTheme.apply(document, theme, systemDark.matches);
+  window.FaloTheme.apply(document, theme, systemDark.matches);
 }
 
 async function tryUnlock() {

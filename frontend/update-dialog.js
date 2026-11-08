@@ -1,10 +1,10 @@
-// WATransChat — authored and maintained solely by @benedictusrey.
-// Update dialog (parity with WATransChat Desktop Lite update-dialog.js).
+// Falo — authored and maintained solely by @benedictusrey.
+// Update dialog (parity with Falo Desktop Lite update-dialog.js).
 
 async function invoke(cmd, args) {
   const fn = window.__TAURI__?.core?.invoke;
   if (typeof fn !== "function") {
-    throw new Error("WATransChat update dialog requires the desktop runtime.");
+    throw new Error("Falo update dialog requires the desktop runtime.");
   }
   return fn(cmd, args);
 }

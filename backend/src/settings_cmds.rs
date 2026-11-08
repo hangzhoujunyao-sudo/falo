@@ -38,7 +38,7 @@ fn settings_path() -> Result<PathBuf, String> {
         .ok_or_else(|| "APPDATA 环境变量不可用".to_string())?;
 
     Ok(PathBuf::from(appdata)
-        .join("WATransChat")
+        .join("Falo")
         .join("settings.json"))
 }
 
@@ -376,12 +376,12 @@ fn download_and_start_installer(url: String) -> Result<Value, String> {
         .as_nanos();
 
     let directory = PathBuf::from(temp).join(format!(
-        "WATransChat-update-{}-{timestamp}",
+        "Falo-update-{}-{timestamp}",
         std::process::id()
     ));
 
     fs::create_dir(&directory).map_err(|e| e.to_string())?;
-    let installer = directory.join("WATransChat-setup.exe");
+    let installer = directory.join("Falo-setup.exe");
 
     // URL 和路径通过环境变量传递，避免把远端字符串拼入 PowerShell 源码。
     // 仅启动通过 Windows Authenticode 验证的安装程序。
@@ -389,7 +389,7 @@ fn download_and_start_installer(url: String) -> Result<Value, String> {
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 try {
-    $uri = [Uri]$env:WATRANSCHAT_UPDATE_URL
+    $uri = [Uri]$env:FALO_UPDATE_URL
     if (-not $uri.IsAbsoluteUri -or
         $uri.Scheme -ne 'https' -or
         [string]::IsNullOrWhiteSpace($uri.Host) -or
@@ -402,20 +402,20 @@ try {
     Invoke-WebRequest `
         -UseBasicParsing `
         -Uri $uri.AbsoluteUri `
-        -OutFile $env:WATRANSCHAT_INSTALLER `
+        -OutFile $env:FALO_INSTALLER `
         -TimeoutSec 900
 
-    if ((Get-Item -LiteralPath $env:WATRANSCHAT_INSTALLER).Length -le 0) {
+    if ((Get-Item -LiteralPath $env:FALO_INSTALLER).Length -le 0) {
         throw '下载的安装程序为空'
     }
 
-    $signature = Get-AuthenticodeSignature -LiteralPath $env:WATRANSCHAT_INSTALLER
+    $signature = Get-AuthenticodeSignature -LiteralPath $env:FALO_INSTALLER
     if ($signature.Status -ne 'Valid') {
         throw ('安装程序签名验证失败: ' + $signature.Status)
     }
 
     $process = Start-Process `
-        -FilePath $env:WATRANSCHAT_INSTALLER `
+        -FilePath $env:FALO_INSTALLER `
         -PassThru `
         -ErrorAction Stop
 
@@ -439,8 +439,8 @@ try {
         "-Command",
         script,
     ])
-    .env("WATRANSCHAT_UPDATE_URL", &url)
-    .env("WATRANSCHAT_INSTALLER", &installer)
+    .env("FALO_UPDATE_URL", &url)
+    .env("FALO_INSTALLER", &installer)
     .output();
 
     let output = match result {
@@ -1010,7 +1010,7 @@ pub async fn contacts_backup_call(
         .map_err(|e| e.to_string())
 }
 
-/// 对应前端动作：向临时目录中的 watranschat.log 追加一行日志。
+/// 对应前端动作：向临时目录中的 falo.log 追加一行日志。
 #[tauri::command]
 pub async fn dlog(
     state: tauri::State<'_, crate::api::AppState>,
@@ -1052,7 +1052,7 @@ pub async fn dlog(
     let mut file = OpenOptions::new()
         .create(true)
         .append(true)
-        .open(directory.join("watranschat.log"))
+        .open(directory.join("falo.log"))
         .map_err(|e| e.to_string())?;
 
     file.write_all(&line).map_err(|e| e.to_string())?;
@@ -1073,7 +1073,7 @@ pub async fn test_notification(
     let title = payload
         .get("title")
         .and_then(|v| v.as_str())
-        .map_or("WATransChat", |v| v);
+        .map_or("Falo", |v| v);
 
     let body = payload
         .get("body")

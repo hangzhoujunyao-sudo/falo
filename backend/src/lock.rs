@@ -59,7 +59,7 @@ fn lock_path() -> Result<PathBuf, String> {
         .filter(|value| !value.is_empty())
         .ok_or_else(|| "APPDATA_not_found".to_string())?;
 
-    Ok(PathBuf::from(appdata).join("WATransChat").join("lock.json"))
+    Ok(PathBuf::from(appdata).join("Falo").join("lock.json"))
 }
 
 fn load_config() -> Result<LockConfig, String> {

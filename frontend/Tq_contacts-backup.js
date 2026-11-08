@@ -1,6 +1,6 @@
 /**
- * Contacts backup panel — port of WATransChat contacts-backup-panel.js
- * Uses Tauri RPC into each open account webview (watrans-store-bridge).
+ * Contacts backup panel — port of Falo contacts-backup-panel.js
+ * Uses Tauri RPC into each open account webview (falo-store-bridge).
  */
 (function () {
   "use strict";
@@ -8,12 +8,12 @@
   const invoke =
     window.__TAURI__?.core?.invoke ??
     (async () => {
-      throw new Error("WATransChat settings require the desktop runtime.");
+      throw new Error("Falo settings require the desktop runtime.");
     });
   const listen = window.__TAURI__?.event?.listen;
 
   function t(key, vars) {
-    return window.WhatsNowI18n ? window.WhatsNowI18n.t(key, vars) : key;
+    return window.FaloI18n ? window.FaloI18n.t(key, vars) : key;
   }
 
   let countryTable = null;
@@ -604,7 +604,7 @@
     });
   }
 
-  window.WhatsNowContactsBackup = {
+  window.FaloContactsBackup = {
     init() {
       bind();
       ensureProgressListener().catch(() => {});

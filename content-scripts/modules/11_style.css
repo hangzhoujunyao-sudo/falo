@@ -1,21 +1,41 @@
-). */
-  function ensureLangSearchStyles() {
-    if (typeof document === "undefined") return;
-    if (document.getElementById("whatsnow-lang-search-styles")) return;
-    var parent = document.head || document.documentElement;
-    if (!parent) return;
-    var s = document.createElement("style");
-    s.id = "whatsnow-lang-search-styles";
-    s.textContent =
-      "select.lang-search-select-native{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0;pointer-events:none}" +
-      ".lang-search-select{position:relative;width:100%}" +
-      ".lang-search-select-input{width:100%;box-sizing:border-box;height:36px;padding:0 10px;border:1px solid #ced4da;border-radius:8px;background:#fff;font-size:13px;color:#343a40;outline:none}" +
-      ".lang-search-select-dropdown{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow:auto;background:#fff;color:#343a40;border:1px solid #ced4da;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100000}" +
-      ".lang-search-select-dropdown[hidden]{display:none!important}" +
-      ".lang-search-select-item{padding:10px 12px;cursor:pointer;user-select:none;font-size:13px;line-height:16px}" +
-      ".lang-search-select-item:hover,.lang-search-select-item.is-active{background:rgba(0,0,0,.06)}" +
-      ".lang-search-select-empty{padding:10px 12px;font-size:12px;color:#868e96}";
-    parent.appendChild(s);
-  }
-
-  /** WATransChat
+). */
+
+  function ensureLangSearchStyles() {
+
+    if (typeof document === "undefined") return;
+
+    if (document.getElementById("falo-lang-search-styles")) return;
+
+    var parent = document.head || document.documentElement;
+
+    if (!parent) return;
+
+    var s = document.createElement("style");
+
+    s.id = "falo-lang-search-styles";
+
+    s.textContent =
+
+      "select.lang-search-select-native{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0;pointer-events:none}" +
+
+      ".lang-search-select{position:relative;width:100%}" +
+
+      ".lang-search-select-input{width:100%;box-sizing:border-box;height:36px;padding:0 10px;border:1px solid #ced4da;border-radius:8px;background:#fff;font-size:13px;color:#343a40;outline:none}" +
+
+      ".lang-search-select-dropdown{position:absolute;left:0;right:0;top:calc(100% + 4px);max-height:260px;overflow:auto;background:#fff;color:#343a40;border:1px solid #ced4da;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:100000}" +
+
+      ".lang-search-select-dropdown[hidden]{display:none!important}" +
+
+      ".lang-search-select-item{padding:10px 12px;cursor:pointer;user-select:none;font-size:13px;line-height:16px}" +
+
+      ".lang-search-select-item:hover,.lang-search-select-item.is-active{background:rgba(0,0,0,.06)}" +
+
+      ".lang-search-select-empty{padding:10px 12px;font-size:12px;color:#868e96}";
+
+    parent.appendChild(s);
+
+  }
+
+
+
+  /** Falo

@@ -6,7 +6,7 @@ use reqwest::{Client, Method, Response, Url};
 use serde_json::Value;
 
 const REQUEST_TIMEOUT: Duration = Duration::from_secs(15);
-const USER_AGENT_VALUE: &str = "WATransChat-OSS/2.6.5";
+const USER_AGENT_VALUE: &str = "Falo-OSS/2.6.5";
 const RESPONSE_SNIPPET_LIMIT: usize = 200;
 
 pub struct ApiClient {

@@ -1,9 +1,24 @@
-# WATransChat（开源重建）
+# Falo（飞译）· WhatsApp Web 翻译工作台（开源重建）
 
-WhatsApp Web 翻译插件 WATransChat 2.6.5（Windows / Tauri 2）的**可恢复部分**重建版。
+![运行截图](frontend_running.png)
 
-> 说明：这是一次「从发布物里把能拿的都拿出来」的工程，不是原作者的仓库。
-> 能拿到的标 ✅，只能重建的标 ⚠️，拿不到的标 ❌ —— 都在下面的表里写明，别自己脑补。
+> 由 WATransChat 2.6.5（Windows / Tauri 2）发布物重建，**已整体改名换标**：
+> 产品名 Falo / 飞译，图标重绘，主色从 WhatsApp 绿换成靛紫，
+> 代码里的 `WATransChat` / `WhatsNow` 标识已全部替换为 `Falo` / `falo`。
+
+## 命名
+
+| 项 | 原版 | 本项目 |
+|---|---|---|
+| 产品名 | WATransChat | **Falo**（中文：飞译） |
+| 包名 / 标识符 | `app.whatsnow.desktop` | `app.falo.desktop` |
+| Cargo 包 | — | `falo-oss` |
+| 全局对象 | `__whatsnow*` | `__falo*` |
+| 环境变量 | `WATRANSCHAT_*` | `FALO_*` |
+| 主色 | `#087a60` / `#25d366`（绿） | `#4f46e5` / `#6366f1`（靛紫） |
+| 图标 | 绿色 W 徽标 | 靛紫渐变 + 白色 F + 箭头（`frontend/app-icon.svg`） |
+
+改名脚本：`tools/rebrand.py`（可重跑；同时做图标与主题色替换）。
 
 ## 恢复了什么
 
@@ -20,7 +35,7 @@ WhatsApp Web 翻译插件 WATransChat 2.6.5（Windows / Tauri 2）的**可恢复
 
 ```
 content-scripts/
-  watrans-content-bundle.js   注入脚本整包（明文，带原注释）
+  falo-content-bundle.js   注入脚本整包（明文，带原注释）
   modules/                    按注释切出的模块（便于阅读）
 docs/
   tauri-commands.md           命令面
@@ -32,7 +47,7 @@ tools/                        资产切分 / 内存扫描脚本（继续挖用�
 
 ## 已经跑起来了
 
-`cargo build` 出的 `backend\target\debug\watranschat-oss.exe` 能启动并渲染出**恢复出来的原版设置界面**
+`cargo build` 出的 `backend\target\debug\falo-oss.exe` 能启动并渲染出**恢复出来的原版设置界面**
 （Overview / Accounts / Focus / Appearance / Notifications / Preferences / Membership / Translation /
 Devices / Backup / Security / About 全在）：
 

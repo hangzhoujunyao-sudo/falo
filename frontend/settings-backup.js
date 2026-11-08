@@ -1,21 +1,21 @@
 /**
- * Settings backup panel — categorized export/import adapted from WATransChat.
+ * Settings backup panel — categorized export/import adapted from Falo.
  * App Settings via get_settings/set_settings; per-account pageData via contacts RPC.
  */
 (function () {
   "use strict";
 
-  const SCHEMA = "watranschat-backup";
+  const SCHEMA = "falo-backup";
   const SCHEMA_VERSION = 1;
 
   const invoke =
     window.__TAURI__?.core?.invoke ??
     (async () => {
-      throw new Error("WATransChat settings require the desktop runtime.");
+      throw new Error("Falo settings require the desktop runtime.");
     });
 
   function t(key, vars) {
-    return window.WhatsNowI18n ? window.WhatsNowI18n.t(key, vars) : key;
+    return window.FaloI18n ? window.FaloI18n.t(key, vars) : key;
   }
 
   /** Categories map to Settings fields and/or page localStorage keys. */
@@ -307,7 +307,7 @@
       };
       downloadBlob(
         new Blob([JSON.stringify(blob, null, 2)], { type: "application/json;charset=utf-8" }),
-        `watranschat-settings-${Date.now()}.json`
+        `falo-settings-${Date.now()}.json`
       );
       let msg = t("sb.exportOk");
       if (skipped.length) msg += " — " + fillSkipped(skipped);
@@ -454,7 +454,7 @@
     });
   }
 
-  window.WhatsNowSettingsBackup = {
+  window.FaloSettingsBackup = {
     init() {
       bind();
     },

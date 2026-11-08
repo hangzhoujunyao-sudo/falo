@@ -4,20 +4,20 @@
  */
 (function () {
   "use strict";
-  if (window.__whatsnowMsgDeviceInstalled) return;
-  window.__whatsnowMsgDeviceInstalled = true;
+  if (window.__faloMsgDeviceInstalled) return;
+  window.__faloMsgDeviceInstalled = true;
 
   function cfg() {
     try {
-      var h = window.__whatsnowTranslateHelpers;
+      var h = window.__faloTranslateHelpers;
       if (h && h.getCfg) return h.getCfg() || {};
     } catch (_) {}
-    return window.__whatsnowTranslateCfg || {};
+    return window.__faloTranslateCfg || {};
   }
 
   function canCore() {
     try {
-      return !!(window.__whatsnowCan && window.__whatsnowCan("core_translate"));
+      return !!(window.__faloCan && window.__faloCan("core_translate"));
     } catch (_) {}
     return false;
   }
@@ -28,7 +28,7 @@
     return c.showDevice !== false;
   }
 
-  var STYLE_ID = "whatsnow-msg-device-style";
+  var STYLE_ID = "falo-msg-device-style";
   function ensureStyles() {
     if (document.getElementById(STYLE_ID)) return;
     var parent = document.head || document.documentElement;
@@ -475,9 +475,9 @@
 
   try {
     var bus =
-      (window.__whatsnowTranslateHelpers &&
-        window.__whatsnowTranslateHelpers.domMutationBus) ||
-      window.__whatsnowDomMutationBus;
+      (window.__faloTranslateHelpers &&
+        window.__faloTranslateHelpers.domMutationBus) ||
+      window.__faloDomMutationBus;
     if (bus && typeof bus.register === "function") {
       bus.register(scheduleScan, { id: "msg-device" });
     } else {
@@ -503,18 +503,18 @@
     } catch (_) {}
   }, 2500);
 
-  window.addEventListener("whatsnow-translate-config", function () {
+  window.addEventListener("falo-translate-config", function () {
     scheduleScan();
   });
 
   try {
-    window.__whatsnowMsgDevice = {
+    window.__faloMsgDevice = {
       detectDeviceFromMessageId: detectDeviceFromMessageId,
       extractMessageIdPart: extractMessageIdPart,
       refreshLabels: refreshAllDeviceLabels,
       scan: scanMessageDevices,
     };
-    window.__whatsnowTranslateHelpers = Object.assign(window.__whatsnowTranslateHelpers || {}, {
+    window.__faloTranslateHelpers = Object.assign(window.__faloTranslateHelpers || {}, {
       detectWaMsgDevice: detectDeviceFromMessageId,
       extractWaMsgIdPart: extractMessageIdPart,
       refreshWaMsgDeviceLabels: refreshAllDeviceLabels,

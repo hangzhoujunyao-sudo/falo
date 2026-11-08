@@ -88,7 +88,7 @@ pub async fn membership_login(
     let device_name = payload
         .get("device_name")
         .and_then(|v| v.as_str())
-        .map_or("WATransChat", |v| v);
+        .map_or("Falo", |v| v);
 
     let response = state
         .api

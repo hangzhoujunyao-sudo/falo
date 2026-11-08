@@ -1,14 +1,14 @@
 {
-  "productName": "WATransChat-OSS",
+  "productName": "Falo-OSS",
   "version": "2.6.5",
-  "identifier": "app.whatsnow.desktop",
+  "identifier": "app.falo.desktop",
   "build": {
     "frontendDist": "../frontend"
   },
   "app": {
     "windows": [
       {
-        "title": "WATransChat",
+        "title": "Falo",
         "width": 1100,
         "height": 720,
         "resizable": true,

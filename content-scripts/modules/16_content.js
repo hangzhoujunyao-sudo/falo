@@ -3,13 +3,13 @@
 (() => {
   'use strict';
 
-  if (window.__WhatsNowStoreBridgeInstalled) return;
-  window.__WhatsNowStoreBridgeInstalled = true;
+  if (window.__FaloStoreBridgeInstalled) return;
+  window.__FaloStoreBridgeInstalled = true;
 
   const EVENT_CMD = 'WAContactExport:cmd';
   const EVENT_RESULT = 'WAContactExport:result';
   const EVENT_PROGRESS = 'WAContactExport:progress';
-  const BRIDGE_SOURCE = 'whatsnow';
+  const BRIDGE_SOURCE = 'falo';
 
   let stopCollect = false;
   let storeCache = null;
@@ -103,7 +103,7 @@
     let webpackRequire = null;
     try {
       window[chunkName].push([
-        ['WhatsNowStoreBridge' + Date.now()],
+        ['FaloStoreBridge' + Date.now()],
         {},
         (req) => {
           webpackRequire = req;
@@ -2340,7 +2340,7 @@
     };
   }
 
-  /** WATransChat 1:1 — Store API 无刷新开聊（JID / 号码 / @账号 / 会话标题） */
+  /** Falo 1:1 — Store API 无刷新开聊（JID / 号码 / @账号 / 会话标题） */
   async function openChatByQueryInMain(rawQuery) {
     const WidFactory = tryPageRequire('WAWebWidFactory');
     const FindChat = tryPageRequire('WAWebFindChatAction');
@@ -2620,7 +2620,7 @@
 
   // 自检：暴露调试钩子
   try {
-    window.__whatsnowStorePhone = {
+    window.__faloStorePhone = {
       isReady: isStoreReady,
       discoverStore,
       getActiveChat,
@@ -2632,11 +2632,11 @@
       buildNotesLookup,
       buildPhoneLookup
     };
-    window.__whatsnowOpenChatByQuery = openChatByQueryInMain;
-    window.__whatsnowOpenChatByPhoneStore = function (phone) {
+    window.__faloOpenChatByQuery = openChatByQueryInMain;
+    window.__faloOpenChatByPhoneStore = function (phone) {
       return openChatByQueryInMain(phone);
     };
-    // WATransChat extension parity: followup-todos / NumberTextInput use __waext.*
+    // Falo extension parity: followup-todos / NumberTextInput use __waext.*
     try {
       const waext = window.__waext || (window.__waext = {});
       waext.openChatByQueryMain = openChatByQueryInMain;
@@ -2644,7 +2644,7 @@
       window.__waextOpenChatByQueryMain = openChatByQueryInMain;
       window.__waextOpenChatByPhoneMain = openChatByQueryInMain;
     } catch (_) {}
-    window.__whatsnowContactExportRpc = contactExportRpc;
+    window.__faloContactExportRpc = contactExportRpc;
   } catch (_) {}
 
   // Aggressive warm-up: WhatsApp webpack modules appear after login/hydration.
