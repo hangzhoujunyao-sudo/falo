@@ -40,9 +40,14 @@
         </div>
 
         <nav class="settings-nav">
+          <p class="nav-group">核心</p>
           <button type="button" class="nav-item active" data-panel-target="overview">
             <span class="nav-icon" aria-hidden="true">⌂</span>
             <span data-i18n="nav.overview">Overview</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="translation">
+            <span class="nav-icon" aria-hidden="true">文</span>
+            <span data-i18n="nav.translation">Translation</span>
           </button>
           <button type="button" class="nav-item" data-panel-target="accounts">
             <span class="nav-icon" aria-hidden="true">◎</span>
@@ -52,6 +57,11 @@
             <span class="nav-icon" aria-hidden="true">◷</span>
             <span data-i18n="nav.focus">Focus</span>
           </button>
+          <p class="nav-group">偏好</p>
+          <button type="button" class="nav-item" data-panel-target="notifications">
+            <span class="nav-icon" aria-hidden="true">◉</span>
+            <span data-i18n="nav.notifications">Notifications</span>
+          </button>
           <button type="button" class="nav-item" data-panel-target="appearance">
             <span class="nav-icon" aria-hidden="true">✦</span>
             <span data-i18n="nav.appearance">Appearance</span>
@@ -60,25 +70,18 @@
             <span class="nav-icon" aria-hidden="true">☰</span>
             <span data-i18n="nav.interface">界面</span>
           </button>
-          <button type="button" class="nav-item" data-panel-target="notifications">
-            <span class="nav-icon" aria-hidden="true">◉</span>
-            <span data-i18n="nav.notifications">Notifications</span>
-          </button>
           <button type="button" class="nav-item" data-panel-target="preferences">
             <span class="nav-icon" aria-hidden="true">⌘</span>
             <span data-i18n="nav.preferences">Preferences</span>
           </button>
-          <button type="button" class="nav-item" data-panel-target="membership">
-            <span class="nav-icon" aria-hidden="true">✦</span>
-            <span data-i18n="nav.membership">Membership</span>
-          </button>
-          <button type="button" class="nav-item" data-panel-target="translation">
-            <span class="nav-icon" aria-hidden="true">文</span>
-            <span data-i18n="nav.translation">Translation</span>
-          </button>
+          <p class="nav-group">账户与安全</p>
           <button type="button" class="nav-item" data-panel-target="devices">
             <span class="nav-icon" aria-hidden="true">▣</span>
             <span data-i18n="nav.devices">Devices</span>
+          </button>
+          <button type="button" class="nav-item" data-panel-target="membership">
+            <span class="nav-icon" aria-hidden="true">✦</span>
+            <span data-i18n="nav.membership">Membership</span>
           </button>
           <button type="button" class="nav-item" data-panel-target="backup">
             <span class="nav-icon" aria-hidden="true">⇩</span>
@@ -88,6 +91,7 @@
             <span class="nav-icon" aria-hidden="true">◇</span>
             <span data-i18n="nav.security">Security</span>
           </button>
+          <p class="nav-group">其他</p>
           <button type="button" class="nav-item" data-panel-target="about">
             <span class="nav-icon" aria-hidden="true">i</span>
             <span data-i18n="nav.about">About</span>
@@ -112,36 +116,19 @@
 
         <main class="panel-stage">
           <section class="settings-panel active" data-panel="overview" aria-labelledby="panel_title">
-            <div class="welcome-card">
-              <div>
-                <p class="eyebrow" data-i18n="overview.eyebrow">Your communication cockpit</p>
-                <h2 data-i18n="overview.headline">Keep conversations close, without losing your focus.</h2>
-                <p>
-                  <span data-i18n="overview.body">Switch accounts, quiet interruptions, and personalize every Falo window from one compact workspace.</span>
-                </p>
-              </div>
-              <img src="app-icon.svg" alt="" aria-hidden="true" />
+          <div class="welcome-card">
+            <img src="app-icon.svg" alt="" aria-hidden="true" class="welcome-mark" />
+            <div>
+              <p class="eyebrow" data-i18n="overview.eyebrow">Your communication cockpit</p>
+              <h2 data-i18n="overview.headline">Keep conversations close, without losing your focus.</h2>
+              <p>
+                <span data-i18n="overview.body">Switch accounts, quiet interruptions, and personalize every Falo window from one compact workspace.</span>
+              </p>
             </div>
+          </div>
 
-            <div class="metric-grid">
-              <button type="button" class="metric-card" data-jump-panel="accounts">
-                <span class="metric-label" data-i18n="overview.metric.spaces">Connected spaces</span>
-                <strong id="overview_accounts">—</strong>
-                <small data-i18n="overview.metric.spacesHint">Manage accounts</small>
-              </button>
-              <button type="button" class="metric-card" data-jump-panel="focus">
-                <span class="metric-label" data-i18n="overview.metric.attention">Attention mode</span>
-                <strong id="overview_focus">Ready</strong>
-                <small data-i18n="overview.metric.attentionHint">Start a focus session</small>
-              </button>
-              <button type="button" class="metric-card" data-jump-panel="appearance">
-                <span class="metric-label" data-i18n="overview.metric.style">Current style</span>
-                <strong id="overview_theme">Dark</strong>
-                <small data-i18n="overview.metric.styleHint">Personalize Falo</small>
-              </button>
-            </div>
-
-            <div class="section-surface">
+          <div class="overview-layout">
+            <section class="section-surface overview-block">
               <div class="section-heading">
                 <div>
                   <p class="eyebrow" data-i18n="overview.quickEyebrow">Quick start</p>
@@ -163,10 +150,32 @@
                   <strong>2</strong><span data-i18n="unit.hours">hours</span>
                 </button>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section class="settings-panel" data-panel="accounts" hidden>
+            <aside class="overview-side">
+              <p class="side-title" data-i18n="overview.sideTitle">At a glance</p>
+              <div class="metric-stack">
+                <button type="button" class="metric-card" data-jump-panel="accounts">
+                  <span class="metric-label" data-i18n="overview.metric.spaces">Connected spaces</span>
+                  <strong id="overview_accounts">—</strong>
+                  <small data-i18n="overview.metric.spacesHint">Manage accounts</small>
+                </button>
+                <button type="button" class="metric-card" data-jump-panel="focus">
+                  <span class="metric-label" data-i18n="overview.metric.attention">Attention mode</span>
+                  <strong id="overview_focus">Ready</strong>
+                  <small data-i18n="overview.metric.attentionHint">Start a focus session</small>
+                </button>
+                <button type="button" class="metric-card" data-jump-panel="appearance">
+                  <span class="metric-label" data-i18n="overview.metric.style">Current style</span>
+                  <strong id="overview_theme">Dark</strong>
+                  <small data-i18n="overview.metric.styleHint">Personalize Falo</small>
+                </button>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="settings-panel" data-panel="accounts" hidden>
             <div class="panel-intro">
               <p class="eyebrow" data-i18n="accounts.eyebrow">Workspace</p>
               <h2 data-i18n="accounts.title">Accounts</h2>

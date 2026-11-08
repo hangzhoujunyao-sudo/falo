@@ -9,10 +9,12 @@
     "windows": [
       {
         "title": "Falo",
-        "width": 1100,
-        "height": 720,
+        "width": 1320,
+        "height": 860,
         "resizable": true,
-        "transparent": false
+        "transparent": false,
+        "minWidth": 1080,
+        "minHeight": 720
       }
     ],
     "security": {

@@ -2885,3 +2885,65 @@ select.lang-search-select-native {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   Falo layout overrides —— 与上游排版不同：
+   · 左侧导航按「核心 / 偏好 / 账户与安全 / 其他」分组
+   · Overview 改为左右两栏：左=快捷预设（2×2），右=指标竖排
+   ============================================================ */
+.nav-group {
+  margin: 14px 12px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rail-muted);
+  opacity: 0.72;
+}
+.nav-group:first-of-type { margin-top: 2px; }
+
+.overview-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: flex-start;
+  margin-top: 16px;
+}
+.overview-layout > .overview-block { flex: 1 1 56%; min-width: 360px; }
+.overview-layout > .overview-side { flex: 1 1 30%; min-width: 240px; }
+.overview-block { margin: 0; }
+.overview-side { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.side-title {
+  margin: 0 2px 2px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.metric-stack { display: flex; flex-direction: column; gap: 10px; }
+.metric-stack .metric-card { padding: 14px 16px; }
+.metric-stack .metric-card strong { font-size: 26px; line-height: 1.1; }
+
+.welcome-card {
+  grid-template-columns: 84px minmax(0, 1fr);
+  padding: 20px 22px;
+  gap: 18px;
+}
+.welcome-card .welcome-mark {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  justify-self: start;
+}
+
+.compact-presets {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 0;
+}
+.preset-button { min-height: 96px; }
+
+@media (max-width: 940px) {
+  .overview-layout > .overview-block,
+  .overview-layout > .overview-side { flex-basis: 100%; }
+}

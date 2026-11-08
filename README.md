@@ -20,6 +20,19 @@
 
 改名脚本：`tools/rebrand.py`（可重跑；同时做图标与主题色替换）。
 
+## 与原版的差异（不只是换皮）
+
+| 维度 | 原版 | Falo |
+|---|---|---|
+| 左侧导航 | 13 项平铺，顺序 Overview→Accounts→Focus→Appearance→界面→… | **4 组分区**：核心（Overview/Translation/Accounts/Focus）/ 偏好（Notifications/Appearance/界面/Preferences）/ 账户与安全（Devices/Membership/Backup/Security）/ 其他（About） |
+| Overview 排布 | 横幅 → 三列指标 → 快捷预设，竖向堆叠 | **两栏**：左=Focus presets（2×2 大卡）/ 右=At a glance 指标竖排 |
+| 横幅卡 | 图标在右 | 图标左置 84px，正文左对齐 |
+| 默认窗口 | 1100×720 | **1320×860**，两栏断点 940px |
+| 品牌 / 图标 / 主色 | WATransChat、绿色 W、WhatsApp 绿 | Falo、靛紫 F 徽标、靛紫主题 |
+
+> 已知：整个 UI 骨架、文案、i18n 仍来自原版发布物（提取所得）；上表是已经做过的**结构性**改动，
+> 不是只改颜色。要继续拉开差距，可以在交互层（默认落地页、面板信息架构）上再做一轮。
+
 ## 恢复了什么
 
 | 部分 | 状态 | 位置 | 体积 |
