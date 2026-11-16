@@ -3,8 +3,17 @@ use serde::Serialize;
 use serde_json::{json, Value};
 use std::sync::Mutex;
 
-static PHRASES_CACHE: Mutex<Vec<Phrase>> = Mutex::new(Vec::new());
-static TODOS_CACHE: Mutex<Vec<FollowupTodo>> = Mutex::new(Vec::new());
+static PHRASES_CACHE: Mutex<(u64, Vec<Phrase>)> = Mutex::new((0, Vec::new()));
+static TODOS_CACHE: Mutex<(u64, Vec<FollowupTodo>)> = Mutex::new((0, Vec::new()));
+
+pub fn clear_session_cache() {
+    if let Ok(mut cache) = PHRASES_CACHE.lock() {
+        cache.1.clear();
+    }
+    if let Ok(mut cache) = TODOS_CACHE.lock() {
+        cache.1.clear();
+    }
+}
 
 #[derive(Clone, Debug, Serialize)]
 pub struct Phrase {
@@ -101,30 +110,55 @@ fn parse_items<T>(
     values.iter().map(parse).collect()
 }
 
-fn read_cache<T: Clone>(cache: &Mutex<Vec<T>>) -> Result<Vec<T>, String> {
+fn read_cache<T: Clone>(cache: &Mutex<(u64, Vec<T>)>, generation: u64) -> Result<Vec<T>, String> {
     let guard = cache.lock().map_err(|e| e.to_string())?;
-    Ok(guard.clone())
+    Ok(if guard.0 == generation {
+        guard.1.clone()
+    } else {
+        Vec::new()
+    })
 }
 
-fn write_cache<T>(cache: &Mutex<Vec<T>>, items: Vec<T>) -> Result<(), String> {
+fn write_cache<T>(
+    cache: &Mutex<(u64, Vec<T>)>,
+    generation: u64,
+    items: Vec<T>,
+) -> Result<(), String> {
     let mut guard = cache.lock().map_err(|e| e.to_string())?;
-    *guard = items;
+    if generation >= guard.0 {
+        *guard = (generation, items);
+    }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn cache_is_scoped_to_login_generation() {
+        let cache = Mutex::new((0, Vec::<String>::new()));
+        write_cache(&cache, 1, vec!["account-one".into()]).unwrap();
+        assert!(read_cache(&cache, 2).unwrap().is_empty());
+        write_cache(&cache, 2, vec!["account-two".into()]).unwrap();
+        write_cache(&cache, 1, vec!["late-account-one".into()]).unwrap();
+        assert_eq!(read_cache(&cache, 2).unwrap(), vec!["account-two"]);
+    }
 }
 
 /// 对接前端“同步常用短语”：拉取远端短语，网络失败时返回进程内离线缓存。
 #[tauri::command]
 pub async fn common_phrases_pull(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
+    let generation = state.api.session_generation();
     let _ = payload;
 
     match state.api.get_json("/v1/phrases").await {
         Ok(response) => {
             let phrases = parse_items(&response, "phrases", parse_phrase)?;
-            write_cache(&PHRASES_CACHE, phrases.clone())?;
+            write_cache(&PHRASES_CACHE, generation, phrases.clone())?;
 
             Ok(json!({
                 "phrases": phrases,
@@ -133,7 +167,7 @@ pub async fn common_phrases_pull(
             }))
         }
         Err(error) => {
-            let phrases = read_cache(&PHRASES_CACHE)?;
+            let phrases = read_cache(&PHRASES_CACHE, generation)?;
 
             Ok(json!({
                 "phrases": phrases,
@@ -149,9 +183,10 @@ pub async fn common_phrases_pull(
 #[tauri::command]
 pub async fn common_phrases_push(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
+    let generation = state.api.session_generation();
     let empty = json!([]);
     let input = if payload.is_array() {
         &payload
@@ -163,7 +198,7 @@ pub async fn common_phrases_push(
     };
 
     let phrases = parse_items(input, "phrases", parse_phrase)?;
-    write_cache(&PHRASES_CACHE, phrases.clone())?;
+    write_cache(&PHRASES_CACHE, generation, phrases.clone())?;
 
     let body = json!({ "phrases": &phrases });
 
@@ -174,7 +209,7 @@ pub async fn common_phrases_push(
             "synced": true
         })),
         Err(error) => {
-            let phrases = read_cache(&PHRASES_CACHE)?;
+            let phrases = read_cache(&PHRASES_CACHE, generation)?;
 
             Ok(json!({
                 "phrases": phrases,
@@ -190,15 +225,16 @@ pub async fn common_phrases_push(
 #[tauri::command]
 pub async fn followup_todos_pull(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
+    let generation = state.api.session_generation();
     let _ = payload;
 
     match state.api.get_json("/v1/todos").await {
         Ok(response) => {
             let todos = parse_items(&response, "todos", parse_todo)?;
-            write_cache(&TODOS_CACHE, todos.clone())?;
+            write_cache(&TODOS_CACHE, generation, todos.clone())?;
 
             Ok(json!({
                 "todos": todos,
@@ -207,7 +243,7 @@ pub async fn followup_todos_pull(
             }))
         }
         Err(error) => {
-            let todos = read_cache(&TODOS_CACHE)?;
+            let todos = read_cache(&TODOS_CACHE, generation)?;
 
             Ok(json!({
                 "todos": todos,
@@ -223,9 +259,10 @@ pub async fn followup_todos_pull(
 #[tauri::command]
 pub async fn followup_todos_push(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
+    let generation = state.api.session_generation();
     let empty = json!([]);
     let input = if payload.is_array() {
         &payload
@@ -237,7 +274,7 @@ pub async fn followup_todos_push(
     };
 
     let todos = parse_items(input, "todos", parse_todo)?;
-    write_cache(&TODOS_CACHE, todos.clone())?;
+    write_cache(&TODOS_CACHE, generation, todos.clone())?;
 
     let body = json!({ "todos": &todos });
 
@@ -248,7 +285,7 @@ pub async fn followup_todos_push(
             "synced": true
         })),
         Err(error) => {
-            let todos = read_cache(&TODOS_CACHE)?;
+            let todos = read_cache(&TODOS_CACHE, generation)?;
 
             Ok(json!({
                 "todos": todos,

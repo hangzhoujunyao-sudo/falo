@@ -2,7 +2,7 @@
 const invoke = window.__TAURI__?.core?.invoke ?? (async () => {
   throw new Error(
     (window.FaloI18n && window.FaloI18n.t("runtime.required")) ||
-      "Falo settings require the desktop runtime.",
+      "飞译 settings require the desktop runtime.",
   );
 });
 const listen = window.__TAURI__?.event?.listen;

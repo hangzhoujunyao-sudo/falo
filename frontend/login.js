@@ -2,12 +2,12 @@
 const invoke =
   window.__TAURI__?.core?.invoke ??
   (async () => {
-    throw new Error("Falo login requires the desktop runtime.");
+    throw new Error("飞译 login requires the desktop runtime.");
   });
 
 const STR = {
   en: {
-    brand: "Falo",
+    brand: "飞译",
     subtitleLogin: "Sign in with your membership account to continue.",
     subtitleRegister: "Create an account to start your free trial.",
     tabLogin: "Sign in",
@@ -78,7 +78,7 @@ const STR = {
     stillFull: "A seat is still in use. Sign out another device.",
   },
   zh: {
-    brand: "Falo",
+    brand: "飞译",
     subtitleLogin: "请使用会员账号登录后继续。",
     subtitleRegister: "注册账号即可开始免费试用。",
     tabLogin: "登录",
@@ -191,7 +191,7 @@ function applyCopy() {
   document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
   const appVer =
     (window.__faloAppVersion && String(window.__faloAppVersion)) || "0.0.0";
-  const brand = "Falo v" + appVer;
+  const brand = "飞译 v" + appVer;
   document.title =
     mode === "register" ? t("tabRegister") + " · " + brand : t("tabLogin") + " · " + brand;
   document.getElementById("login-heading").textContent = t("brand");

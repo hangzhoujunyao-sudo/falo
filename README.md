@@ -1,114 +1,39 @@
-# Falo（飞译）· WhatsApp Web 翻译工作台（开源重建）
+# 飞译（Falo）
 
-![运行截图](frontend_running.png)
+Windows 桌面 WhatsApp 多账号与翻译工作台，使用 Tauri 2、Rust 和 WebView2。界面统一使用“飞译”；内部 `FALO_*` 环境变量和已有数据目录保持兼容。
 
-> 由 Falo 2.6.5（Windows / Tauri 2）发布物重建，**已整体改名换标**：
-> 产品名 Falo / 飞译，图标重绘，主色从 WhatsApp 绿换成靛紫，
-> 代码里的 `Falo` / `Falo` 标识已全部替换为 `Falo` / `falo`。
+## 启动后端
 
-## 命名
-
-| 项 | 原版 | 本项目 |
-|---|---|---|
-| 产品名 | Falo | **Falo**（中文：飞译） |
-| 包名 / 标识符 | `app.falo.desktop` | `app.falo.desktop` |
-| Cargo 包 | — | `falo-oss` |
-| 全局对象 | `__falo*` | `__falo*` |
-| 环境变量 | `FALO_*` | `FALO_*` |
-| 主色 | `#4f46e5` / `#6366f1`（绿） | `#4f46e5` / `#6366f1`（靛紫） |
-| 图标 | 绿色 W 徽标 | 靛紫渐变 + 白色 F + 箭头（`frontend/app-icon.svg`） |
-
-改名脚本：`tools/rebrand.py`（可重跑；同时做图标与主题色替换）。
-
-## 界面：已经和原版不是一套信息架构了
-
-![工作台](frontend_running.png)
-
-| 维度 | 原版 | Falo |
-|---|---|---|
-| 落地页 | Overview 营销海报 | **工作台**：活跃会话环 + 连接状态 + 最近会话 + 三个快捷动作 |
-| 导航 | 13 项平铺 | **6 组 + 子项胶囊**：工作台 / 连接（账户·设备）/ 翻译 / 通知与外观（通知·专注·外观·界面·偏好）/ 账户与安全（会员·备份·安全）/ 关于 |
-| 指标区 | 三列 metric 卡 | **环形状态卡**（conic-gradient 环，数值仍在原 id 上，逻辑没动） |
-| 专注预设 | 4 个大方块按钮 | **滑块 + 胶囊**，滑块复用上游 `focus_custom` 流程 |
-| 面板元信息 | i18n 内置 | 新增 `workbench`，由 `falo-extra.js` 注入 |
-
-![翻译面板](docs/screenshot-translation.png)
-
-> 导航、面板、开关都是真在跑：上面第二张就是点「翻译」后的实机截图。
-
-## 与原版的差异（不只是换皮）
-
-| 维度 | 原版 | Falo |
-|---|---|---|
-| 左侧导航 | 13 项平铺，顺序 Overview→Accounts→Focus→Appearance→界面→… | **4 组分区**：核心（Overview/Translation/Accounts/Focus）/ 偏好（Notifications/Appearance/界面/Preferences）/ 账户与安全（Devices/Membership/Backup/Security）/ 其他（About） |
-| Overview 排布 | 横幅 → 三列指标 → 快捷预设，竖向堆叠 | **两栏**：左=Focus presets（2×2 大卡）/ 右=At a glance 指标竖排 |
-| 横幅卡 | 图标在右 | 图标左置 84px，正文左对齐 |
-| 默认窗口 | 1100×720 | **1320×860**，两栏断点 940px |
-| 品牌 / 图标 / 主色 | Falo、绿色 W、WhatsApp 绿 | Falo、靛紫 F 徽标、靛紫主题 |
-
-> 已知：整个 UI 骨架、文案、i18n 仍来自原版发布物（提取所得）；上表是已经做过的**结构性**改动，
-> 不是只改颜色。要继续拉开差距，可以在交互层（默认落地页、面板信息架构）上再做一轮。
-
-## 恢复了什么
-
-| 部分 | 状态 | 位置 | 体积 |
-|---|---|---|---|
-| WhatsApp 页面注入脚本（翻译 / i18n / AI 建议 / 汇率 / 设备徽标 / 发送钩子 / 语音） | ✅ 明文源码 | `content-scripts/` | 1698 KB（整包 1.03 MB + 21 个命名模块） |
-| Tauri 命令面（前端 `invoke()` 的名字） | ✅ 名单 | `docs/tauri-commands.md` | — |
-| 远端接口域名与路径 | ✅ 字符串级 | `docs/endpoints.md` | — |
-| Rust 后端 | ✅ **74 条命令、约 4.4k 行，cargo check / build 全绿、0 warning** | `backend/` | 135 KB |
-| UI 前端（index.html / main.js / style.css / login / tabs / lock / i18n / vendor xlsx / 图标） | ✅ **26 个文件 2.78 MB**，brotli 流逐条解出 | `frontend/` | 2.78 MB |
-| 远端服务（会员 / 翻译 / 计费） | ❌ 服务端，不在客户端 | 只能按 `docs/endpoints.md` 复刻协议 | — |
-
-## 目录
-
-```
-content-scripts/
-  falo-content-bundle.js   注入脚本整包（明文，带原注释）
-  modules/                    按注释切出的模块（便于阅读）
-docs/
-  tauri-commands.md           命令面
-  endpoints.md                网络端点
-backend/                      Tauri 2 (Rust) 重建骨架：Cargo.toml / tauri.conf.json / src
-frontend/                     占位页 + 资源恢复说明
-tools/                        资产切分 / 内存扫描脚本（继续挖用）
-```
-
-## 已经跑起来了
-
-`cargo build` 出的 `backend\target\debug\falo-oss.exe` 能启动并渲染出**恢复出来的原版设置界面**
-（Overview / Accounts / Focus / Appearance / Notifications / Preferences / Membership / Translation /
-Devices / Backup / Security / About 全在）：
-
-![运行截图](frontend_running.png)
-
-构建方式（GNU 工具链，不需要装 3GB 的 VS Build Tools）：
+安装 Python 3.11 或以上，在仓库根目录执行：
 
 ```powershell
-winget install -e --id BrechtSanders.WinLibs.POSIX.UCRT
-rustup toolchain install stable-x86_64-pc-windows-gnu --profile minimal
-$env:PATH = "$env:USERPROFILE\.cargo\bin;<winlibs>\mingw64\bin;$env:PATH"
-cd backend && cargo +stable-x86_64-pc-windows-gnu build
+python server/app.py create-user your-email@example.com --seats 3
+python server/app.py serve
 ```
 
-## 骨架说明
+客户端默认连接 `http://127.0.0.1:8787/`。在会员页使用创建的邮箱与密码登录。服务器部署、数据库备份和接口范围见 [服务说明](server/README.md)。
 
-```bash
-cd backend && cargo build     # 需要 Rust + WebView2
+## 桌面端构建
+
+需要 Rust、Windows C/C++ 工具链和 WebView2。GNU 工具链需将 WinLibs 的 `mingw64/bin` 加入 PATH。中文路径下建议使用英文构建输出目录，避免 dlltool 编码问题：
+
+```powershell
+$env:CARGO_TARGET_DIR = "$env:LOCALAPPDATA/FaloBuild/target"
+cargo +stable-x86_64-pc-windows-gnu check --manifest-path backend/Cargo.toml
+cargo +stable-x86_64-pc-windows-gnu build --manifest-path backend/Cargo.toml
 ```
 
-前端资源补齐后：`cargo tauri dev`。
+构建后运行输出目录中的 `debug/falo-oss.exe`。也可使用已配置的 MSVC 工具链。翻译供应商凭据与联网条件仍需单独配置。
 
-## UI 是怎么解出来的
+## 验证与范围
 
-`.rdata` 里每条资源 = **明文路径 + brotli 流**。坑在于：
+```powershell
+python -m unittest discover -s server -v
+python tools/diff_commands.py
+```
 
-- `brotli.decompress(整段缓冲区)` 会因尾随字节报 `decoder failed` → 必须按记录边界切长度；
-- 路径末字节可能吞掉流首字节（`/main.js[` 的 `[` = `0x5B`）→ 起点要在 ±2 字节里试。
+基础服务支持账号登录、会话退出、设备列表、席位限制、常用短语和待办同步。邮件注册、支付、登录挑战、联系人分步备份、代理检测及服务端翻译测试尚未接入。详细限制见服务说明。命令名称对齐不代表所有界面流程已通过端到端测试。
 
-`tools/extract_by_anchor.py` 做前者，`tools/pass3.py` 补齐 PNG 与无锚点流（`index.html` 就在尾段）。
+## 许可
 
-## 授权
-
-重建部分（骨架、文档、工具）按 MIT 发布，见 `LICENSE`。
-`content-scripts/` 内容来自发布物的可读片段，用于互操作与研究；商用或再分发请自行确认权利。
+见 [LICENSE](LICENSE)。保留现有源码中的第三方作者署名与许可信息。

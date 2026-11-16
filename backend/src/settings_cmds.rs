@@ -37,9 +37,7 @@ fn settings_path() -> Result<PathBuf, String> {
         .filter(|value| !value.is_empty())
         .ok_or_else(|| "APPDATA 环境变量不可用".to_string())?;
 
-    Ok(PathBuf::from(appdata)
-        .join("Falo")
-        .join("settings.json"))
+    Ok(PathBuf::from(appdata).join("Falo").join("settings.json"))
 }
 
 fn unix_seconds() -> Result<u64, String> {
@@ -75,6 +73,13 @@ fn load_settings_unlocked() -> Result<Value, String> {
     }
 
     validate_settings(&settings)?;
+    if settings
+        .get("focus_until")
+        .and_then(Value::as_u64)
+        .is_some_and(|until| until > 0 && until <= unix_seconds().unwrap_or(0))
+    {
+        settings["focus_mode"] = json!(false);
+    }
     Ok(settings)
 }
 
@@ -375,10 +380,8 @@ fn download_and_start_installer(url: String) -> Result<Value, String> {
         .map_err(|e| e.to_string())?
         .as_nanos();
 
-    let directory = PathBuf::from(temp).join(format!(
-        "Falo-update-{}-{timestamp}",
-        std::process::id()
-    ));
+    let directory =
+        PathBuf::from(temp).join(format!("Falo-update-{}-{timestamp}", std::process::id()));
 
     fs::create_dir(&directory).map_err(|e| e.to_string())?;
     let installer = directory.join("Falo-setup.exe");
@@ -483,9 +486,9 @@ try {
 #[tauri::command]
 pub async fn get_settings(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
     read_settings()
 }
@@ -495,9 +498,9 @@ pub async fn get_settings(
 pub async fn set_settings(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let patch = match payload.get("settings") {
@@ -557,9 +560,9 @@ pub async fn set_settings(
 #[tauri::command]
 pub async fn check_for_update(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = payload;
     let response = state
         .api
@@ -575,9 +578,9 @@ pub async fn check_for_update(
 pub async fn update_close(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
     emit_main(&app, "update-close", json!({ "closed": true }))?;
     Ok(json!({ "ok": true }))
@@ -588,9 +591,9 @@ pub async fn update_close(
 pub async fn update_download_and_install(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = payload;
     let _update_guard = UpdateGuard::acquire()?;
 
@@ -658,9 +661,9 @@ pub async fn update_download_and_install(
 pub async fn update_resize(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let width = payload
@@ -697,9 +700,9 @@ pub async fn update_resize(
 pub async fn update_snooze(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let minutes = payload
@@ -729,9 +732,9 @@ pub async fn update_snooze(
 #[tauri::command]
 pub async fn check_proxy(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let proxy = payload
         .get("proxy")
         .and_then(|v| v.as_str())
@@ -763,9 +766,9 @@ pub async fn check_proxy(
 #[tauri::command]
 pub async fn get_theme(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
     let settings = read_settings()?;
 
@@ -782,9 +785,9 @@ pub async fn get_theme(
 pub async fn get_always_on_top(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
 
     let window = app
@@ -800,9 +803,9 @@ pub async fn get_always_on_top(
 pub async fn toggle_always_on_top(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let window = app
@@ -847,9 +850,9 @@ pub async fn toggle_always_on_top(
 #[tauri::command]
 pub async fn get_productivity_status(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let account_id = payload
@@ -883,22 +886,33 @@ pub async fn get_productivity_status(
 pub async fn set_focus_mode(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let enabled = payload
         .get("focus_mode")
         .and_then(|v| v.as_bool())
         .or_else(|| payload.get("enabled").and_then(|v| v.as_bool()))
-        .map_or(false, |v| v);
+        .unwrap_or_else(|| payload.get("minutes").and_then(Value::as_u64).unwrap_or(0) > 0);
+    let minutes = payload
+        .get("minutes")
+        .and_then(Value::as_u64)
+        .unwrap_or(0)
+        .min(1440);
+    let until = if enabled && minutes > 0 {
+        unix_seconds()? + minutes * 60
+    } else {
+        0
+    };
 
     change_settings(|settings| {
         let object = settings
             .as_object_mut()
             .ok_or_else(|| "设置格式错误".to_string())?;
         object.insert("focus_mode".into(), json!(enabled));
+        object.insert("focus_until".into(), json!(until));
         Ok(())
     })?;
 
@@ -912,9 +926,10 @@ pub async fn set_focus_mode(
 pub async fn set_account_notifications(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload =
+        crate::api::alias_args(crate::api::invoke_args(&request), &[("id", "account_id")]);
     let _ = state;
 
     let account_id = payload
@@ -951,9 +966,10 @@ pub async fn set_account_notifications(
 pub async fn set_account_proxy(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload =
+        crate::api::alias_args(crate::api::invoke_args(&request), &[("id", "account_id")]);
     let _ = state;
 
     let account_id = payload
@@ -1003,9 +1019,9 @@ pub async fn set_account_proxy(
 #[tauri::command]
 pub async fn get_account_fingerprint(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
 
     tauri::async_runtime::spawn_blocking(machine_fingerprint)
@@ -1017,9 +1033,9 @@ pub async fn get_account_fingerprint(
 #[tauri::command]
 pub async fn contacts_backup_call(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     state
         .api
         .post_json("/v1/contacts/backup", payload)
@@ -1031,9 +1047,9 @@ pub async fn contacts_backup_call(
 #[tauri::command]
 pub async fn dlog(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::alias_args(crate::api::invoke_args(&request), &[("msg", "message")]);
     let _ = state;
 
     let level = payload
@@ -1084,9 +1100,9 @@ pub async fn dlog(
 pub async fn test_notification(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let title = payload
@@ -1113,9 +1129,9 @@ pub async fn test_notification(
 #[tauri::command]
 pub async fn quality_translate_test(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let settings = read_settings()?;
 
     let text = payload

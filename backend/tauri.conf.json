@@ -1,5 +1,5 @@
 {
-  "productName": "Falo-OSS",
+  "productName": "飞译",
   "version": "2.6.5",
   "identifier": "app.falo.desktop",
   "build": {
@@ -8,7 +8,7 @@
   "app": {
     "windows": [
       {
-        "title": "Falo",
+        "title": "飞译",
         "width": 1320,
         "height": 860,
         "resizable": true,
