@@ -4,7 +4,7 @@ const invoke =
   window.__TAURI__?.core?.invoke ??
   window.__TAURI_INTERNALS__?.invoke ??
   (async () => {
-    throw new Error("Falo tabs require the desktop runtime.");
+    throw new Error("飞译 tabs require the desktop runtime.");
   });
 
 const titleLabelEl = document.getElementById("title-label");
@@ -49,7 +49,7 @@ const STR = {
     close: "Close",
     addAccount: "Add account",
     settings: "Settings",
-    accountsAria: "Falo accounts",
+    accountsAria: "飞译 accounts",
     accountName: "Account name",
     add: "Add",
     cancel: "Cancel",
@@ -71,7 +71,7 @@ const STR = {
     close: "关闭",
     addAccount: "添加账号",
     settings: "设置",
-    accountsAria: "Falo 账号",
+    accountsAria: "飞译 账号",
     accountName: "账号名称",
     add: "添加",
     cancel: "取消",

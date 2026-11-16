@@ -94,9 +94,9 @@ fn validate_writable_directory(path: PathBuf) -> Result<PathBuf, String> {
 #[tauri::command]
 pub async fn set_unread_count(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let count = match payload.get("count").and_then(|v| v.as_u64()) {
@@ -128,9 +128,9 @@ pub async fn set_unread_count(
 #[tauri::command]
 pub async fn set_profile_name(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let name = payload
@@ -158,9 +158,9 @@ pub async fn set_profile_name(
 #[tauri::command]
 pub async fn open_external_url(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let raw_url = payload
@@ -199,9 +199,9 @@ pub async fn open_external_url(
 #[tauri::command]
 pub async fn notify(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     main_window()?
@@ -220,9 +220,9 @@ pub async fn notify(
 #[tauri::command]
 pub async fn open_settings(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let section = payload
@@ -256,15 +256,27 @@ pub async fn open_settings(
 #[tauri::command]
 pub async fn cycle_account_tab(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload =
+        crate::api::alias_args(crate::api::invoke_args(&request), &[("delta", "direction")]);
     let _ = state;
 
     let requested_direction = payload
         .get("direction")
         .and_then(|v| v.as_str())
-        .unwrap_or("next");
+        .unwrap_or_else(|| {
+            if payload
+                .get("delta")
+                .and_then(serde_json::Value::as_i64)
+                .unwrap_or(1)
+                < 0
+            {
+                "previous"
+            } else {
+                "next"
+            }
+        });
 
     let (direction, delta) = match requested_direction {
         "next" => ("next", 1_i32),
@@ -295,9 +307,9 @@ pub async fn cycle_account_tab(
 #[tauri::command]
 pub async fn set_icon_as_template(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     #[cfg(target_os = "macos")]
@@ -341,9 +353,9 @@ pub async fn set_icon_as_template(
 #[tauri::command]
 pub async fn set_temp_dir_path(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
 
     let requested_path = payload.get("path").and_then(|v| v.as_str()).unwrap_or("");

@@ -1,12 +1,6 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
-use std::{
-    fs,
-    io::Write,
-    path::PathBuf,
-    sync::Mutex,
-    time::Instant,
-};
+use std::{fs, io::Write, path::PathBuf, sync::Mutex, time::Instant};
 use tauri::{Emitter, Manager};
 
 static APP_LOCK: Mutex<Option<LockRuntime>> = Mutex::new(None);
@@ -15,6 +9,12 @@ static APP_LOCK: Mutex<Option<LockRuntime>> = Mutex::new(None);
 struct LockOptions {
     timeout_secs: u64,
     on_minimize: bool,
+    #[serde(default = "default_lock_on_launch")]
+    lock_on_launch: bool,
+}
+
+fn default_lock_on_launch() -> bool {
+    true
 }
 
 impl Default for LockOptions {
@@ -22,6 +22,7 @@ impl Default for LockOptions {
         Self {
             timeout_secs: 300,
             on_minimize: true,
+            lock_on_launch: true,
         }
     }
 }
@@ -127,7 +128,7 @@ fn with_lock(
 
     if guard.is_none() {
         let config = load_config()?;
-        let locked = config.enabled;
+        let locked = config.enabled && config.options.lock_on_launch;
 
         *guard = Some(LockRuntime {
             config,
@@ -169,6 +170,12 @@ fn status(runtime: &LockRuntime) -> Value {
         "enabled": runtime.config.enabled,
         "locked": runtime.config.enabled && runtime.locked,
         "biometric": runtime.config.biometric,
+        "biometric_available": false,
+        "biometric_enabled": false,
+        "biometric_label": "Windows Hello",
+        "lock_on_launch": runtime.config.options.lock_on_launch,
+        "lock_on_hide": runtime.config.options.on_minimize,
+        "idle_secs": runtime.config.options.timeout_secs,
         "timeout_secs": runtime.config.options.timeout_secs
     })
 }
@@ -381,9 +388,17 @@ fn sha256(input: &[u8]) -> [u8; 32] {
 #[tauri::command]
 pub async fn change_app_lock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::alias_args(
+        crate::api::invoke_args(&request),
+        &[("current", "current_password"), ("new", "new_password")],
+    );
+    if let (Some(new), Some(confirm)) = (payload.get("new"), payload.get("confirm")) {
+        if new != confirm {
+            return Err("两次密码输入不一致".into());
+        }
+    }
     let _ = state;
     let old_password = payload
         .get("old_password")
@@ -407,9 +422,12 @@ pub async fn change_app_lock_password(
 #[tauri::command]
 pub async fn disable_app_lock(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::alias_args(
+        crate::api::invoke_args(&request),
+        &[("current", "password")],
+    );
     let _ = state;
     let password = payload
         .get("password")
@@ -435,9 +453,9 @@ pub async fn disable_app_lock(
 #[tauri::command]
 pub async fn get_lock_status(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
     with_lock(|runtime| Ok(status(runtime)))
 }
@@ -447,9 +465,9 @@ pub async fn get_lock_status(
 pub async fn lock_app(
     state: tauri::State<'_, crate::api::AppState>,
     app: tauri::AppHandle,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
     let window = app
         .get_webview_window("main")
@@ -476,9 +494,9 @@ pub async fn lock_app(
 #[tauri::command]
 pub async fn reset_app_lock(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
     let password = payload
         .get("password")
@@ -501,9 +519,15 @@ pub async fn reset_app_lock(
 #[tauri::command]
 pub async fn set_app_lock_options(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::alias_args(
+        crate::api::invoke_args(&request),
+        &[
+            ("idle_secs", "timeout_secs"),
+            ("lock_on_hide", "on_minimize"),
+        ],
+    );
     let _ = state;
     let options = payload
         .get("options")
@@ -511,6 +535,7 @@ pub async fn set_app_lock_options(
         .unwrap_or(&payload);
     let timeout_secs = options.get("timeout_secs").and_then(|v| v.as_u64());
     let on_minimize = options.get("on_minimize").and_then(|v| v.as_bool());
+    let lock_on_launch = options.get("lock_on_launch").and_then(Value::as_bool);
 
     with_lock(|runtime| {
         require_unlocked(runtime)?;
@@ -519,6 +544,8 @@ pub async fn set_app_lock_options(
             timeout_secs.unwrap_or(runtime.config.options.timeout_secs);
         runtime.config.options.on_minimize =
             on_minimize.unwrap_or(runtime.config.options.on_minimize);
+        runtime.config.options.lock_on_launch =
+            lock_on_launch.unwrap_or(runtime.config.options.lock_on_launch);
 
         Ok(json!({
             "success": true,
@@ -531,9 +558,14 @@ pub async fn set_app_lock_options(
 #[tauri::command]
 pub async fn set_app_lock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::alias_args(crate::api::invoke_args(&request), &[("new", "password")]);
+    if let (Some(new), Some(confirm)) = (payload.get("new"), payload.get("confirm")) {
+        if new != confirm {
+            return Err("两次密码输入不一致".into());
+        }
+    }
     let _ = state;
     let password = payload
         .get("password")
@@ -557,9 +589,9 @@ pub async fn set_app_lock_password(
 #[tauri::command]
 pub async fn set_biometric_enabled(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
     let enabled = payload
         .get("enabled")
@@ -585,9 +617,9 @@ pub async fn set_biometric_enabled(
 #[tauri::command]
 pub async fn unlock_biometric(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
 
     with_lock(|runtime| {
@@ -607,9 +639,9 @@ pub async fn unlock_biometric(
 #[tauri::command]
 pub async fn unlock_password(
     state: tauri::State<'_, crate::api::AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = state;
     let password = payload
         .get("password")

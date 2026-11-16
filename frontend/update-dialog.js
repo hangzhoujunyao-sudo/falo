@@ -4,7 +4,7 @@
 async function invoke(cmd, args) {
   const fn = window.__TAURI__?.core?.invoke;
   if (typeof fn !== "function") {
-    throw new Error("Falo update dialog requires the desktop runtime.");
+    throw new Error("飞译 update dialog requires the desktop runtime.");
   }
   return fn(cmd, args);
 }

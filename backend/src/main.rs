@@ -1,4 +1,4 @@
-﻿//! Falo锛堝紑婧愰噸寤猴級鈥斺€?Tauri 2 鍚庣鍏ュ彛
+//! Falo锛堝紑婧愰噸寤猴級鈥斺€?Tauri 2 鍚庣鍏ュ彛
 //!
 //! 鍛戒护闈?= 鍓嶇 `invoke()` 鐨勫疄闄呰皟鐢紙65 鏉★級+ 浜岃繘鍒跺懡浠よ〃閲屾仮澶嶇殑琛ュ厖椤广€?//! 鍚勬ā鍧楃敱涓浆绔欏苟鍙戠敓鎴愶紝`tools/diff_commands.py` 鍋氬墠绔?鍚庣涓€鑷存€ф牎楠屻€?
 mod accounts;
@@ -8,6 +8,7 @@ mod lock;
 mod membership;
 mod membership_extra;
 mod phrases;
+mod session;
 mod settings_cmds;
 mod translate;
 use api::AppState;

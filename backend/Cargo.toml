@@ -2,7 +2,7 @@
 name = "falo-oss"
 version = "2.6.5"
 edition = "2021"
-description = "Falo 开源重建（Tauri 2 + WebView2）"
+description = "飞译桌面工作台（Tauri 2 + WebView2）"
 license = "MIT"
 
 [build-dependencies]

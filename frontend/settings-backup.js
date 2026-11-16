@@ -11,7 +11,7 @@
   const invoke =
     window.__TAURI__?.core?.invoke ??
     (async () => {
-      throw new Error("Falo settings require the desktop runtime.");
+      throw new Error("飞译 settings require the desktop runtime.");
     });
 
   function t(key, vars) {

@@ -3,3 +3,6 @@ node_modules/
 *.log
 __pycache__/
 dist/
+server/data/
+*.sqlite3
+*.sqlite3-journal

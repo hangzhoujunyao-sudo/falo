@@ -37,10 +37,12 @@ impl<'a> TranslationRequest<'a> {
                 .map_or(default_text, |v| v),
             from: payload
                 .get("from")
+                .or_else(|| payload.get("source_lang"))
                 .and_then(|v| v.as_str())
                 .map_or("auto", |v| v),
             to: payload
                 .get("to")
+                .or_else(|| payload.get("target_lang"))
                 .and_then(|v| v.as_str())
                 .map_or("zh-CN", |v| v),
             engine: payload
@@ -293,9 +295,9 @@ async fn dispatch_translation(
 #[tauri::command]
 pub async fn translate_text(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let request = TranslationRequest::read(&payload, "")?;
     let start = Instant::now();
     let translated = dispatch_translation(&state.api, &request).await?;
@@ -311,9 +313,9 @@ pub async fn translate_text(
 #[tauri::command]
 pub async fn quality_translate(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let request = TranslationRequest::read(&payload, "")?;
     if request.text.trim().is_empty() {
         return Err("upstream: quality translation requires nonempty text".into());
@@ -362,9 +364,9 @@ pub async fn quality_translate(
 #[tauri::command]
 pub async fn translate_test(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let request = TranslationRequest::read(&payload, "Hello, world!")?;
     if request.text.trim().is_empty() {
         return Err("upstream: translation test requires nonempty text".into());
@@ -436,9 +438,9 @@ async fn concurrent_probes(api: &ApiClient) -> [Result<u64, String>; 3] {
 #[tauri::command]
 pub async fn probe_engine_latency(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = payload;
     let [yandex, exchange, currency] = concurrent_probes(&state.api).await;
 
@@ -462,9 +464,9 @@ pub async fn probe_engine_latency(
 #[tauri::command]
 pub async fn fetch_inline_button_config(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
+    let payload = crate::api::invoke_args(&request);
     let _ = (state, payload);
 
     Ok(json!({
@@ -492,13 +494,22 @@ pub async fn fetch_inline_button_config(
 #[tauri::command]
 pub async fn fetch_fx_rates(
     state: tauri::State<'_, AppState>,
-    payload: Option<serde_json::Value>,
+    request: tauri::ipc::Request<'_>,
 ) -> Result<serde_json::Value, String> {
-    let payload = payload.unwrap_or(serde_json::Value::Null);
-    let _ = payload;
+    let payload = crate::api::invoke_args(&request);
+    let requested_base = payload
+        .get("base")
+        .and_then(Value::as_str)
+        .unwrap_or("USD")
+        .to_ascii_uppercase();
+    if requested_base.len() != 3 || !requested_base.bytes().all(|b| b.is_ascii_uppercase()) {
+        return Err("汇率基准必须是三位币种代码".into());
+    }
     let response = state
         .api
-        .get_json(FX_URL)
+        .get_json(&format!(
+            "https://open.er-api.com/v6/latest/{requested_base}"
+        ))
         .await
         .map_err(|e| e.to_string())?;
 
@@ -511,8 +522,8 @@ pub async fn fetch_fx_rates(
         .and_then(|v| v.as_str())
         .ok_or_else(|| "upstream: exchange-rate response is missing base_code".to_owned())?;
 
-    if base != "USD" {
-        return Err("upstream: exchange-rate response base is not USD".into());
+    if base != requested_base {
+        return Err("upstream: exchange-rate response base mismatch".into());
     }
 
     let rates = response
@@ -531,8 +542,8 @@ pub async fn fetch_fx_rates(
         }
     }
 
-    if rates.get("USD").and_then(|v| v.as_f64()) != Some(1.0) {
-        return Err("upstream: USD reference rate must equal 1".into());
+    if rates.get(&requested_base).and_then(|v| v.as_f64()) != Some(1.0) {
+        return Err("upstream: reference rate must equal 1".into());
     }
 
     Ok(json!({

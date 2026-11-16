@@ -110,7 +110,7 @@
       if (version === "0.0.0") version = "2.6.5";
       window.__faloAppVersion = version;
       for (const el of document.querySelectorAll("[data-version-ref]")) {
-        el.textContent = "Falo " + version;
+        el.textContent = "飞译 " + version;
       }
       const bar = document.querySelector(".window-titlebar-name");
       if (bar && /v[\d.]+/.test(bar.textContent)) {
